@@ -7,7 +7,7 @@ Copyright: Free
 
 Author: Group 9
 
-Description: Program for a hotal management system.
+Description: Program for a hotel management system.
  */
 
 
