@@ -19,7 +19,7 @@ Description: Program for a hotal management system.
 #include <ctype.h>  /* Include ctype.h  */
 #include <windows.h> /* lib for include windows API such as msgbox */
 #include <time.h>	/* lib for getting system time */
-#include <errno.h> /* lib dealing with errors */
+#include <errno.h> /* lib dealing with error */
 #include <math.h> /* lib for math */
 
 
