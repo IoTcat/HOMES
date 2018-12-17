@@ -1,5 +1,5 @@
 /*
-Name: Assesment 4 of EEE 101
+Name: Assesment 4 of EEE 1012
 
 File Name: main.c
 
