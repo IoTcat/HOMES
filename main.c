@@ -304,7 +304,7 @@ int data__filter_input(char*parameter1)
     {
         return 1;
     }
-    else if(strlen(parameter1)==3)
+    else if(strlen(parameter1)==3 &&)
     {
         return 0;
     }
