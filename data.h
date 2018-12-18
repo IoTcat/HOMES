@@ -1043,7 +1043,7 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
 		{
 			/* only active this for debug purpose*//*printf("%d\n", (int)((*(del+j+1)-(double)(int)*(del+j+1))*1000));*/
 
-			if(((pRm+ii)->index==(int)*(del+j+1))&&((pRm+ii)->roomId==((int)((*(del+j+1)-(double)(int)*(del+j+1))*1000)+1))) ifDel=1;
+			if(((pRm+ii)->index==(int)*(del+j+1))&&((pRm+ii)->roomId==((int)((*(del+j+1)-(double)(int)*(del+j+1))*1000)))) ifDel=1;
 		}
 
 		if(index!=0&&(pRm+ii)->index!=index) ifDel=1;
@@ -1187,3 +1187,46 @@ int data__del_room_info(int id,int room)
 	if(errno==22)	errno=0;
 	return 2;
 }
+
+
+
+
+/* function for copy a date rooms moudle by date  */
+int data__room_setup_by_date(int date,int modelDate)
+{
+	
+	/* declear a room pointer to receive the matched rooms info */
+	struct room *pRm=NULL;
+
+	pRm= data__get_room_info(0/*index*/,0/*roomId*/,modelDate/*date*/,NULL,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
+
+	/* show error hint if the function not runing successfully */
+	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
+
+	for(int i=0;i<g_nRtrnRows;i++)
+	{
+		(pRm+i)->date=date;
+		(pRm+i)->checkIn=1;
+		(pRm+i)->checkOut=1;
+		(pRm+i)->visitorId[0]=0;
+
+		data__insert_room_info(pRm+i);
+	}
+
+	return 0;
+}
+
+int data__room_setup_by_nothing(int date)
+{
+	/* Create a new visitor struct variable with some user info */
+	room NewRoom={0/*this is the visitor id, please leave 0 here */,0/*roomId*/,date/*date*/,{0}/*visitorId*/,1/*room type*/,66.66/*price*/,1/*checkIn*/,1/*checkOut*/};
+
+	for(int i=0;i<80;i++)
+	{
+		NewRoom.roomId=(i/10+1)*100+i%10+1;
+		data__insert_room_info(&NewRoom);
+	}
+	
+	return 0;
+}
+

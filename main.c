@@ -21,6 +21,8 @@ Description: Program for a hotal management system.
 #include <time.h>	/* lib for getting system time */
 #include <errno.h> /* lib dealing with error */
 #include <math.h> /* lib for math */
+#include <unistd.h> /* include this lib for multithread processing */
+#include <pthread.h> /* include this lib for multithread processing */
 
 
 /* program title */
@@ -92,6 +94,7 @@ typedef struct usr
 } usr;
 
 
+
 typedef struct visitor
 {
 	int id;/* unique key for identify visitor */
@@ -161,6 +164,7 @@ void demo__create_visitor();
 void demo__create_room();
 void demo__display_all_visitors();
 void demo__display_all_rooms();
+int final_main();
 
 /***************above are the declearation of some demo functions*********************/
 
@@ -169,11 +173,6 @@ void demo__display_all_rooms();
 
 
 /*****************please put your function declearation here!!***********************/
-
-
-
-
-
 
 
 
@@ -187,17 +186,12 @@ int main(int argc, char const *argv[])
 {
 	demo__test_fundamental_functions(); /* Don't Remove This For Test Purpose!! */
 
+	//final_main();
+
 	/*************Your Code Here****************/
 
-	//printf("Hellow World!\n");
-	usr usr;
 
-	int nUsr=login__choose_usr();
 
-	if(nUsr==1) sprintf(usr.name,"staff");
-	else sprintf(usr.name,"manager");
-
-	login__check_passwd(usr);
 
 
 
@@ -214,6 +208,21 @@ int main(int argc, char const *argv[])
 
 
 
+int final_main()
+{
+
+	usr usr;
+
+	int nUsr=login__choose_usr();
+
+	if(nUsr==1) sprintf(usr.name,"staff");
+	else sprintf(usr.name,"manager");
+
+	login__check_passwd(usr);
+
+
+	return 0;
+}
 
 
 
