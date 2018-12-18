@@ -15,7 +15,7 @@ Description: Program for a hotal management system.
 #include <stdio.h>  /* Include standard library of stdio.h */
 #include <stdlib.h> /* Include standard liberary of stdlib.h */
 #include <conio.h>  /* Include liberary of conio.h  */
-#include <string.h>	/* Include string.h */ 
+#include <string.h>	/* Include string.h */
 #include <ctype.h>  /* Include ctype.h  */
 #include <windows.h> /* lib for include windows API such as msgbox */
 #include <time.h>	/* lib for getting system time */
@@ -69,7 +69,7 @@ Description: Program for a hotal management system.
 
 /* variable of user name ::manager, receptionist*/
 char *g_pUsr=NULL;
-/* this variable indicate the rows of return struct */ 
+/* this variable indicate the rows of return struct */
 int g_nRtrnRows=0;
 
 
@@ -152,13 +152,44 @@ void demo__display_all_rooms();
 
 
 
+/*************here are the declearation of some demo functions***********************/
+
+int demo__test_fundamental_functions();
+int demo__menu();
+void demo__print__menu(int nPnt);
+void demo__data__insert_visitor_info();
+void demo__data__del_visitor_info();
+void demo__data__get_visitor_info();
+void demo__data__insert_room_info();
+void demo__data__del_room_info();
+void demo__data__get_room_info();
+void demo__create_visitor();
+void demo__create_room();
+void demo__display_all_visitors();
+void demo__display_all_rooms();
+
+/***************above are the declearation of some demo functions*********************/
+
+
+
+
 
 /*****************please put your function declearation here!!***********************/
 
-//void demo__hello_world(int o_O);
-
-
-
+int data__change_room_info(int,int,int,int,struct room *);
+/*int data__initialize_pointer(int **);
+int data__allocate_room_to_pointer_array(int **);*/
+int data__allocate_room_to_array(int *);
+int data__initialize_room_array(int *);
+int data__correspond_input_to_array(int);
+int data__allocate_type_to_room(int*);
+int data__allocate_price_to_room(int*);
+int data__initialize_room_structure(room*,int*,int*,int*);
+int data__revise_room_price_based_on_type(int,int,double);
+int data__mark_check_in(int,int);
+int data__mark_check_out(int,int);
+int data__insert_userinfo_to_structure(int,int,int*);
+int data__filter_input(char*);
 
 
 
@@ -172,8 +203,25 @@ int main(int argc, char const *argv[])
 	demo__test_fundamental_functions(); /* Don't Remove This For Test Purpose!! */
 
 	/*************Your Code Here****************/
+	/*interface*/
+	//char choosec[2];
+	//room demo_NewRoom={0/*this is the visitor id, please leave 0 here */,666/*roomId*/,20181111/*date*/,{2/*visitor number*/,1234567899,1243567899}/*visitorId*/,2/*room type*/,66.66/*price*/,2/*checkIn*/,1/*checkOut*/};
+	//int ce3=0;/*Used for quit the program*/
+	/*int *RP[80];
+	int *DP[80];
+	data__initialize_pointer(RP);
+	data__initialize_pointer(DP);*/
 
-	//printf("Hellow World!\n");
+	//room r2={0,205,20180921,{0},2,289,1,1};
+	//data__insert_room_info(&r2);
+    //data__revise_room_price_based_on_type(20180921,2,666);
+    //data__mark_check_in(20180921,205);
+    int visitordid[4]={1,123123};
+    data__insert_userinfo_to_structure(20181111,666,visitordid);
+
+
+
+
 
 
 
@@ -188,6 +236,293 @@ int main(int argc, char const *argv[])
 }
 
 
+/*********** My own function (staring line) ********/
+int data__revise_room_price_based_on_type(int Date,int Type,double Price)
+{
+    int vid[4];
+    vid[0]=0;
+    struct room *pts=NULL;
+    pts=data__get_room_info(0,0,Date,vid,Type,0,0,0,pts);
+
+    system("pause");
+    for(int i=0;i<g_nRtrnRows;i++)
+    {
+        (pts+i)->price=Price;
+        data__del_room_info((pts+i)->index,(pts+i)->roomId);
+        data__insert_room_info(pts+i);
+    }
+    return 0;
+
+
+}
+
+int data__mark_check_in(int Date,int RoomNo)
+{
+    int vid[4];
+    vid[0]=0;
+    struct room *pts=NULL;
+    pts=data__get_room_info(0,RoomNo,Date,vid,0,0,0,0,pts);
+    pts->checkIn=2;
+    data__del_room_info(pts->index,pts->roomId);
+    data__insert_room_info(pts);
+    return 0;
+
+}
+
+int data__mark_check_out(int Date,int RoomNo)
+{
+    int vid[4];
+    vid[0]=0;
+    struct room *pts=NULL;
+    pts=data__get_room_info(0,RoomNo,Date,vid,0,0,0,0,pts);
+    pts->checkOut=2;
+    data__del_room_info(pts->index,pts->roomId);
+    data__insert_room_info(pts);
+    return 0;
+
+}
+
+int data__insert_userinfo_to_structure(int Date,int RoomNo,int* Visitordetail)
+{
+    struct room *pts=NULL;
+    int vid[4];
+    vid[0]=0;
+    pts=data__get_room_info(0,RoomNo,Date,vid,0,0,0,0,pts);
+    for(int i=0;i<4;i++)
+    {
+    pts->visitorId[i]=Visitordetail[i];
+    }
+    data__del_room_info(pts->index,pts->roomId);
+    data__insert_room_info(pts);
+
+    return 0;
+}
+
+int data__filter_input(char*parameter1)
+{
+    if(strlen(parameter1)==1 && (parameter1==48 && parameter1==49 && parameter1==50 && parameter1==51))
+    {
+        return 1;
+    }
+    else if(strlen(parameter1)==3)
+    {
+        return 0;
+    }
+}
+
+
+
+int data__change_room_info(int room,int date,int roomNo,int roomdate,struct room *container)
+{
+    if(!data__get_room_info(0,room,date,"NULL",0,0,0,0,&container))
+    {
+       container->roomId=roomNo;
+       container->date=date;
+       container->price=100;/*Needs a price list 100 is just an example to let the program run*/
+       container->index=0;
+       container->visitorId[0]=0;
+       container->type=2;/*Needs a parameter which records the type for every room*/
+       container->checkIn=1;/*Needs nothing*/
+       container->checkOut=1;/*Needs nothing*/
+       data__insert_room_info(&container);
+    }
+
+}
+
+
+
+int data__allocate_type_to_room(int*initialtype)
+{
+    int i;
+    for(i=0;i<20;i++)
+    {
+        initialtype[i]=1;
+    }
+    for(i=20;i<40;i++)
+    {
+        initialtype[i]=2;
+    }
+    for(i=40;i<60;i++)
+    {
+        initialtype[i]=3;
+    }
+    for(i=60;i<80;i++)
+    {
+        initialtype[i]=10;
+    }
+    if(i==80)
+        return 1;
+    else
+        return 2;
+}
+
+int data__allocate_price_to_room(int* initialprice)
+{
+    int i;
+    for(i=0;i<20;i++)
+    {
+        initialprice[i]=200;
+    }
+    for(i=20;i<40;i++)
+    {
+        initialprice[i]=300;
+    }
+    for(i=40;i<60;i++)
+    {
+        initialprice[i]=400;
+    }
+    for(i=60;i<80;i++)
+    {
+        initialprice[i]=1000;
+    }
+    if(i==80)
+        return 1;
+    else
+        return 2;
+}
+
+int data__initialize_room_array(int *ptr)
+{
+    int i;
+    for(i=0;i<80;i++)
+    {
+        ptr[i]=0;
+    }
+    if(i==80)
+    {
+        return 1;
+    }
+    else
+    {
+        return 10;
+    }
+}
+
+/*int data__initialize_room_structure(room* ptr,int*roomNo,int*price,int*type)
+{
+    int i=0;
+    for(i=0;i<80;i++)
+    {
+        roomNo[i]->roomId=roomNo[i];
+
+    }
+}*/
+
+int data__allocate_roomNo_to_array(int *ptr)
+{
+    int i;
+    int unit;
+    unit=1;
+    for(i=0;i<10;i++)
+    {
+        ptr[i]=100+unit;
+        unit++;
+    }
+
+    unit=1;
+    for(i=10;i<20;i++)
+    {
+        ptr[i]=200+unit;
+        unit++;
+    }
+
+    unit=1;
+    for(i=20;i<30;i++)
+    {
+        ptr[i]=300+unit;
+        unit++;
+    }
+
+    unit=1;
+    for(i=30;i<40;i++)
+    {
+        ptr[i]=400+unit;
+        unit++;
+    }
+
+    unit=1;
+    for(i=40;i<50;i++)
+    {
+        ptr[i]=500+unit;
+        unit++;
+    }
+
+    unit=1;
+    for(i=50;i<60;i++)
+    {
+        ptr[i]=600+unit;
+        unit++;
+    }
+
+    unit=1;
+    for(i=60;i<70;i++)
+    {
+        ptr[i]=700+unit;
+        unit++;
+    }
+
+    unit=1;
+    for(i=70;i<80;i++)
+    {
+        ptr[i]=800+unit;
+        unit++;
+    }
+
+    i=0;
+    while(1)
+    {
+
+        if(ptr[i]!=0)
+        {
+            i++;
+            if(i==80)
+            break;
+
+        }
+        else
+            break;
+    }
+    if(i==80)
+        return 1;
+    else
+        return 10;
+
+}
+
+int data__correspond_input_to_array(int input)
+{
+    int gewei;
+    int shiwei;
+    shiwei=input/100-1;
+    gewei=input%100-1;
+    return (shiwei*10+gewei);
+}
+/*int data__initialize_pointer(int **ptr)
+{
+    int i;
+    for(i=0;i<80;i++)
+    {
+        ptr[0]=NULL;
+    }
+    if(i==80)
+    {
+        return 1;
+    }
+    else
+    {
+        return 2;
+    }
+}
+
+int data__allocate_room_to_pointer_array(int **ptr)
+{
+    int i;
+    for(i=0;i<10;i++)
+    {
+
+    }
+}*/
+/*********** My own function (End line) ********/
 
 
 
@@ -331,7 +666,7 @@ void demo__print__menu(int nPnt)
 
 	printf("Please use Arrows on Keyboard to Choose:\n");
 	char chItem1[]="Choose 1";
-	/* function pringt__item has three parameters: display string, if it is choosed,extra space on its left*/ 
+	/* function pringt__item has three parameters: display string, if it is choosed,extra space on its left*/
 	print__item(chItem1,(nPnt==1)?1:0,0);
 
 	char chItem2[]="Choose 2";
@@ -377,7 +712,7 @@ void demo__data__del_visitor_info()
 {
 	printf("Demo 2:\nTo delete a visitor info, you need to provide the visitor's ID.\n\n");
 	printf("you can see detailed info in demo__data__del_visitor_info()\n\n");
-		
+
 	printf("Please input the ID:\n");
 
 	/* get ID input */
@@ -385,7 +720,7 @@ void demo__data__del_visitor_info()
 	while(!scanf("%s",tmp_visitorId)) fflush(stdin);
 
 	/* del the visitor info */
-	if(data__del_visitor_info(atoi(tmp_visitorId))) printf("Error in Function data__del_visitor_info: %s\n",strerror(errno));; 
+	if(data__del_visitor_info(atoi(tmp_visitorId))) printf("Error in Function data__del_visitor_info: %s\n",strerror(errno));;
 
 }
 

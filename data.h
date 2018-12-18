@@ -50,7 +50,7 @@ void data__check_file_path(char hint)
 	if(hint=='V'||hint=='D')
 		sprintf(chCmd,"@echo off&IF NOT EXIST \"%s\\%s\" echo RoomData:>%s\\%s",DATA_FOLDER,ROOM_DATA_FILE,DATA_FOLDER,ROOM_DATA_FILE);
 
-	system(chCmd);	
+	system(chCmd);
 
 }
 
@@ -177,7 +177,7 @@ char *data__generate_digital_signature(char *tmp_signature)
 
 /*function for update file signature */
 void data__update_file_signature()
-{ 
+{
 	FILE *fp;
 	char chPath[50];
 	char *signature=NULL;
@@ -334,16 +334,16 @@ int *data__seek_key_word(char chKey[40], FILE *fp,int * nSeek,int file)
 
 	if(file==1)
     	sprintf(chPath,"%s/%s",DATA_FOLDER,VISITOR_INDEX_FILE);
-		
+
 	if(file==2)
 		sprintf(chPath,"%s/%s",DATA_FOLDER,ROOM_INDEX_FILE);
 
 	indx=fopen(chPath,"r");
 
 	/* get the length of the file */
-	fseek(fp,0,SEEK_END); 
+	fseek(fp,0,SEEK_END);
 	int nFlen=ftell(fp);
-	fseek(indx,0,SEEK_END); 
+	fseek(indx,0,SEEK_END);
 	int nIlen=ftell(indx);
 
 	/* free nSeek firstly in case it has been decleared */
@@ -436,21 +436,21 @@ void data__get_one_visitor_info(int nSeek,FILE *fp,visitor *visitor,int index)
 
 
 	/* get the length of the File */
-	fseek(fp,0,SEEK_END); 
+	fseek(fp,0,SEEK_END);
 	int nFlen=ftell(fp);
 
 	/* set the pointer at the nSeek point of the File */
-	fseek(fp,nSeek,SEEK_SET); 
+	fseek(fp,nSeek,SEEK_SET);
 
 	/* find the beginning of this visitor info */
 	do
 	{
-		fseek(fp,-4,SEEK_CUR); 
+		fseek(fp,-4,SEEK_CUR);
 
 	}while(!((fgetc(fp)^PASSWORD)=='$'&&(fgetc(fp)^PASSWORD)=='$'&&(fgetc(fp)^PASSWORD)=='$'));
 
 	/* adjust the pionter for the following reading*/
-	fseek(fp,2,SEEK_CUR); 
+	fseek(fp,2,SEEK_CUR);
 	/* read visitor info */
 	nItem=0;
 	do
@@ -466,19 +466,19 @@ void data__get_one_visitor_info(int nSeek,FILE *fp,visitor *visitor,int index)
 
 			chTmp[i++]=(fgetc(fp)^PASSWORD);
 
-			/* mark when find a '$|' which indicate the end of one item */ 
+			/* mark when find a '$|' which indicate the end of one item */
 			nLineCnt_sub=0;
 			if((fgetc(fp)^PASSWORD)=='$')	nLineCnt_sub++;
 			if((fgetc(fp)^PASSWORD)=='|')	nLineCnt_sub++;
 
 			fseek(fp,-2,SEEK_CUR); /* readjust the pointer */
 
-			/* mark when find a '|||' which indicate the end this user info */ 
+			/* mark when find a '|||' which indicate the end this user info */
 			nLineCnt=0;
 			if((fgetc(fp)^PASSWORD)=='|')	nLineCnt++;
 			if((fgetc(fp)^PASSWORD)=='|')	nLineCnt++;
 			if((fgetc(fp)^PASSWORD)=='|')	nLineCnt++;
-			fseek(fp,-1,SEEK_CUR); 
+			fseek(fp,-1,SEEK_CUR);
 
 		}while(nLineCnt_sub<2&&ftell(fp)<nFlen&&nLineCnt<3);
 
@@ -503,7 +503,7 @@ void data__get_one_visitor_info(int nSeek,FILE *fp,visitor *visitor,int index)
 		/* when come accross '|||' break */
 		if(nLineCnt==3||ftell(fp)>nFlen) break;
 
-		fseek(fp,2,SEEK_CUR); 
+		fseek(fp,2,SEEK_CUR);
 		nItem++;
 
 	}while(1);
@@ -520,21 +520,21 @@ void data__get_one_room_info(int nSeek,FILE *fp,room *pRoom,int index)
 	char chTmp[35];
 
 	/* get the length of the File */
-	fseek(fp,0,SEEK_END); 
+	fseek(fp,0,SEEK_END);
 	int nFlen=ftell(fp);
 
 	/* set the pointer at the nSeek point of the File */
-	fseek(fp,nSeek,SEEK_SET); 
+	fseek(fp,nSeek,SEEK_SET);
 
 	/* find the beginning of this visitor info */
 	do
 	{
-		fseek(fp,-4,SEEK_CUR); 
+		fseek(fp,-4,SEEK_CUR);
 
 	}while(!((fgetc(fp)^PASSWORD)=='$'&&(fgetc(fp)^PASSWORD)=='$'&&(fgetc(fp)^PASSWORD)=='$'));
 
 	/* adjust the pionter for the following reading*/
-	fseek(fp,2,SEEK_CUR); 
+	fseek(fp,2,SEEK_CUR);
 	/* read visitor info */
 	nItem=0;
 	do
@@ -550,19 +550,19 @@ void data__get_one_room_info(int nSeek,FILE *fp,room *pRoom,int index)
 
 			chTmp[i++]=(fgetc(fp)^PASSWORD);
 
-			/* mark when find a '$|' which indicate the end of one item */ 
+			/* mark when find a '$|' which indicate the end of one item */
 			nLineCnt_sub=0;
 			if((fgetc(fp)^PASSWORD)=='$')	nLineCnt_sub++;
 			if((fgetc(fp)^PASSWORD)=='|')	nLineCnt_sub++;
 
 			fseek(fp,-2,SEEK_CUR); /* readjust the pointer */
 
-			/* mark when find a '|||' which indicate the end this user info */ 
+			/* mark when find a '|||' which indicate the end this user info */
 			nLineCnt=0;
 			if((fgetc(fp)^PASSWORD)=='|')	nLineCnt++;
 			if((fgetc(fp)^PASSWORD)=='|')	nLineCnt++;
 			if((fgetc(fp)^PASSWORD)=='|')	nLineCnt++;
-			fseek(fp,-1,SEEK_CUR); 
+			fseek(fp,-1,SEEK_CUR);
 
 		}while(nLineCnt_sub<2&&ftell(fp)<nFlen&&nLineCnt<3);
 
@@ -594,7 +594,7 @@ void data__get_one_room_info(int nSeek,FILE *fp,room *pRoom,int index)
 				}
 
 				(pRoom+index)->visitorId[0]=k;
-			}	
+			}
 
 			if(nItem==4)	(pRoom+index)->type=atoi(chTmp);
 			if(nItem==5)	(pRoom+index)->price=atof(chTmp);
@@ -607,7 +607,7 @@ void data__get_one_room_info(int nSeek,FILE *fp,room *pRoom,int index)
 		/* when come accross '|||' break */
 		if(nLineCnt==3||ftell(fp)>nFlen) break;
 
-		fseek(fp,2,SEEK_CUR); 
+		fseek(fp,2,SEEK_CUR);
 		nItem++;
 
 	}while(1);
@@ -625,7 +625,7 @@ int *data__get_del_usr_info(int *deled_usr)
 	char chPath[60];
 
 	data__check_file_path('r');
-  
+
   	/* this function should not have worked well with out this code, however...*/
 	/*if(deled_usr!=NULL) free(deled_usr);*/
 	/* declear a file var */
@@ -637,7 +637,7 @@ int *data__get_del_usr_info(int *deled_usr)
     fp = fopen (chPath, "r");
 
     /* get the length of the file */
-    fseek(fp,0,SEEK_END); 
+    fseek(fp,0,SEEK_END);
 	int nFlen=ftell(fp);
 
 	/* allocate a memory for int[] deled_usr*/
@@ -684,7 +684,7 @@ double *data__get_del_room_info(double *deled_rom)
 	char chPath[60];
 
 	data__check_file_path('R');
-  
+
   	/* this function should not have worked well with out this code, however...*/
 	/*if(deled_rom!=NULL) free(deled_usr);*/
 	/* declear a file var */
@@ -696,7 +696,7 @@ double *data__get_del_room_info(double *deled_rom)
     fp = fopen (chPath, "r");
 
     /* get the length of the file */
-    fseek(fp,0,SEEK_END); 
+    fseek(fp,0,SEEK_END);
 	int nFlen=ftell(fp);
 
 	/* allocate a memory for int[] deled_usr*/
@@ -718,7 +718,7 @@ double *data__get_del_room_info(double *deled_rom)
     	/* get one ID */
     	for(i=0;i<14;i++)
     		strTmp[i]=(fgetc(fp)^PASSWORD);
-    	
+
     	strTmp[i]='\0';
 
     	/* assign the ID to int[]*/
@@ -885,7 +885,7 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
 
 		sprintf(value,"hhhH$");
 		break;
-		
+
 	}
 
 

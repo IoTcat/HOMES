@@ -1,0 +1,21 @@
+# depslib dependency file v1.0
+1545124849 source:d:\github_as4\ee101-as4-hotelsystem\main.c
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	<string.h>
+	<ctype.h>
+	<windows.h>
+	<time.h>
+	<errno.h>
+	<math.h>
+	"data.h"
+	"input.h"
+	"print.h"
+
+1545125281 d:\github_as4\ee101-as4-hotelsystem\data.h
+
+1545123544 d:\github_as4\ee101-as4-hotelsystem\input.h
+
+1545123546 d:\github_as4\ee101-as4-hotelsystem\print.h
+
