@@ -21,6 +21,8 @@ Description: Program for a hotal management system.
 #include <time.h>	/* lib for getting system time */
 #include <errno.h> /* lib dealing with error */
 #include <math.h> /* lib for math */
+#include <unistd.h> /* include this lib for multithread processing */
+#include <pthread.h> /* include this lib for multithread processing */
 
 
 /* program title */
@@ -55,10 +57,19 @@ Description: Program for a hotal management system.
 #define VISITOR_INDEX_FILE "visitorIndex.txt"
 /* the name of index file */
 #define ROOM_INDEX_FILE "roomIndex.txt"
+<<<<<<< HEAD
+=======
+/* the name of passwd file */
+#define STAFF_PASSWD_FILE "staffPasswd.txt"
+/* the name of passwd file */
+#define MANAGER_PASSWD_FILE "managerPasswd.txt"
+>>>>>>> master
 /* the password of data file */
 #define PASSWORD 'l'
 /* the digital signature key */
 #define DIGITAL_SIGNATURE_KEY 'k'
+/* the max size of password */
+#define USRPASSWORD_MAX_SIZE 99
 
 
 
@@ -77,6 +88,15 @@ int g_nRtrnRows=0;
 
 
 /************** declear struct here ****************************/
+
+
+typedef struct usr
+{
+	char name[10]; /* staff> staff,manager-> manager */
+	char passwd[USRPASSWORD_MAX_SIZE];
+} usr;
+
+
 
 typedef struct visitor
 {
@@ -117,6 +137,10 @@ typedef struct room
 #include "data.h"
 #include "input.h"
 #include "print.h"
+<<<<<<< HEAD
+=======
+#include "login.h"
+>>>>>>> master
 
 
 
@@ -146,6 +170,7 @@ void demo__create_visitor();
 void demo__create_room();
 void demo__display_all_visitors();
 void demo__display_all_rooms();
+int final_main();
 
 /***************above are the declearation of some demo functions*********************/
 
@@ -171,6 +196,7 @@ void demo__display_all_rooms();
 /***************above are the declearation of some demo functions*********************/
 
 
+<<<<<<< HEAD
 
 
 
@@ -190,6 +216,8 @@ int data__mark_check_in(int,int);
 int data__mark_check_out(int,int);
 int data__insert_userinfo_to_structure(int,int,int*);
 int data__filter_input(char*);
+=======
+>>>>>>> master
 
 
 
@@ -201,6 +229,8 @@ int data__filter_input(char*);
 int main(int argc, char const *argv[])
 {
 	demo__test_fundamental_functions(); /* Don't Remove This For Test Purpose!! */
+
+	//final_main();
 
 	/*************Your Code Here****************/
 	/*interface*/
@@ -222,6 +252,10 @@ int main(int argc, char const *argv[])
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 
 
 
@@ -526,6 +560,21 @@ int data__allocate_room_to_pointer_array(int **ptr)
 
 
 
+int final_main()
+{
+
+	usr usr;
+
+	int nUsr=login__choose_usr();
+
+	if(nUsr==1) sprintf(usr.name,"staff");
+	else sprintf(usr.name,"manager");
+
+	login__check_passwd(usr);
+
+
+	return 0;
+}
 
 
 
