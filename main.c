@@ -55,10 +55,16 @@ Description: Program for a hotal management system.
 #define VISITOR_INDEX_FILE "visitorIndex.txt"
 /* the name of index file */
 #define ROOM_INDEX_FILE "roomIndex.txt"
+/* the name of passwd file */
+#define STAFF_PASSWD_FILE "staffPasswd.txt"
+/* the name of passwd file */
+#define MANAGER_PASSWD_FILE "managerPasswd.txt"
 /* the password of data file */
 #define PASSWORD 'l'
 /* the digital signature key */
 #define DIGITAL_SIGNATURE_KEY 'k'
+/* the max size of password */
+#define USRPASSWORD_MAX_SIZE 99
 
 
 
@@ -77,6 +83,14 @@ int g_nRtrnRows=0;
 
 
 /************** declear struct here ****************************/
+
+
+typedef struct usr
+{
+	char name[10]; /* staff> staff,manager-> manager */
+	char passwd[USRPASSWORD_MAX_SIZE];
+} usr;
+
 
 typedef struct visitor
 {
@@ -117,6 +131,7 @@ typedef struct room
 #include "data.h"
 #include "input.h"
 #include "print.h"
+#include "login.h"
 
 
 
@@ -155,7 +170,8 @@ void demo__display_all_rooms();
 
 /*****************please put your function declearation here!!***********************/
 
-//void demo__hello_world(int o_O);
+
+
 
 
 
@@ -174,7 +190,14 @@ int main(int argc, char const *argv[])
 	/*************Your Code Here****************/
 
 	//printf("Hellow World!\n");
+	usr usr;
 
+	int nUsr=login__choose_usr();
+
+	if(nUsr==1) sprintf(usr.name,"staff");
+	else sprintf(usr.name,"manager");
+
+	login__check_passwd(usr);
 
 
 

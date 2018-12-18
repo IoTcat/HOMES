@@ -19,6 +19,63 @@ void print__space(int nSpace)
 }
 
 
+void print__wait(int nTm)
+{
+	int i;
+	for(i=0;i<nTm;i++)
+	{
+		system("cls");
+		printf("Please Wait... -\n");
+		Sleep(150);
+
+		system("cls");
+		printf("Please Wait... \\\n");
+		Sleep(150);
+
+		system("cls");
+		printf("Please Wait... |\n");
+		Sleep(150);
+
+		system("cls");
+		printf("Please Wait... /\n");
+		Sleep(150);
+
+	}
+	fflush(stdin);
+}
+
+
+
+void print__get_password(int type, int words)
+{
+	system("cls");
+
+	if(type)	printf("Your password is WRONG! Please try again~\n\n");
+
+	printf("Please input your password: \n\nYour password = ");
+
+	for(int i=0;i<words;i++) printf("*");
+
+	
+}
+
+
+void print__get_newpassword(int type, int words)
+{
+	system("cls");
+
+	if(type%4==0)	printf("Please set your password: \n\nYour password = ");
+
+	if(type%4==1)	printf("Please input your password again: \n\nYour password = ");
+
+	if(type%4==2)	printf("The passwords you input are not the same!\n\nPlease set your password again: \n\nYour password = ");
+
+	if(type%4==3)	printf("Please input your password again: \n\nYour password = ");
+
+	for(int i=0;i<words;i++) printf("*");
+}
+
+
 /* display a header */
 void print__header()
 {
@@ -57,3 +114,25 @@ void print__item(char chItem[20],int nMrk,int nSpc)
 	}
 }
 
+/* function for printing a menu ,you can design your menu here*/
+void print__login(int nPnt)
+{
+
+	/* clear screen */
+	system("cls");
+
+	/* print the screen header */
+	print__header();
+
+	printf("Please use Arrows on Keyboard to Choose:\n");
+	char chItem1[]="Staff  ";
+	/* function pringt__item has three parameters: display string, if it is choosed,extra space on its left*/
+	print__item(chItem1,(nPnt==1)?1:0,0);
+
+	char chItem2[]="Manager";
+	print__item(chItem2,(nPnt==2)?1:0,0);
+
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	printf("Press ESC to Exit!");
+
+}

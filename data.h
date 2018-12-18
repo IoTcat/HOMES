@@ -12,6 +12,111 @@ int data__get_current_date()
     return date;
 }
 
+/* function for locate a peice of info in a file by key words */
+int *data__seek_key_word_former(char chKey[40], FILE *fp,int * nSeek)
+{
+	int i,j=0;
+
+
+	/* if the length of key words is less than 3, the function will not work */
+	if(strlen(chKey)<2)	return NULL;
+
+	/* get the length of the file */
+	fseek(fp,0,SEEK_END); 
+	int nFlen=ftell(fp);
+
+	/* free nSeek firstly in case it has been decleared */
+	free(nSeek);
+
+	/* allocate a memary for nSeek */
+	nSeek=(int *)malloc((nFlen/strlen(chKey))*sizeof(int));
+
+	/* move the pointer to the beginning of the File */
+	fseek( fp, 0, SEEK_SET );
+
+	/* find all location where the key word exist */
+	for(i=0;ftell(fp)<nFlen;)
+	{
+		/* match the key word */
+		for(j=0;j<strlen(chKey);)
+		{
+			if(fgetc(fp)==(chKey[j++])) ;
+			else break;
+		}
+
+		/* if found the key word, record its location */
+		if(j==strlen(chKey))
+		{
+			nSeek[++i]=ftell(fp);
+			/*active this only for debug purpose*//*printf("%d\n",nSeek[i] );*/
+		}
+	}
+
+	/* record the times that the key words appeared in the File */
+	nSeek[0]=i;
+
+	return nSeek;
+}
+
+
+void data__insert_psswd_online(char *psswdKey, int usr)
+{
+	/* declear a file var */
+    FILE *fp;
+    char chPath[50];
+
+    /* get file name */
+    if(usr==1)
+    sprintf(chPath,"%s/%s",DATA_FOLDER,STAFF_PASSWD_FILE);
+    if(usr==2)
+    sprintf(chPath,"%s/%s",DATA_FOLDER,MANAGER_PASSWD_FILE);
+
+
+    fp=fopen(chPath,"w+");
+
+    fprintf(fp, "%s",psswdKey );
+
+    fclose(fp);
+
+}
+
+
+/* function for encoding a password */
+char *data__encode_password(usr usr, char *rtrn)
+{
+	rtrn=(char *)malloc(sizeof(usr.name)+sizeof(usr.passwd)+3);
+
+	char tmp[]="password";
+
+	int j=0;
+	for(int i=0;i<strlen(usr.name);i++)
+	{
+		
+			tmp[(j++)%8]^=usr.name[i];
+	}
+	
+
+	for(int i=0;i<strlen(usr.passwd);i++)
+	{
+			tmp[(j++)%8]^=usr.passwd[i];
+	}
+
+
+
+	for(int i=0;i<8;i++)
+	{
+		tmp[i]=(tmp[i]+666)%62;
+
+		if(tmp[i]<10)	tmp[i]+=48;
+		else if(tmp[i]<36) tmp[i]+=87;
+		else tmp[i]=tmp[i]-36+65;
+	}
+
+	sprintf(rtrn,"%s",tmp);
+
+	return rtrn;
+}
+
 
 
 /* function for generate a new visitor ID */
