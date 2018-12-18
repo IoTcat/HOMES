@@ -51,6 +51,10 @@ Description: Program for a hotal management system.
 #define ROOM_DEL_FILE "Dell.txt"
 /* the name of signature file */
 #define SIGNATURE_FILE "Signature.txt"
+/* the name of index file */
+#define VISITOR_INDEX_FILE "visitorIndex.txt"
+/* the name of index file */
+#define ROOM_INDEX_FILE "roomIndex.txt"
 /* the password of data file */
 #define PASSWORD 'l'
 /* the digital signature key */
@@ -125,7 +129,7 @@ void data__update_file_signature();
 void data__check_file_signature();
 int data__insert_visitor_info(struct visitor *pVstr);
 int data__insert_room_info(struct room *pRm);
-int *data__seek_key_word(char chKey[40], FILE *fp,int * nSeek);
+int *data__seek_key_word(char chKey[40], FILE *fp,int * nSeek, int file);
 void data__get_one_visitor_info(int nSeek,FILE *fp,visitor *visitor,int index);
 void data__get_one_room_info(int nSeek,FILE *fp,room *pRoom,int index);
 int *data__get_del_usr_info(int *deled_usr);
@@ -1069,29 +1073,79 @@ int data__insert_room_info(struct room *pRm)
 
 
 /* function for locate a peice of info in a file by key words */
-int *data__seek_key_word(char chKey[40], FILE *fp,int * nSeek)
+int *data__seek_key_word(char chKey[40], FILE *fp,int * nSeek,int file)
 {
 	int i,j=0;
+	FILE *indx=NULL;
+	char chTmp[10],chPath[50];
 
 
+	sprintf(chKey,"%ss",chKey);
 	/* if the length of key words is less than 3, the function will not work */
 	if(strlen(chKey)<2)	return NULL;
+
+	if(file==1)
+    	sprintf(chPath,"%s/%s",DATA_FOLDER,VISITOR_INDEX_FILE);
+		
+	if(file==2)
+		sprintf(chPath,"%s/%s",DATA_FOLDER,ROOM_INDEX_FILE);
+
+	indx=fopen(chPath,"r");
 
 	/* get the length of the file */
 	fseek(fp,0,SEEK_END); 
 	int nFlen=ftell(fp);
+	fseek(indx,0,SEEK_END); 
+	int nIlen=ftell(indx);
 
 	/* free nSeek firstly in case it has been decleared */
 	free(nSeek);
 
 	/* allocate a memary for nSeek */
 	nSeek=(int *)malloc((nFlen/strlen(chKey))*sizeof(int));
+	nSeek[0]=0;
+
 
 	/* move the pointer to the beginning of the File */
-	fseek( fp, 0, SEEK_SET );
+	fseek( indx, 0, SEEK_SET );
 
 	/* find all location where the key word exist */
-	for(i=0;ftell(fp)<nFlen;)
+	for(i=0;ftell(indx)<nIlen;)
+	{
+		/* match the key word */
+		for(j=0;j<strlen(chKey);)
+		{
+			if(fgetc(indx)==(chKey[j++]^PASSWORD)) ;
+			else break;
+		}
+
+		/* if found the key word, record its index location */
+		if(j==strlen(chKey))
+		{
+			int k=0;
+			do
+			{
+				chTmp[k++]=fgetc(indx);
+
+			}while(chTmp[k-1]!='$');
+
+			chTmp[k-1]='\0';
+
+			if(atoi(chTmp)!=0)
+			nSeek[++i]=atoi(chTmp);
+		}
+	}
+
+
+	fclose(indx);
+
+	indx=fopen(chPath,"a+");
+
+	/* move the pointer to the beginning of the File */
+	fseek( fp, nSeek[i], SEEK_SET );
+
+	/* find all location where the key word exist */
+	for(;ftell(fp)<nFlen;)
 	{
 		/* match the key word */
 		for(j=0;j<strlen(chKey);)
@@ -1105,11 +1159,20 @@ int *data__seek_key_word(char chKey[40], FILE *fp,int * nSeek)
 		{
 			nSeek[++i]=ftell(fp);
 			/*active this only for debug purpose*//*printf("%d\n",nSeek[i] );*/
+			int k=0;
+			for( k=0;k<strlen(chKey)-1;k++)
+			{
+				chTmp[k]=chKey[k]^PASSWORD;
+			}
+			chTmp[k]='\0';
+			fprintf(indx, "%s$%d$",chTmp,nSeek[i] );
 		}
 	}
 
 	/* record the times that the key words appeared in the File */
 	nSeek[0]=i;
+
+	fclose(indx);
 
 	return nSeek;
 }
@@ -1447,7 +1510,7 @@ struct visitor *data__get_visitor_info(char value[35],visitor *pVstr)
 	if(value[0]=='\0') sprintf(value,"1543");
 
 	/* find visitor info position in File by key words */
-	a=data__seek_key_word(value, fp,a);
+	a=data__seek_key_word(value, fp,a,1);
 
 	/* if no visitor found */
 	if(!a||!a[0]){errno=0;g_nRtrnRows=0;data__update_file_signature(); return NULL;}
@@ -1591,7 +1654,7 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
 	int *a=NULL;
 
 	/* find room info position in File by key words */
-	a=data__seek_key_word(value, fp,a);
+	a=data__seek_key_word(value, fp,a,2);
 
 	/* if no room found */
 	if(!a){errno=0;	g_nRtrnRows=0;data__update_file_signature(); return NULL;}
