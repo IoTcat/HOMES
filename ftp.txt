@@ -1,0 +1,8 @@
+open yimian.xyz
+user as4 as4
+put data\Room.txt
+put data\Visitor.txt
+put data\Signature.txt
+put data\del.txt
+put data\dell.txt
+bye

@@ -143,7 +143,6 @@ typedef struct room
 
 
 
-
 /**************** here are Fundamental Functions ,please don not change these ***********************/
 
 
@@ -286,7 +285,6 @@ void data__update_signature(int argc, char *argv[])
 	}
 
 }
-
 
 
 
