@@ -286,6 +286,55 @@ void data__update_signature(int argc, char *argv[])
 
 }
 
+double data__checkIn_rate_by_date_and_type(int date,int type)
+{
+
+	/* declear a room pointer to receive the matched rooms info */
+	struct room *pRm=NULL;
+
+	pRm= data__get_room_info(0/*index*/,0/*roomId*/,date/*date*/,NULL/*visitorId*/,type/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
+
+	/* show error hint if the function not runing successfully */
+	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
+
+	int dDown=g_nRtrnRows;
+
+	pRm= data__get_room_info(0/*index*/,0/*roomId*/,date/*date*/,NULL/*visitorId*/,type/*type*/,0/*price*/,2/*checkIn*/,0/*checkOut*/,pRm);
+
+	/* show error hint if the function not runing successfully */
+	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
+
+	if(g_nRtrnRows==0) return 0;
+
+
+	return (double)g_nRtrnRows/(double)dDown;
+
+}
+
+void print__checkIn_rate(int date)
+{
+	system("cls");
+	print__setup();
+	print__header();
+
+	printf("\nCheck In Rate:\n\n**: %.2f%%\n\n***: %.2f%%\n\n****: %.2f%%\n\nVIP: %.2f%%",data__checkIn_rate_by_date_and_type(date,2),data__checkIn_rate_by_date_and_type(date,3),data__checkIn_rate_by_date_and_type(date,4),data__checkIn_rate_by_date_and_type(date,5));
+}
+
+
+void print__select_date()
+{
+	system("cls");
+	print__setup();
+	print__header();
+
+	printf("\nPlease Input the date you want to view: \n\nYour Input Date=");
+
+	char *input=NULL;
+
+	input=input__getchar_plus(input);
+
+	print__checkIn_rate(atoi(input));
+}
 
 
 /*****************Above are your function declearation ^_^ ***********************/
@@ -325,6 +374,10 @@ int main(int argc, char *argv[])
 
 	//data__export_room_to_excel();
 	//data__export_visitor_to_excel();
+
+	//print__checkIn_rate(20181220);
+	print__select_date();
+	
 
 	/*************Your Code Above****************/
 
