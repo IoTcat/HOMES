@@ -321,7 +321,7 @@ void print__checkIn_rate(int date)
 }
 
 
-void print__select_date()
+void print__select_date_checkIn()
 {
 	system("cls");
 	print__setup();
@@ -335,6 +335,56 @@ void print__select_date()
 
 	print__checkIn_rate(atoi(input));
 }
+
+
+double data__income_by_date_and_type(int date, int type)
+{
+	/* declear a room pointer to receive the matched rooms info */
+	struct room *pRm=NULL;
+
+	pRm= data__get_room_info(0/*index*/,0/*roomId*/,date/*date*/,NULL/*visitorId*/,type/*type*/,0/*price*/,0/*checkIn*/,2/*checkOut*/,pRm);
+
+	/* show error hint if the function not runing successfully */
+	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
+
+	double income=0;
+
+	for(int i=0;i<g_nRtrnRows;i++)
+	{
+		income+=(pRm+i)->price;
+	}
+
+	return income;
+
+}
+
+
+void print__income_by_date(int date)
+{
+	system("cls");
+	print__setup();
+	print__header();
+
+	printf("\nIncome for each room type:\n\n**: %.2f\n\n***: %.2f\n\n****: %.2f\n\nVIP: %.2f",data__income_by_date_and_type(date,2),data__income_by_date_and_type(date,3),data__income_by_date_and_type(date,4),data__income_by_date_and_type(date,5));
+}
+
+
+void print__select_date_income()
+{
+	system("cls");
+	print__setup();
+	print__header();
+
+	printf("\nPlease Input the date you want to view: \n\nYour Input Date=");
+
+	char *input=NULL;
+
+	input=input__getchar_plus(input);
+
+	print__income_by_date(atoi(input));
+}
+
+
 
 
 /*****************Above are your function declearation ^_^ ***********************/
@@ -376,8 +426,10 @@ int main(int argc, char *argv[])
 	//data__export_visitor_to_excel();
 
 	//print__checkIn_rate(20181220);
-	print__select_date();
-	
+	//print__select_date_checkIn();
+	//printf("%f\n",data__income_by_date_and_type(20181219, 1) );
+	//print__income_by_date(20181219);
+	//print__select_date_income();
 
 	/*************Your Code Above****************/
 
