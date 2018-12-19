@@ -162,3 +162,54 @@ void print__roomId(room *pRm)
 
 
 }
+ 
+void print__income_by_date(int date)
+{
+	system("cls");
+	print__setup();
+	print__header();
+
+	printf("\nIncome for each room type:\n\n**: %.2f\n\n***: %.2f\n\n****: %.2f\n\nVIP: %.2f",data__income_by_date_and_type(date,2),data__income_by_date_and_type(date,3),data__income_by_date_and_type(date,4),data__income_by_date_and_type(date,5));
+}
+
+
+void print__select_date_income()
+{
+	system("cls");
+	print__setup();
+	print__header();
+
+	printf("\nPlease Input the date you want to view: \n\nYour Input Date=");
+
+	char *input=NULL;
+
+	input=input__getchar_plus(input);
+
+	print__income_by_date(atoi(input));
+}
+
+
+void print__checkIn_rate(int date)
+{
+	system("cls");
+	print__setup();
+	print__header();
+
+	printf("\nCheck In Rate:\n\n**: %.2f%%\n\n***: %.2f%%\n\n****: %.2f%%\n\nVIP: %.2f%%",data__checkIn_rate_by_date_and_type(date,2),data__checkIn_rate_by_date_and_type(date,3),data__checkIn_rate_by_date_and_type(date,4),data__checkIn_rate_by_date_and_type(date,5));
+}
+
+
+void print__select_date_checkIn()
+{
+	system("cls");
+	print__setup();
+	print__header();
+
+	printf("\nPlease Input the date you want to view: \n\nYour Input Date=");
+
+	char *input=NULL;
+
+	input=input__getchar_plus(input);
+
+	print__checkIn_rate(atoi(input));
+}

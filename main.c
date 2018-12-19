@@ -177,214 +177,17 @@ int final_main();
 
 /*****************please put your function declearation here!!***********************/
 
-int data__check_del_by_date(int date)
+void data__room_setup(int quick)
 {
-	/* declear a room pointer to receive the matched rooms info */
-	struct room *pRm=NULL;
-
-	for(int i=0;i<80;i++)
+	for(int i=0;i<7;i++)
 	{
-
-		pRm= data__get_room_info(0/*index*/,(i/10+1)*100+i%10+1/*roomId*/,date/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
-
-		/* show error hint if the function not runing successfully */
-		if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
-
-		for(int j=0;j<g_nRtrnRows-1;j++)
-			data__del_room_info((pRm+j)->index,(pRm+j)->roomId);
-
-	}
-
-	return 0;
-}
-
-
-
-int data__revise_room_price_based_on_type(int Date,int Type,double Price)
-{
-
-    struct room *pts=NULL;
-    pts=data__get_room_info(0,0,Date,NULL,Type,0,0,0,pts);
-
-    for(int i=0;i<g_nRtrnRows;i++)
-    {
-        (pts+i)->price=Price;
-        data__del_room_info((pts+i)->index,(pts+i)->roomId);
-        data__insert_room_info(pts+i);
-    }
-
-   // data__check_del_by_date(Date);
-    return 0;
-
-
-}
-
-int data__mark_check_in(int Date,int RoomNo)
-{
-
-    struct room *pts=NULL;
-    pts=data__get_room_info(0,RoomNo,Date,NULL,0,0,0,0,pts);
-    pts->checkIn=2;
-    data__del_room_info(pts->index,pts->roomId);
-    data__insert_room_info(pts);
-
-    //data__check_del_by_date(Date);
-    return 0;
-
-}
-
-int data__mark_check_out(int Date,int RoomNo)
-{
-
-    struct room *pts=NULL;
-    pts=data__get_room_info(0,RoomNo,Date,NULL,0,0,0,0,pts);
-    pts->checkOut=2;
-    data__del_room_info(pts->index,pts->roomId);
-    data__insert_room_info(pts);
-
-  //  data__check_del_by_date(Date);
-    return 0;
-
-}
-
-int data__insert_userinfo_to_structure(int Date,int RoomNo,int* Visitordetail)
-{
-    struct room *pts=NULL;
-
-    pts=data__get_room_info(0,RoomNo,Date,NULL,0,0,0,0,pts);
-    for(int i=0;i<4;i++)
-    {
-    pts->visitorId[i]=Visitordetail[i];
-    }
-    data__del_room_info(pts->index,pts->roomId);
-    data__insert_room_info(pts);
-
-   // data__check_del_by_date(Date);
-
-    return 0;
-}
-
-
-void data__update_signature(int argc, char *argv[])
-{
-
-	time_t t;
-	t = time(NULL);
- 
-
-	if(argc==3&&atoi(argv[1])>time(&t)-10000) 
-	{
-		int a=atoi(data__encode_uc(argv[1]));
-		int b=atoi(argv[2]);
-		if(a==b)
-		{
-			printf("Updating Digital Signature...\n");
-			data__update_file_signature();
-			exit(0);
-		}
+		data__room_setup_by_date(data__get_current_date(0)+i,20181219);
+	
+		if(!quick)
+			data__check_del_by_date(data__get_current_date(0)+i);
 	}
 
 }
-
-double data__checkIn_rate_by_date_and_type(int date,int type)
-{
-
-	/* declear a room pointer to receive the matched rooms info */
-	struct room *pRm=NULL;
-
-	pRm= data__get_room_info(0/*index*/,0/*roomId*/,date/*date*/,NULL/*visitorId*/,type/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
-
-	/* show error hint if the function not runing successfully */
-	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
-
-	int dDown=g_nRtrnRows;
-
-	pRm= data__get_room_info(0/*index*/,0/*roomId*/,date/*date*/,NULL/*visitorId*/,type/*type*/,0/*price*/,2/*checkIn*/,0/*checkOut*/,pRm);
-
-	/* show error hint if the function not runing successfully */
-	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
-
-	if(g_nRtrnRows==0) return 0;
-
-
-	return (double)g_nRtrnRows/(double)dDown;
-
-}
-
-void print__checkIn_rate(int date)
-{
-	system("cls");
-	print__setup();
-	print__header();
-
-	printf("\nCheck In Rate:\n\n**: %.2f%%\n\n***: %.2f%%\n\n****: %.2f%%\n\nVIP: %.2f%%",data__checkIn_rate_by_date_and_type(date,2),data__checkIn_rate_by_date_and_type(date,3),data__checkIn_rate_by_date_and_type(date,4),data__checkIn_rate_by_date_and_type(date,5));
-}
-
-
-void print__select_date_checkIn()
-{
-	system("cls");
-	print__setup();
-	print__header();
-
-	printf("\nPlease Input the date you want to view: \n\nYour Input Date=");
-
-	char *input=NULL;
-
-	input=input__getchar_plus(input);
-
-	print__checkIn_rate(atoi(input));
-}
-
-
-double data__income_by_date_and_type(int date, int type)
-{
-	/* declear a room pointer to receive the matched rooms info */
-	struct room *pRm=NULL;
-
-	pRm= data__get_room_info(0/*index*/,0/*roomId*/,date/*date*/,NULL/*visitorId*/,type/*type*/,0/*price*/,0/*checkIn*/,2/*checkOut*/,pRm);
-
-	/* show error hint if the function not runing successfully */
-	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
-
-	double income=0;
-
-	for(int i=0;i<g_nRtrnRows;i++)
-	{
-		income+=(pRm+i)->price;
-	}
-
-	return income;
-
-}
-
-
-void print__income_by_date(int date)
-{
-	system("cls");
-	print__setup();
-	print__header();
-
-	printf("\nIncome for each room type:\n\n**: %.2f\n\n***: %.2f\n\n****: %.2f\n\nVIP: %.2f",data__income_by_date_and_type(date,2),data__income_by_date_and_type(date,3),data__income_by_date_and_type(date,4),data__income_by_date_and_type(date,5));
-}
-
-
-void print__select_date_income()
-{
-	system("cls");
-	print__setup();
-	print__header();
-
-	printf("\nPlease Input the date you want to view: \n\nYour Input Date=");
-
-	char *input=NULL;
-
-	input=input__getchar_plus(input);
-
-	print__income_by_date(atoi(input));
-}
-
-
 
 
 /*****************Above are your function declearation ^_^ ***********************/
@@ -430,6 +233,8 @@ int main(int argc, char *argv[])
 	//printf("%f\n",data__income_by_date_and_type(20181219, 1) );
 	//print__income_by_date(20181219);
 	//print__select_date_income();
+
+	//data__room_setup(0);
 
 	/*************Your Code Above****************/
 

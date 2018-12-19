@@ -1358,3 +1358,162 @@ void data__export_visitor_to_excel()
 	system(chPath);
 
 }
+
+
+int data__check_del_by_date(int date)
+{
+	/* declear a room pointer to receive the matched rooms info */
+	struct room *pRm=NULL;
+
+	for(int i=0;i<80;i++)
+	{
+
+		pRm= data__get_room_info(0/*index*/,(i/10+1)*100+i%10+1/*roomId*/,date/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
+
+		/* show error hint if the function not runing successfully */
+		if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
+
+		for(int j=0;j<g_nRtrnRows-1;j++)
+			data__del_room_info((pRm+j)->index,(pRm+j)->roomId);
+
+	}
+
+	return 0;
+}
+
+
+
+int data__revise_room_price_based_on_type(int Date,int Type,double Price)
+{
+
+    struct room *pts=NULL;
+    pts=data__get_room_info(0,0,Date,NULL,Type,0,0,0,pts);
+
+    for(int i=0;i<g_nRtrnRows;i++)
+    {
+        (pts+i)->price=Price;
+        data__del_room_info((pts+i)->index,(pts+i)->roomId);
+        data__insert_room_info(pts+i);
+    }
+
+   // data__check_del_by_date(Date);
+    return 0;
+
+
+}
+
+int data__mark_check_in(int Date,int RoomNo)
+{
+
+    struct room *pts=NULL;
+    pts=data__get_room_info(0,RoomNo,Date,NULL,0,0,0,0,pts);
+    pts->checkIn=2;
+    data__del_room_info(pts->index,pts->roomId);
+    data__insert_room_info(pts);
+
+    //data__check_del_by_date(Date);
+    return 0;
+
+}
+
+int data__mark_check_out(int Date,int RoomNo)
+{
+
+    struct room *pts=NULL;
+    pts=data__get_room_info(0,RoomNo,Date,NULL,0,0,0,0,pts);
+    pts->checkOut=2;
+    data__del_room_info(pts->index,pts->roomId);
+    data__insert_room_info(pts);
+
+  //  data__check_del_by_date(Date);
+    return 0;
+
+}
+
+int data__insert_userinfo_to_structure(int Date,int RoomNo,int* Visitordetail)
+{
+    struct room *pts=NULL;
+
+    pts=data__get_room_info(0,RoomNo,Date,NULL,0,0,0,0,pts);
+    for(int i=0;i<4;i++)
+    {
+    pts->visitorId[i]=Visitordetail[i];
+    }
+    data__del_room_info(pts->index,pts->roomId);
+    data__insert_room_info(pts);
+
+   // data__check_del_by_date(Date);
+
+    return 0;
+}
+
+
+void data__update_signature(int argc, char *argv[])
+{
+
+	time_t t;
+	t = time(NULL);
+ 
+
+	if(argc==3&&atoi(argv[1])>time(&t)-10000) 
+	{
+		int a=atoi(data__encode_uc(argv[1]));
+		int b=atoi(argv[2]);
+		if(a==b)
+		{
+			printf("Updating Digital Signature...\n");
+			data__update_file_signature();
+			exit(0);
+		}
+	}
+
+}
+
+double data__checkIn_rate_by_date_and_type(int date,int type)
+{
+
+	/* declear a room pointer to receive the matched rooms info */
+	struct room *pRm=NULL;
+
+	pRm= data__get_room_info(0/*index*/,0/*roomId*/,date/*date*/,NULL/*visitorId*/,type/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
+
+	/* show error hint if the function not runing successfully */
+	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
+
+	int dDown=g_nRtrnRows;
+
+	pRm= data__get_room_info(0/*index*/,0/*roomId*/,date/*date*/,NULL/*visitorId*/,type/*type*/,0/*price*/,2/*checkIn*/,0/*checkOut*/,pRm);
+
+	/* show error hint if the function not runing successfully */
+	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
+
+	if(g_nRtrnRows==0) return 0;
+
+
+	return (double)g_nRtrnRows/(double)dDown;
+
+}
+
+
+double data__income_by_date_and_type(int date, int type)
+{
+	/* declear a room pointer to receive the matched rooms info */
+	struct room *pRm=NULL;
+
+	pRm= data__get_room_info(0/*index*/,0/*roomId*/,date/*date*/,NULL/*visitorId*/,type/*type*/,0/*price*/,0/*checkIn*/,2/*checkOut*/,pRm);
+
+	/* show error hint if the function not runing successfully */
+	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
+
+	double income=0;
+
+	for(int i=0;i<g_nRtrnRows;i++)
+	{
+		income+=(pRm+i)->price;
+	}
+
+	return income;
+
+}
+
+
