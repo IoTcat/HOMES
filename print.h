@@ -19,8 +19,6 @@ void print__space(int nSpace)
 }
 
 
-<<<<<<< HEAD
-=======
 void print__wait(int nTm)
 {
 	int i;
@@ -78,7 +76,6 @@ void print__get_newpassword(int type, int words)
 }
 
 
->>>>>>> master
 /* display a header */
 void print__header()
 {
@@ -117,8 +114,6 @@ void print__item(char chItem[20],int nMrk,int nSpc)
 	}
 }
 
-<<<<<<< HEAD
-=======
 /* function for printing a menu ,you can design your menu here*/
 void print__login(int nPnt)
 {
@@ -141,4 +136,3 @@ void print__login(int nPnt)
 	printf("Press ESC to Exit!");
 
 }
->>>>>>> master

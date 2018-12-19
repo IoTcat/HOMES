@@ -219,18 +219,7 @@ int main(int argc, char const *argv[])
     //data__mark_check_in(20180921,205);
     //int visitordid[4]={1,123123};
     //data__insert_userinfo_to_structure(20181111,666,visitordid);
-    char test[50];
-    int rv;
-    while(1)
-    {
-     system("cls");
-     printf("Please enter a input\n\n");
-     gets(test);
-     rv=data__filter_input(test);
-     printf("The return value of your input is %d.\n\n\n\n if it is larger than 0, then it is legal\n\n",rv);
-     printf("If it is less than 0, then it is illegal");
-     system("pause");
-    }
+
 
 
 
@@ -456,6 +445,18 @@ int data__filter_input(char*parameter1)
        else
        return -20;
     }
+    /*    char test[50];
+    int rv;
+    while(1)
+    {
+     system("cls");
+     printf("Please enter a input\n\n");
+     gets(test);
+     rv=data__filter_input(test);
+     printf("The return value of your input is %d.\n\n\n\n if it is larger than 0, then it is legal\n\n",rv);
+     printf("If it is less than 0, then it is illegal");
+     system("pause");
+    }*/
 }
 
 
