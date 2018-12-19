@@ -1,11 +1,18 @@
 /* function for get current date */
-int data__get_current_date()
+int data__get_current_date(int plus)
 {
 	time_t timep;
 
     struct tm *p;
     time (&timep);
     p=gmtime(&timep);
+
+
+    time_t t;
+    t=timep+plus*3600*24;;
+    p=gmtime(&t);
+
+
 
     int date=(1900+p->tm_year)*10000+(1+p->tm_mon)*100+(p->tm_mday)*1;
 

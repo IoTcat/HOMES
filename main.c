@@ -183,11 +183,18 @@ int data__correspond_input_to_array(int);
 int data__allocate_type_to_room(int*);
 int data__allocate_price_to_room(int*);
 int data__initialize_room_structure(room*,int*,int*,int*);
+
 int data__revise_room_price_based_on_type(int,int,double);
 int data__mark_check_in(int,int);
 int data__mark_check_out(int,int);
 int data__insert_userinfo_to_structure(int,int,int*);
 int data__filter_input(char*);
+
+int menu__data_statistics();
+int menu__data_setting();
+int menu__receptionist();
+int menu__manager_password();
+int menu__main();
 
 /*****************Above are your function declearation ^_^ ***********************/
 
@@ -202,8 +209,8 @@ int main(int argc, char const *argv[])
 
 	/*************Your Code Here****************/
     /* initialize the window */
-    print__setup();
-    menu__main();
+    //print__setup();
+    //menu__main();
 
 	/*interface*/
 	//char choosec[2];
@@ -229,6 +236,17 @@ int main(int argc, char const *argv[])
     //menu__receptionist();
     //menu__manager_password();
     //menu__main();
+    while(1)
+    {
+        system("cls");
+        printf("Please enter a number\n\n");
+        char in[10];
+        gets(in);
+        int baby=atoi(in);
+        int yes=data__get_current_date(baby);
+       printf("Today is %d",yes);
+       system("pause");
+    }
 
 
 
@@ -761,6 +779,24 @@ void menu__print_main(int nPnt)
 
 	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	printf("Press ESC to Exit!");
+
+}
+
+int data__change_room_type(int roomNo,int Type)
+{
+    room *pts=NULL;
+    int i;
+    for(i=0;i<8;i++)
+    {
+        int currentdate=data__get_current_date(i);
+        pts=data__get_room_info(0,roomNo,currentdate,NULL,0,0,0,0,pts);
+        pts->type=Type;
+    }
+    if(i==8)
+        return 1;
+    else
+        return 0;
+
 
 }
 
