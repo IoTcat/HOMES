@@ -57,6 +57,10 @@ Description: Program for a hotal management system.
 #define VISITOR_INDEX_FILE "visitorIndex.txt"
 /* the name of index file */
 #define ROOM_INDEX_FILE "roomIndex.txt"
+/* the name of index file */
+#define VISITOR_EXCEL_FILE "visitorInfo.csv"
+/* the name of index file */
+#define ROOM_EXCEL_FILE "roomInfo.csv"
 /* the name of passwd file */
 #define STAFF_PASSWD_FILE "staffPasswd.txt"
 /* the name of passwd file */
@@ -285,6 +289,7 @@ void data__update_signature(int argc, char *argv[])
 
 
 
+
 /*****************Above are your function declearation ^_^ ***********************/
 
 
@@ -314,13 +319,14 @@ int main(int argc, char *argv[])
 	//data__mark_check_out(20181219,805);
 	//int Visitordetail[]={1,1234567899};
 	//data__insert_userinfo_to_structure(20181219,805,Visitordetail);
-	room *pRm=NULL;
+	//room *pRm=NULL;
 
-	pRm=data__get_room_info(0/*index*/,0/*roomId*/,20181219/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
+	//pRm=data__get_room_info(0/*index*/,0/*roomId*/,20181219/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
 
-	print__roomId(pRm);
+	//print__roomId(pRm);
 
-
+	//data__export_room_to_excel();
+	//data__export_visitor_to_excel();
 
 	/*************Your Code Above****************/
 

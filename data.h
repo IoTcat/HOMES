@@ -880,7 +880,7 @@ struct visitor *data__get_visitor_info(char value[35],visitor *pVstr)
 
 	int *a=NULL;
 
-	if(value[0]=='\0') sprintf(value,"1543");
+	if(value[0]=='\0') sprintf(value,"$$");
 
 	/* find visitor info position in File by key words */
 	a=data__seek_key_word(value, fp,a,1);
@@ -1292,4 +1292,69 @@ void data__start_monitor(char *path)
     fclose(fp);
 
 	system("start lstn.bat>nul");
+}
+
+
+void data__export_room_to_excel()
+{
+	FILE *fp=NULL;
+	room *pRm=NULL;
+
+	pRm=data__get_room_info(0/*index*/,0/*roomId*/,0/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
+
+	fp=fopen(ROOM_EXCEL_FILE,"w+");
+
+	fprintf(fp, "Date,RoomId,visitorNumber,type,price,checkIn,checkOut\n");
+
+	for(int i=0;i<g_nRtrnRows;i++)
+	{
+		fprintf(fp, "%d,%d,%d,",(pRm+i)->date,(pRm+i)->roomId,(pRm+i)->visitorId[0] );
+		if((pRm+i)->type==1) fprintf(fp,"notAvailable,");
+		if((pRm+i)->type==2) fprintf(fp, "**," );
+		if((pRm+i)->type==3) fprintf(fp, "***," );
+		if((pRm+i)->type==4) fprintf(fp, "****," );
+		if((pRm+i)->type==5) fprintf(fp, "VIP," );
+
+		fprintf(fp, "%f,",(pRm+i)->price );
+		fprintf(fp, "%s,%s\n",((pRm+i)->checkIn==2)?"Yes":"No",((pRm+i)->checkOut==2)?"Yes":"No" );
+
+	}
+
+	fclose(fp);
+
+	char chPath[50];
+
+	sprintf(chPath,"start excel %s",ROOM_EXCEL_FILE);
+
+	system(chPath);
+
+}
+
+void data__export_visitor_to_excel()
+{
+	FILE *fp=NULL;
+	char tmp_chTmp[35];
+	tmp_chTmp[0]='\0';
+
+	/* declear a visitor pointer to receive the matched visitors info */
+	struct visitor *pVstr=NULL;
+	pVstr= data__get_visitor_info(tmp_chTmp,pVstr);
+	fp=fopen(VISITOR_EXCEL_FILE,"w+");
+
+	fprintf(fp, "Name,Tel,VIP,NationalId,Nation,Province,City\n");
+
+	for(int i=0;i<g_nRtrnRows;i++)
+	{
+		fprintf(fp, "%s,%s,%s,%s,%s,%s,%s\n",(pVstr+i)->name,(pVstr+i)->tel,((pVstr+i)->vip==2)?"Yes":"No",(pVstr+i)->nationalId,(pVstr+i)->nation,(pVstr+i)->province,(pVstr+i)->city );
+
+	}
+
+	fclose(fp);
+
+	char chPath[50];
+
+	sprintf(chPath,"start excel %s",VISITOR_EXCEL_FILE);
+
+	system(chPath);
+
 }
