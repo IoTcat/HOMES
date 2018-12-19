@@ -136,3 +136,29 @@ void print__login(int nPnt)
 	printf("Press ESC to Exit!");
 
 }
+
+
+void print__roomId(room *pRm)
+{
+
+	int t=0;
+	for(int i=0;i<g_nRtrnRows;)
+	{
+		t=0;
+		printf("%d",(pRm+i)->roomId );
+
+		while(i<g_nRtrnRows&&((pRm+i)->roomId)+1==((pRm+i+1)->roomId))
+		{
+			t++;
+			i++;
+		}
+
+		i++;
+
+		if(t==0) printf(", ");
+		if(t==1) printf(", %d, ",(pRm+i-1)->roomId );
+		if(t>1) printf("-%d, ",(pRm+i-1)->roomId);
+	}
+
+
+}
