@@ -13,6 +13,36 @@ int input__detect_input_ASCII()
 }
 
 
+char *input__getchar_plus(char *p)
+{
+
+    char *pTmp;
+
+    /* apply for a large dynamic memory for the first time storage */
+    if((pTmp=(char *)malloc(999999))==NULL)
+    {
+        printf("Application memory failure...\n");
+        exit(0); /* if fail, exit the input__as1_getchar_plus function with the return value of 0 */
+    }
+
+    /* get words from keyboard to pTemp */
+    gets(pTmp);
+
+    /* apply for a dynamic memory as needed */
+    if((p=(char *)malloc(strlen(pTmp)+1))==NULL)
+    {
+        printf("Application memory failure...\n");
+        exit(0); /* if fail, exit the input__as1_getchar_plus function with the return value of 0 */
+    }
+
+    /* copy str from pTmp to p */
+    strcpy(p,pTmp);
+
+    /* free the Tmp memory */
+    free(pTmp);
+
+    return p;
+}
 
 /* function for get keyboard arrow event */
 int input__get_arrow()
