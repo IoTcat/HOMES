@@ -57,13 +57,10 @@ Description: Program for a hotal management system.
 #define VISITOR_INDEX_FILE "visitorIndex.txt"
 /* the name of index file */
 #define ROOM_INDEX_FILE "roomIndex.txt"
-<<<<<<< HEAD
-=======
 /* the name of passwd file */
 #define STAFF_PASSWD_FILE "staffPasswd.txt"
 /* the name of passwd file */
 #define MANAGER_PASSWD_FILE "managerPasswd.txt"
->>>>>>> master
 /* the password of data file */
 #define PASSWORD 'l'
 /* the digital signature key */
@@ -137,10 +134,7 @@ typedef struct room
 #include "data.h"
 #include "input.h"
 #include "print.h"
-<<<<<<< HEAD
-=======
 #include "login.h"
->>>>>>> master
 
 
 
@@ -177,28 +171,6 @@ int final_main();
 
 
 
-/*************here are the declearation of some demo functions***********************/
-
-int demo__test_fundamental_functions();
-int demo__menu();
-void demo__print__menu(int nPnt);
-void demo__data__insert_visitor_info();
-void demo__data__del_visitor_info();
-void demo__data__get_visitor_info();
-void demo__data__insert_room_info();
-void demo__data__del_room_info();
-void demo__data__get_room_info();
-void demo__create_visitor();
-void demo__create_room();
-void demo__display_all_visitors();
-void demo__display_all_rooms();
-
-/***************above are the declearation of some demo functions*********************/
-
-
-<<<<<<< HEAD
-
-
 
 /*****************please put your function declearation here!!***********************/
 
@@ -216,9 +188,6 @@ int data__mark_check_in(int,int);
 int data__mark_check_out(int,int);
 int data__insert_userinfo_to_structure(int,int,int*);
 int data__filter_input(char*);
-=======
->>>>>>> master
-
 
 
 /*****************Above are your function declearation ^_^ ***********************/
@@ -233,6 +202,8 @@ int main(int argc, char const *argv[])
 	//final_main();
 
 	/*************Your Code Here****************/
+
+
 	/*interface*/
 	//char choosec[2];
 	//room demo_NewRoom={0/*this is the visitor id, please leave 0 here */,666/*roomId*/,20181111/*date*/,{2/*visitor number*/,1234567899,1243567899}/*visitorId*/,2/*room type*/,66.66/*price*/,2/*checkIn*/,1/*checkOut*/};
@@ -246,16 +217,21 @@ int main(int argc, char const *argv[])
 	//data__insert_room_info(&r2);
     //data__revise_room_price_based_on_type(20180921,2,666);
     //data__mark_check_in(20180921,205);
-    int visitordid[4]={1,123123};
-    data__insert_userinfo_to_structure(20181111,666,visitordid);
+    //int visitordid[4]={1,123123};
+    //data__insert_userinfo_to_structure(20181111,666,visitordid);
+    char test[50];
+    int rv;
+    while(1)
+    {
+     system("cls");
+     printf("Please enter a input\n\n");
+     gets(test);
+     rv=data__filter_input(test);
+     printf("The return value of your input is %d.\n\n\n\n if it is larger than 0, then it is legal\n\n",rv);
+     printf("If it is less than 0, then it is illegal");
+     system("pause");
+    }
 
-
-
-
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 
 
 
@@ -268,7 +244,6 @@ int main(int argc, char const *argv[])
 
 	return 0;
 }
-
 
 /*********** My own function (staring line) ********/
 int data__revise_room_price_based_on_type(int Date,int Type,double Price)
@@ -334,13 +309,152 @@ int data__insert_userinfo_to_structure(int Date,int RoomNo,int* Visitordetail)
 
 int data__filter_input(char*parameter1)
 {
-    if(strlen(parameter1)==1 && (parameter1==48 && parameter1==49 && parameter1==50 && parameter1==51))
+    if(strlen(parameter1)>40 || parameter1[0]=='\0')
     {
-        return 1;
+        return -40;
     }
-    else if(strlen(parameter1)==3 &&)
+    else if(strlen(parameter1)==1)/*Visitor number*/
     {
-        return 0;
+        if(parameter1[0]==48 || parameter1[0]==49 || parameter1[0]==50)
+            return 1;
+        else
+            return -1;
+    }
+    else if(strlen(parameter1)==3)/*Price or room number*/
+    {
+        int i;
+        for(i=0;i<3;i++)/*Whether all characters are digits*/
+        {
+         if(isdigit(parameter1[i]))
+            continue;
+         else
+            break;
+        }
+        if(i==3 && parameter1[0]!=48)/*If the first element is not 0*/
+        {
+           return 3;
+        }
+        else
+        {
+            return -3;
+        }
+
+    }
+    else if(strlen(parameter1)==4)/*price*/
+    {
+        int i;
+        for(i=0;i<4;i++)/*Whether all characters are digits*/
+        {
+         if(isdigit(parameter1[i]))
+            continue;
+         else
+            break;
+        }
+      if(i==4 && atoi(parameter1)>=1000 && atoi(parameter1)<=9999)
+        return 4;
+      else
+        return -4;
+    }
+    else if(strlen(parameter1)==7)
+    {
+        if(parameter1[3]==44 || parameter1[3]==45)/*Test * and - first */
+        {
+            int i,t;
+            for(i=0;i<3;i++)
+            {
+                if(isdigit(parameter1[i]))
+                    continue;
+                else
+                    break;
+            }
+            for(t=4;t<7;t++)
+            {
+                if(isdigit(parameter1[t]))
+                    continue;
+                else
+                    break;
+            }
+            if(i==3 && t==7)
+            {
+                if(parameter1[0]<=56 && parameter1[0]>=49 && parameter1[4]<=56 && parameter1[4]>=49)
+                {
+                    if((parameter1[1]==48 || parameter1[1]==49)&& (parameter1[5]==48 || parameter1[5]==49) )
+                    {
+                        if(parameter1[1]==48 && parameter1[5]==48)
+                        {
+                            if((parameter1[2]<=57 && parameter1[2]>=49) && (parameter1[6]<=57 && parameter1[6]>=49))
+                                return 7;
+                        }
+                        else if(parameter1[1]==48 && parameter1[5]==49)
+                        {
+                           if((parameter1[2]<=57 && parameter1[2]>=49) && parameter1[6]==48)
+                            return 7;
+                        }
+                        else if(parameter1[1]==49 && parameter1[5]==48)
+                        {
+                            if((parameter1[6]<=57 && parameter1[6]>=49) && parameter1[2]==48)
+                            return 7;
+                        }
+                        else if(parameter1[1]==49 && parameter1[5]==49)
+                        {
+                            if(parameter1[2]==48 && parameter1[6]==48)
+                                return 7;
+                        }
+                    }
+                }
+            }
+            return -7;
+        }
+        else
+            return -7;
+    }
+    else if(strlen(parameter1)==8)/*Date*/
+    {
+        int i;
+        for(i=0;i<8;i++)/*Whether all characters are digits*/
+        {
+         if(isdigit(parameter1[i]))
+            continue;
+         else
+            break;
+        }
+      if(i==8 && atoi(parameter1)>=20181218 && atoi(parameter1)<=99999999)
+        return 8;
+      else
+        return -8;
+
+    }
+    else if(strlen(parameter1)==11)/*telephone number*/
+    {
+        int i;
+        for(i=0;i<11;i++)/*Whether all characters are digits*/
+        {
+         if(isdigit(parameter1[i]) || parameter1[i]==35 || parameter1[i]==42 || parameter1[i]==43)
+            continue;
+         else
+            break;
+        }
+      if(i==11 && parameter1[0]!=48)
+        return 11;
+      else
+        return -11;
+    }
+    else
+    {
+        int i;
+        for(i=0;i<strlen(parameter1);i++)
+        {
+            if((parameter1[i]<=122 && parameter1[i]>=65) || parameter1[i]==32)
+                continue;
+            else
+                break;
+        }
+       if(i==strlen(parameter1))
+       {
+           return 20;
+       }
+       else
+       return -20;
     }
 }
 
