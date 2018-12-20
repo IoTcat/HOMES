@@ -1502,23 +1502,32 @@ int data__mark_check_out(int Date,int RoomNo)
 
 }
 
+
+
 int data__insert_userinfo_to_structure(int Date,int RoomNo,int* Visitordetail)
 {
     struct room *pts=NULL;
+    pts=data__get_room_info(0,Date,RoomNo,NULL,0,0,0,0,pts);
 
-    pts=data__get_room_info(0,RoomNo,Date,NULL,0,0,0,0,pts);
-    for(int i=0;i<4;i++)
+    	for(int i=0;i<g_nRtrnRows;i++)
+	printf("Index:%d Room:%d date:%d VisitorNum:%d Type:%d Price:%f CheckIn:%d CheckOut:%d\n", (pts+i)->index, (pts+i)->roomId, (pts+i)->date,(pts+i)->visitorId[0], (pts+i)->type,(pts+i)->price, (pts+i)->checkIn, (pts+i)->checkOut);
+	system("cls");
+    room containerwow;
+    containerwow.checkIn=pts->checkIn;
+    containerwow.checkOut=pts->checkOut;
+    containerwow.date=pts->date;
+    containerwow.index=0;
+    containerwow.price=pts->price;
+    containerwow.roomId=pts->roomId;
+    containerwow.type=pts->type;
+    for(int i=0;i<2;i++)
     {
-    pts->visitorId[i]=Visitordetail[i];
+       containerwow.visitorId[i]=Visitordetail[i];
     }
-    data__del_room_info(pts->index,pts->roomId);
-    data__insert_room_info(pts);
-
-   // data__check_del_by_date(Date);
+    data__insert_room_info(&containerwow);
 
     return 0;
 }
-
 
 void data__update_signature(int argc, char *argv[])
 {
@@ -1643,3 +1652,40 @@ int data__change_room_type(int roomNo,int Type)
 
 
 }
+
+struct room *data__get_room_availavble_by_date(int Date, int type,struct room *pts)
+{
+    int visitorinfo[4]={0};
+    pts=data__get_room_info(0,0,Date,visitorinfo,type,0,1,1,pts);
+    if(g_nRtrnRows==0) return NULL;
+    
+    return pts;
+}
+
+int data__get_day_available_from_A_date_for_room(int Date,int roomNo)
+{
+    room* pts=NULL;
+    int i=0;
+    int count=0;
+    if(Date==data__get_current_date(0)) i=8;
+    else if(Date==data__get_current_date(1)) i=7;
+    else if(Date==data__get_current_date(2)) i=6;
+    else if(Date==data__get_current_date(3)) i=5;
+    else if(Date==data__get_current_date(4)) i=4;
+    else if(Date==data__get_current_date(5)) i=3;
+    else if(Date==data__get_current_date(6)) i=2;
+    else if(Date==data__get_current_date(7)) i=1;
+    for(int m=0;m<i;m++)
+    {
+        int x=data__get_current_date(8+m-i);
+        pts=data__get_room_info(0,roomNo,x,NULL,0,0,0,0,pts);
+        if(g_nRtrnRows==0 || pts->visitorId[0]!=0)
+            break;
+        else if(pts->visitorId[0]==0)
+            count++;
+    }
+    return count;
+
+}
+
+

@@ -357,267 +357,6 @@ int menu__search_visitor_three_type_selection()/*data statistics interface*/
 
 
 
-struct visitor* data__search_visitor_from_three_types(void)
-{
-    char *p=NULL;
-    visitor *container0=NULL;
-    visitor *container1=NULL;
-    visitor *container2=NULL;
-
-    while(1)
-    {
-        int selection=menu__search_visitor_three_type_selection();
-        if(selection==0)
-            return container0;
-        if(selection==1)
-        {
-            system("cls");
-            while(1)
-            {
-                printf("The visitor you want to find(Enter \"q\" to return): ");
-                p[0]='\0';
-                p=input__getchar_plus(p);
-                while(1)
-                {
-                    if(strlen(p)>25 || p[0]=='\0')
-                  {
-
-                    printf("Please make sure the length is within 25 letters.\n");
-                    printf("Enter \"q\" to return\n\n");
-                    system("pause");
-                    system("cls");
-                    printf("The visitor you want to find(Enter \"q\" to return): ");
-                    p=input__getchar_plus(p);
-                    if(strlen(p)==1 && p[0]=='q')
-                        break;
-                  }
-                  else if(strlen(p)<=25 && p[0]=='\0')
-                    break;
-                }
-                  if(strlen(p)==1 && p[0]=='q')
-                        break;
-
-                    system("cls");
-                    printf("Loading...");
-                    container1=data__get_visitor_info(p,container1);
-                    if(container1==NULL)
-                    {
-                        system("cls");
-                        printf("Sorry, the visitor you search is not in the database.\n");
-                        system("pause");
-                        system("cls");
-                    }
-                    else if(g_nRtrnRows!=1)
-                    {
-                        printf("There are more than two users with the same name\n");
-                        printf("Please user other keywords to find visitor");
-                        system("pause");
-                        break;
-                    }
-                    else if(g_nRtrnRows==1)
-                    {
-                        system("cls");
-                        printf("The visitor is found");
-                        system("pause");
-                        return container1;
-                    }
-
-
-
-            }
-
-        }
-   if(selection==2)
-        {
-            system("cls");
-            while(1)
-            {
-                printf("Please input the visitor's Tel No.(Enter \"q\" to return): ");
-                p=input__getchar_plus(p);
-                while(1)
-                {
-
-                    if(strlen(p)>25 || p[0]=='\0')
-                  {
-
-                    printf("Please make sure the length is within 25 numbers.\n");
-                    printf("Enter \"q\" to return\n\n");
-                    system("pause");
-                    system("cls");
-                    printf("Please input the visitor's Tel No.(Enter \"q\" to return): ");
-                    p=input__getchar_plus(p);
-                    if(strlen(p)==1 && p[0]=='q')
-                        break;
-                  }
-                  else if(strlen(p)==1 && p[0]=='q')
-                      break;
-                  else if(strlen(p)<=25 && p[0]=='\0')
-                  {
-                      int i=-100;
-                      for(i=0;i<strlen(p);i++)
-                      {
-                          if(isdigit(p[i]) || p[i]==35 || p[i]==42 || p[i]==43) continue;
-                          else break;
-                      }
-                      if(i==strlen(p))
-                        break;
-                      else
-                      {
-                          printf("Please make sure the length is within 25 numbers.\n");
-                          printf("Enter \"q\" to return\n\n");
-                          system("pause");
-                          system("cls");
-                          printf("Please input the visitor's Tel No.(Enter \"q\" to return): ");
-                          p=input__getchar_plus(p);
-                          if(strlen(p)==1 && p[0]=='q')
-                              break;
-                      }
-
-                  }
-                }
-                  if(strlen(p)==1 && p[0]=='q')
-                        break;
-                    system("cls");
-                    printf("Loading...");
-                    container2=data__get_visitor_info(p,container2);
-                    if(container2==NULL)
-                    {
-                        printf("Sorry, the visitor you search is not in the database.\n");
-                        system("pause");
-                        system("cls");
-                    }
-                    else if(g_nRtrnRows==1)
-                    {
-                        int original=atoi(container2->tel);
-                        int input=atoi(p);
-                        if(original==input)
-                        {
-                            system("cls");
-                            printf("The visitor is found");
-                            system("pause");
-                            return container2;
-                        }
-                        else
-                            {
-                            printf("Do not find the visitor");
-                            system("pause");
-                            system("cls");
-                            continue;
-                            }
-
-                    }
-                    else if(g_nRtrnRows>1)
-                        {
-                            printf("Something wrong occurs");
-                            system("pause");
-                            break;
-                        }
-
-
-
-            }
-
-        }
-
-        if(selection==3)
-        {
-            system("cls");
-            while(1)
-            {
-                printf("Please input the visitor's ID(Enter \"q\" to return): ");
-                p=input__getchar_plus(p);
-                while(1)
-                {
-
-                    if(strlen(p)>25 || p[0]=='\0')
-                  {
-
-                    printf("Please make sure the length is within 25 numbers.\n");
-                    printf("Enter \"q\" to return\n\n");
-                    system("pause");
-                    system("cls");
-                    printf("The visitor you want to find(Enter \"q\" to return): ");
-                    p=input__getchar_plus(p);
-                    if(strlen(p)==1 && p[0]=='q')
-                        break;
-                  }
-                  else if(strlen(p)==1 && p[0]=='q')
-                      break;
-                  else if(strlen(p)<=25 && p[0]=='\0')
-                  {
-                      int i=-100;
-                      for(i=0;i<strlen(p);i++)
-                      {
-                          if(isdigit(p[i])) continue;
-                          else break;
-                      }
-                      if(i==strlen(p))
-                        break;
-                      else
-                      {
-                          printf("Please make sure the length is within 25 numbers.\n");
-                          printf("Enter \"q\" to return\n\n");
-                          system("pause");
-                          system("cls");
-                          printf("Please input the visitor's ID(Enter \"q\" to return): ");
-                          p=input__getchar_plus(p);
-                          if(strlen(p)==1 && p[0]=='q')
-                              break;
-                      }
-
-                  }
-                }
-                  if(strlen(p)==1 && p[0]=='q')
-                        break;
-
-                    system("cls");
-                    printf("Loading...");
-                    container2=data__get_visitor_info(p,container2);
-                    if(container2==NULL)
-                    {
-                        printf("Sorry, the visitor you search is not in the database.\n");
-                        system("pause");
-                        system("cls");
-                    }
-                    else if(g_nRtrnRows==1)
-                    {
-                        int original1=atoi(container2->nationalId);
-                        int input1=atoi(p);
-                        if(original1==input1)
-                        {
-                            printf("The visitor is found");
-                            system("pause");
-                            system("cls");
-                            return container2;
-                        }
-                        else
-                        {
-                            system("cls");
-                            printf("Do not find the visitor");
-                            system("pause");
-                            continue;
-                        }
-
-                    }
-                    else if(g_nRtrnRows>1)
-                        {
-                            printf("Something wrong occurs");
-                            system("pause");
-                            break;
-                        }
-
-
-
-            }
-
-        }
-
-    }
-
-}
-
-
-
 
 void menu__print_main(int nPnt)
 {
@@ -1019,3 +758,67 @@ int data__change_room_type_final(void)
     return -1;
 
 }
+
+
+
+int menu__change_check_out()
+{
+    
+	char *chTmp=NULL;
+
+	while(1)
+	{
+	system("cls");
+	
+
+	print__header();
+
+	printf("Please Input the Room Number: \nRoom Number=");
+
+
+
+	chTmp=input__getchar_plus(chTmp);
+
+	if(data__filter_input(chTmp)==3&&atoi(chTmp)%100<11&&atoi(chTmp)%100>0&&atoi(chTmp)/100>0&&atoi(chTmp)/100<9) break;
+
+	printf("\n\n\n\nIllegal Input!!!\n");
+
+	Sleep(1500);
+
+	}
+
+
+	system("cls");
+	print__header();
+
+    int totalmoney=0;
+    room *pts=NULL;
+    pts=data__get_room_info(0,atoi(chTmp),0,NULL,0,0,2,1,pts);
+    for(int i=0;i<g_nRtrnRows;i++)
+    {
+        totalmoney=totalmoney+(pts+i)->price;
+
+    }
+    if(g_nRtrnRows==0) {printf("\n\nThis Room not need to CheckOut!!");Sleep(1500);return 0;}
+
+    printf("\n\nThe total is: %d\n\nPlease press enter or space to confirm, or press Any Other Key to quit..",totalmoney);
+
+    char cTmp=input__detect_input_ASCII();
+
+    if((cTmp==32||cTmp==13))
+     for(int i=0;i<g_nRtrnRows;i++)
+    {
+        system("cls");
+		print__header();
+
+		printf("Loading...\n");
+        data__mark_check_out((pts+i)->date,atoi(chTmp));
+
+    }
+
+
+    return 0;
+}
+
+
+

@@ -309,3 +309,18 @@ void print__room_type(void)
         print__roomId(pts);
     }
 }
+
+
+	void print__search_room_by_date_and_type(int date,int type)
+	{
+		room *pRm=NULL;
+
+		pRm=data__get_room_availavble_by_date(date,type,pRm);
+
+		int tmp_g=g_nRtrnRows;
+
+		for(int i=0;i<tmp_g;i++)
+		{
+			printf("Room Number: %d         Days: %d\n",(pRm+i)->roomId,data__get_day_available_from_A_date_for_room(date,(pRm+i)->roomId) ); 
+		}
+	}

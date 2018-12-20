@@ -215,12 +215,113 @@ void main__checkIn()
 
 	input=input__getchar_plus(input);
 
-	print__income_by_date(atoi(input));
+	print__checkIn_rate(atoi(input));
 
 	printf("\n\n\n\n\n\nPress any key to go back~");
 
 	system("pause>nul");
 }
+
+
+
+int main__booking()
+{
+/*
+while(1)
+
+{
+	char *chTmp=NULL;
+	while(1)
+	{
+	system("cls");
+	print__header();
+
+	printf("Please Input a Tel, Name or National Number to search a visitor:\nKey Words= ");
+
+
+
+	chTmp=input__getchar_plus(chTmp);
+	if(strlen(chTmp)>5) break;
+
+	printf("\n\nYour Key Word is TOO SHORT!!\n");
+
+	Sleep(1500);
+	}
+
+
+	while(1)
+	{
+
+	struct visitor *pVstr=NULL;
+	pVstr= data__get_visitor_info(chTmp,pVstr);
+
+	if(g_nRtrnRows!=1) 
+	{
+
+		printf("\n\nNo user or more than ONE user searched!!\n");
+
+		break;
+	}
+
+
+	}
+
+
+
+
+}
+*/
+	/****the type choosing screen*****/
+	/*****how long choosing screen****/
+
+
+	system("cls");
+	print__header();
+
+	printf("Please Input the Date:\nDate= ");
+
+	char *chDate=NULL;
+
+	chDate=input__getchar_plus(chDate);
+
+	printf("\nPlease Input Type:\n Type= ");
+
+	char *chType=NULL;
+
+	chType=input__getchar_plus(chType);
+
+	system("cls");
+
+	printf("Availible Rooms and days: \n");
+
+	print__search_room_by_date_and_type(atoi(chDate),atoi(chType));
+
+	char *chRoom=NULL;
+
+	/*未容错*/
+	printf("\n\nPlease Input the Room to book:\nroom= ");
+
+	chRoom=input__getchar_plus(chRoom);
+	
+	/*未容错*/
+	char *chDays=NULL;
+
+	printf("\nPlease input the days to book: \ndays= ");
+
+	chDays=input__getchar_plus(chDays);
+
+
+
+
+
+
+	return 0;
+}
+
+
+
+
+
 
 /*****************Above are your function declearation ^_^ ***********************/
 
@@ -252,9 +353,7 @@ int main(int argc, char *argv[])
 	//data__mark_check_out(20181219,805);
 	//int Visitordetail[]={1,1234567899};
 	//data__insert_userinfo_to_structure(20181219,805,Visitordetail);
-	//room *pRm=NULL;
-
-	//pRm=data__get_room_info(0/*index*/,0/*roomId*/,20181219/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
+	//
 
 	//print__roomId(pRm);
 
@@ -278,6 +377,15 @@ int main(int argc, char *argv[])
 	//download__upload();
 	//
 	//main__room_setup();
+	//
+	
+
+
+	//int Visitordetail[4]={1,1234567899};
+
+	//data__insert_userinfo_to_structure(808,20181227,Visitordetail);
+	main__booking();
+	
 	/*************Your Code Above****************/
 
 	system("echo This is the END of your Main function!!!!&&pause>nul"); /* Remain you of the end of your main function */
@@ -379,13 +487,12 @@ int final_main()
 		{
 			int nPnt=menu__receptionist();
 
-			//if(nPnt==1) 
+			if(nPnt==1)  {visitor *pVst=NULL;} 
 			//if(nPnt==2) 
 			//if(nPnt==3) 
-			//if(nPnt==4) 
+			if(nPnt==4) menu__change_check_out();
 			if(nPnt==0) print__exit();
 			
-			step=0;
 		}
 
 	}
