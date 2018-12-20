@@ -25,7 +25,7 @@ int login__choose_usr()
 
 		/* when press esc */
 		if(nArrw==9)
-			return 6;
+			print__exit();
 
 	}while(1);
 

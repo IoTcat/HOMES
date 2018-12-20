@@ -194,8 +194,13 @@ void print__checkIn_rate(int date)
 
 
 /* exit */
-void print__exit()
+int print__exit()
 {
+	
+	int i;
+	i=MessageBox(NULL,"Are You Sure to Exit? ","AS4 Message",MB_YESNO);
+	if(i!=IDYES) return 0; 
+
 	system("cls");
 
 	printf("\n\n\n\n");
