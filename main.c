@@ -311,9 +311,125 @@ while(1)
 	chDays=input__getchar_plus(chDays);
 
 
+	system("cls");
+	print__header();
+
+	printf("Please input the visitor number\nVisitor Number= ");
+
+	char *chVnum=NULL;
+
+	chVnum=input__getchar_plus(chVnum);
+
+	int nVst[atoi(chVnum)+1];
+
+	nVst[0]=atoi(chVnum);
 
 
+for(int i=0;i<atoi(chVnum);i++)
+{
 
+	int ifCreate=0;
+	while(1)
+	{
+
+	system("cls");
+	print__header();
+
+
+	printf("Please Input a Key words to search a Visitor or input q to create one: \nKey Words= ");
+
+	char *chWd=NULL;
+
+	chWd=input__getchar_plus(chWd);
+
+
+	if(strlen(chWd)==1&&chWd[0]=='q')
+	{
+		ifCreate=1;
+		break;
+	}
+
+	struct visitor *pVstr=NULL;
+	pVstr= data__get_visitor_info(chWd,pVstr);
+
+	/* print all these visitors info on screen */
+	for(int i=0;i<g_nRtrnRows;i++)
+	printf("ID:%d Name:%s Tel:%s VIP:%d NationalID:%s Nation:%s province:%s City:%s\n", (pVstr+i)->id, (pVstr+i)->name, (pVstr+i)->tel,(pVstr+i)->vip, (pVstr+i)->nationalId,(pVstr+i)->nation, (pVstr+i)->province, (pVstr+i)->city);
+
+
+	if(g_nRtrnRows==1)
+	{
+		Sleep(1500);
+
+		nVst[i+1]=pVstr->id;
+		break;
+	}
+
+	printf("Find nothing or Find more than one result!!\n");
+
+	Sleep(1500);
+
+	}
+	while(ifCreate)
+	{
+
+	visitor demo_NewVisitor;
+
+	printf("Please input a name:\n");
+	while(!scanf("%s",demo_NewVisitor.name)) fflush(stdin);
+
+	printf("Please input a tel:\n");
+	while(!scanf("%s",demo_NewVisitor.tel)) fflush(stdin);
+
+	printf("Please input if it is vip (not vip->1,vip->2) :\n");
+	char tmp_ch[15];
+	while(!scanf("%s",tmp_ch)) fflush(stdin);
+	demo_NewVisitor.vip=atoi(tmp_ch);
+
+	printf("Please input a nationalId:\n");
+	while(!scanf("%s",demo_NewVisitor.nationalId)) fflush(stdin);
+
+	printf("Please input a nation:\n");
+	while(!scanf("%s",demo_NewVisitor.nation)) fflush(stdin);
+
+	printf("Please input a province:\n");
+	while(!scanf("%s",demo_NewVisitor.province)) fflush(stdin);
+
+	printf("Please input a city:\n");
+	while(!scanf("%s",demo_NewVisitor.city)) fflush(stdin);
+
+	demo_NewVisitor.id=0;
+
+	/* excute the data__insert_visitor_info function and when the function crash, print the error info on screen */
+	if(data__insert_visitor_info(&demo_NewVisitor)) printf("Error in Function data__insert_visitor_info: %s\n",strerror(errno));
+	else printf("Create successfully!\n");
+
+	struct visitor *pVstr=NULL;
+	pVstr= data__get_visitor_info(demo_NewVisitor.tel,pVstr);
+
+	/* print all these visitors info on screen */
+	for(int i=0;i<g_nRtrnRows;i++)
+	printf("ID:%d Name:%s Tel:%s VIP:%d NationalID:%s Nation:%s province:%s City:%s\n", (pVstr+i)->id, (pVstr+i)->name, (pVstr+i)->tel,(pVstr+i)->vip, (pVstr+i)->nationalId,(pVstr+i)->nation, (pVstr+i)->province, (pVstr+i)->city);
+
+
+		Sleep(1500);
+
+		nVst[i+1]=pVstr->id;
+		break;
+
+	}
+}
+
+
+	system("cls");
+	print__header();
+
+	for(int i=0;i<atoi(chDays);i++)
+	data__insert_userinfo_to_structure(atoi(chDate)+i,atoi(chRoom),nVst);
+
+	printf("\n\nBooking Successfully!\n");
+
+	Sleep(1500);
 
 	return 0;
 }
@@ -487,7 +603,7 @@ int final_main()
 		{
 			int nPnt=menu__receptionist();
 
-			if(nPnt==1)  {visitor *pVst=NULL;} 
+			if(nPnt==1)  main__booking();
 			//if(nPnt==2) 
 			//if(nPnt==3) 
 			if(nPnt==4) menu__change_check_out();
