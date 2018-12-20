@@ -320,7 +320,10 @@ int main(int argc, char const *argv[])
     //system("pause");
     //data__mark_check_out(20181219,101);
     //data__change_price_by_type_final();
-       data__setting_final_version();
+       //data__setting_final_version();
+       //data__change_check_out();
+       //data__mark_check_in(20181219,102);
+       data__change_check_out(102);
 
 
 
@@ -334,6 +337,23 @@ int main(int argc, char const *argv[])
 }
 
 /*********** My own function (staring line) ********/
+
+int data__change_check_out(int roomNo)
+{
+    int totalmoney=0;
+    room *pts=NULL;
+    pts=data__get_room_info(0,roomNo,0,NULL,0,0,2,1,pts);printf("We find %d",g_nRtrnRows); system("pause");
+    for(int i=0;i<g_nRtrnRows;i++)
+    {
+        totalmoney=totalmoney+(pts+i)->price;
+        data__mark_check_out((pts+i)->date,roomNo);
+
+    }
+    printf("The total is: %d\n",totalmoney);
+    system("pause");
+    return 1;
+}
+
 void data__setting_final_version(void)
 {
     while(1)
@@ -442,7 +462,7 @@ int data__change_price_by_type_final(void)
 }
 
 
-void data__change_room_type_final(void)
+int data__change_room_type_final(void)
 {
     int m=-100,n=0,x=0,brnum=0;
     while(1)
@@ -483,7 +503,9 @@ void data__change_room_type_final(void)
     }
 
     }while(1);
-    if(m==0 || brnum==-10) break;
+    if(m==0) return 0;
+    else if(brnum==-10)
+        return 10;
     }
 
 }
@@ -687,7 +709,9 @@ int data__filter_input(char*parameter1)
        else
        return -20;
     }
-    /*    char test[50];
+
+}
+ /*    char test[50];
     int rv;
     while(1)
     {
@@ -699,7 +723,6 @@ int data__filter_input(char*parameter1)
      printf("If it is less than 0, then it is illegal");
      system("pause");
     }*/
-}
 
 int menu__data_statistics()/*data statistics interface*/
 {
