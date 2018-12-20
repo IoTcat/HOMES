@@ -983,7 +983,7 @@ struct visitor *data__get_visitor_info(char value[35],visitor *pVstr)
 
 
 /* function for get room info */
-struct room *data__get_room_info(int index, int roomId, int date, int visitorId[], int type, double price, int checkIn, int checkOut,room *pRm)
+struct room *data__get_room_info(int index, int roomId, int date, int *visitorId, int type, double price, int checkIn, int checkOut,room *pRm)
 {
 	/* reset errno */
 	errno=0;
@@ -995,11 +995,28 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
 
 	while(1)
 	{
+
+
+
 		if(index!=0)
 		{
 			sprintf(value,"%dI$",index);
 			break;
 		}
+
+
+		if(visitorId!=NULL)
+		{
+			
+			value[0]='\0';
+
+			if(*visitorId==0)
+			sprintf(value,"0V$");
+			else
+			{sprintf(value,"%d",*visitorId); }
+			break;
+		}
+
 
 		if(roomId!=0)
 		{
@@ -1013,20 +1030,6 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
 			break;
 		}
 
-		if(visitorId!=NULL)
-		{
-			char tmp_ch[13];
-			value[0]='\0';
-
-			for(int i=0;i<visitorId[0];i++)
-			{
-				itoa(visitorId[i+1],tmp_ch,10);
-				strcat(value,tmp_ch);
-			}
-			sprintf(tmp_ch,"V$");
-			strcat(value,tmp_ch);
-			break;
-		}
 
 		if(type!=0)
 		{
@@ -1069,6 +1072,7 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
     fp = fopen (chPath, "r");
 
 	int *a=NULL;
+
 
 	/* find room info position in File by key words */
 	a=data__seek_key_word(value, fp,a,2);
@@ -1134,25 +1138,6 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
 		if(ifDel==0&&index!=0&&(pRm+ii)->index!=index) ifDel=1;
 		if(ifDel==0&&roomId!=0&&(pRm+ii)->roomId!=roomId) ifDel=1;
 		if(ifDel==0&&date!=0&&(pRm+ii)->date!=date) ifDel=1;
-
-		if(ifDel==0&&visitorId!=NULL)
-		{
-			if(visitorId[0]==0)
-			{	
-				if((pRm+ii)->visitorId[0]!=0) ifDel=1;
-			}
-			else
-			{
-				ifDel=visitorId[0];
-				for(int k=0;k<visitorId[0];k++)
-				{
-					for(int l=0;l<(pRm+ii)->visitorId[0];l++)
-					{
-						if(visitorId[k+1]==(pRm+ii)->visitorId[l+1]) ifDel--;
-					}
-				}
-			}
-		}
 
 		if(type!=0&&(pRm+ii)->type!=type) ifDel=1;
 		if(ifDel==0&&price!=0&&(pRm+ii)->price!=price) ifDel=1;
@@ -1507,7 +1492,7 @@ int data__mark_check_out(int Date,int RoomNo)
 int data__insert_userinfo_to_structure(int Date,int RoomNo,int* Visitordetail)
 {
     struct room *pts=NULL;
-    pts=data__get_room_info(0,Date,RoomNo,NULL,0,0,0,0,pts);
+    pts=data__get_room_info(0,RoomNo,Date,NULL,0,0,0,0,pts);
 
     	for(int i=0;i<g_nRtrnRows;i++)
 	printf("Index:%d Room:%d date:%d VisitorNum:%d Type:%d Price:%f CheckIn:%d CheckOut:%d\n", (pts+i)->index, (pts+i)->roomId, (pts+i)->date,(pts+i)->visitorId[0], (pts+i)->type,(pts+i)->price, (pts+i)->checkIn, (pts+i)->checkOut);

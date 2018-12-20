@@ -376,27 +376,27 @@ for(int i=0;i<atoi(chVnum);i++)
 	visitor demo_NewVisitor;
 
 	printf("Please input a name:\n");
-	while(!scanf("%s",demo_NewVisitor.name)) fflush(stdin);
+	gets(demo_NewVisitor.name);
 
 	printf("Please input a tel:\n");
-	while(!scanf("%s",demo_NewVisitor.tel)) fflush(stdin);
+	gets(demo_NewVisitor.tel);
 
 	printf("Please input if it is vip (not vip->1,vip->2) :\n");
 	char tmp_ch[15];
-	while(!scanf("%s",tmp_ch)) fflush(stdin);
+	gets(tmp_ch);
 	demo_NewVisitor.vip=atoi(tmp_ch);
 
 	printf("Please input a nationalId:\n");
-	while(!scanf("%s",demo_NewVisitor.nationalId)) fflush(stdin);
+	gets(demo_NewVisitor.nationalId);
 
 	printf("Please input a nation:\n");
-	while(!scanf("%s",demo_NewVisitor.nation)) fflush(stdin);
+	gets(demo_NewVisitor.nation);
 
 	printf("Please input a province:\n");
-	while(!scanf("%s",demo_NewVisitor.province)) fflush(stdin);
+	gets(demo_NewVisitor.province);
 
 	printf("Please input a city:\n");
-	while(!scanf("%s",demo_NewVisitor.city)) fflush(stdin);
+	gets(demo_NewVisitor.city);
 
 	demo_NewVisitor.id=0;
 
@@ -412,10 +412,12 @@ for(int i=0;i<atoi(chVnum);i++)
 	printf("ID:%d Name:%s Tel:%s VIP:%d NationalID:%s Nation:%s province:%s City:%s\n", (pVstr+i)->id, (pVstr+i)->name, (pVstr+i)->tel,(pVstr+i)->vip, (pVstr+i)->nationalId,(pVstr+i)->nation, (pVstr+i)->province, (pVstr+i)->city);
 
 
-		Sleep(1500);
+	Sleep(1500);
 
-		nVst[i+1]=pVstr->id;
-		break;
+	nVst[i+1]=pVstr->id;
+	break;
+
+	ifCreate=0;
 
 	}
 }
@@ -423,9 +425,11 @@ for(int i=0;i<atoi(chVnum);i++)
 
 	system("cls");
 	print__header();
+	printf("%d %d %d\n",nVst[0],nVst[1],nVst[2] );
+	system("pause");
 
 	for(int i=0;i<atoi(chDays);i++)
-	data__insert_userinfo_to_structure(atoi(chDate)+i,atoi(chRoom),nVst);
+	{data__insert_userinfo_to_structure(atoi(chDate)+i,atoi(chRoom),nVst);}
 
 	printf("\n\nBooking Successfully!\n");
 
@@ -481,16 +485,18 @@ int main__checkIn_re()
 	/* declear a room pointer to receive the matched rooms info */
 	struct room *pRm=NULL;
 
-	int hh[]={1/* number of visitors*/,nVst/* visitorId*/};
-	pRm= data__get_room_info(0/*index*/,0/*roomId*/,0/*date*/,hh/*visitorId*/,0/*type*/,0/*price*/,1/*checkIn*/,0/*checkOut*/,pRm);
+	int *hh=(int *)malloc(5*sizeof(int));
+	*hh=nVst;
+	pRm= data__get_room_info(0/*index*/,0/*roomId*/,data__get_current_date(0)/*date*/,hh/*visitorId*/,0/*type*/,0/*price*/,1/*checkIn*/,0/*checkOut*/,pRm);
 
 	/* show error hint if the function not runing successfully */
 	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
 
-
-	data__mark_check_in(data__get_current_date(0),pRm->roomId);
-
-	printf("\n\nCheck in Successfully!!\n");
+	
+	if(g_nRtrnRows==1)
+	{printf("\n\nCheck in Successfully!!\n");data__mark_check_in(data__get_current_date(0),pRm->roomId);}
+	else
+	printf("\n\nThis Visitor has not Book the Room.\n");
 
 	Sleep(1500);
 
@@ -498,6 +504,82 @@ int main__checkIn_re()
 	return 0;
 }
 
+
+int main__change_visitor_info()
+{
+
+	int nVst=0;
+
+	while(1)
+	{
+
+	system("cls");
+	print__header();
+
+
+	printf("Please Input a Key words to search a Visitor: \nKey Words= ");
+
+	char *chWd=NULL;
+
+	chWd=input__getchar_plus(chWd);
+
+	if(strlen(chWd)==0) return 0;
+
+	struct visitor *pVstr=NULL;
+	pVstr= data__get_visitor_info(chWd,pVstr);
+
+
+	/* print all these visitors info on screen */
+	for(int i=0;i<g_nRtrnRows;i++)
+	printf("ID:%d Name:%s Tel:%s VIP:%d NationalID:%s Nation:%s province:%s City:%s\n", (pVstr+i)->id, (pVstr+i)->name, (pVstr+i)->tel,(pVstr+i)->vip, (pVstr+i)->nationalId,(pVstr+i)->nation, (pVstr+i)->province, (pVstr+i)->city);
+
+
+	if(g_nRtrnRows==1)
+	{
+		nVst=pVstr->id;
+		break;
+	}
+
+	printf("Find nothing or Find more than one result!!\n");
+
+	Sleep(1500);
+
+	}
+
+	visitor demo_NewVisitor;
+
+	printf("\nPlease input a name:\n");
+	gets(demo_NewVisitor.name);
+
+	printf("Please input a tel:\n");
+	gets(demo_NewVisitor.tel);
+
+	printf("Please input if it is vip (not vip->1,vip->2) :\n");
+	char tmp_ch[15];
+	gets(tmp_ch);
+	demo_NewVisitor.vip=atoi(tmp_ch);
+
+	printf("Please input a nationalId:\n");
+	gets(demo_NewVisitor.nationalId);
+
+	printf("Please input a nation:\n");
+	gets(demo_NewVisitor.nation);
+
+	printf("Please input a province:\n");
+	gets(demo_NewVisitor.province);
+
+	printf("Please input a city:\n");
+	gets(demo_NewVisitor.city);
+
+	demo_NewVisitor.id=0;
+
+	/* excute the data__insert_visitor_info function and when the function crash, print the error info on screen */
+	if(data__insert_visitor_info(&demo_NewVisitor)) printf("Error in Function data__insert_visitor_info: %s\n",strerror(errno));
+	else {system("cls");printf("\nCreate successfully!\n");/* del the visitor info */
+	if(data__del_visitor_info(nVst)) printf("Error in Function data__del_visitor_info: %s\n",strerror(errno));;Sleep(1400);}
+
+	return 0;
+}
 
 
 /*****************Above are your function declearation ^_^ ***********************/
@@ -515,7 +597,7 @@ int main(int argc, char *argv[])
 	/* start monitor event, for the purpose of kill bgm and delete tmp file after user exit */
 	data__start_monitor(argv[0]);
 
-	//demo__test_fundamental_functions(); /* Don't Remove This For Test Purpose!! */
+	demo__test_fundamental_functions(); /* Don't Remove This For Test Purpose!! */
 
 	final_main();
 
@@ -627,7 +709,7 @@ int final_main()
 
 			if(nPnt==1) {while(1){print__room_type(); printf("\n\n\n\n"); system("echo Please Press Any Key to Continue...&&pause>nul");if(data__change_price_by_type_final()==0) break;}}
 			if(nPnt==2) {while(1){print__room_type(); printf("\n\n\n\n"); system("echo Please Press Any Key to Continue...&&pause>nul");if(data__change_room_type_final()==0) break;}}
-			//if(nPnt==3) 
+			if(nPnt==3) main__change_visitor_info();
 			if(nPnt==0) step=1;
 		}
 
@@ -665,7 +747,7 @@ int final_main()
 			int nPnt=menu__receptionist();
 
 			if(nPnt==1)  main__booking();
-			//if(nPnt==2) 
+			if(nPnt==2) main__change_visitor_info();
 			if(nPnt==3) main__checkIn_re();
 			if(nPnt==4) menu__change_check_out();
 			if(nPnt==0) print__exit();
@@ -866,7 +948,7 @@ void demo__data__del_visitor_info()
 
 	/* get ID input */
 	char tmp_visitorId[11];
-	while(!scanf("%s",tmp_visitorId)) fflush(stdin);
+	gets(tmp_visitorId);
 
 	/* del the visitor info */
 	if(data__del_visitor_info(atoi(tmp_visitorId))) printf("Error in Function data__del_visitor_info: %s\n",strerror(errno));; 
