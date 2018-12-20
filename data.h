@@ -364,6 +364,8 @@ void data__update_file_signature()
 /* function for check file signature */
 void data__check_file_signature()
 {
+	system("cls");
+	printf("Check Digital Signature...\n");
 	char *current_signature=NULL;
 	current_signature=data__generate_digital_signature(current_signature);
 
@@ -928,7 +930,7 @@ struct visitor *data__get_visitor_info(char value[35],visitor *pVstr)
 	a=data__seek_key_word(value, fp,a,1);
 
 	/* if no visitor found */
-	if(!a||!a[0]){errno=0;g_nRtrnRows=0;data__update_file_signature(); return NULL;}
+	if(!a||!a[0]){errno=0;g_nRtrnRows=0;return NULL;}
 
 	/* free the memmory of former pVstr */
 	free(pVstr);
@@ -1072,7 +1074,7 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
 	a=data__seek_key_word(value, fp,a,2);
 
 	/* if no room found */
-	if(!a){errno=0;	g_nRtrnRows=0;data__update_file_signature(); return NULL;}
+	if(!a){errno=0;	g_nRtrnRows=0; return NULL;}
 
 	/* free the memmory of former pVstr */
 	free(pRm);
@@ -1526,6 +1528,7 @@ void data__update_signature(int argc, char *argv[])
 		int b=atoi(argv[2]);
 		if(a==b)
 		{
+			system("mode con cols=30 lines=2");
 			printf("Updating Digital Signature...\n");
 			data__update_file_signature();
 			exit(0);

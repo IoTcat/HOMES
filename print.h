@@ -89,9 +89,9 @@ void print__header()
 	print__space(19);
 
 	if(g_pUsr)
-		printf("User: %6s",g_pUsr );
+		printf("    %6s",g_pUsr );
 
-	printf("this is the header");
+	
 
 	printf("\n----------------------------------------------------------------------------------------");
 }
@@ -173,21 +173,6 @@ void print__income_by_date(int date)
 }
 
 
-void print__select_date_income()
-{
-	system("cls");
-	print__setup();
-	print__header();
-
-	printf("\nPlease Input the date you want to view: \n\nYour Input Date=");
-
-	char *input=NULL;
-
-	input=input__getchar_plus(input);
-
-	print__income_by_date(atoi(input));
-}
-
 
 void print__checkIn_rate(int date)
 {
@@ -195,21 +180,67 @@ void print__checkIn_rate(int date)
 	print__setup();
 	print__header();
 
-	printf("\nCheck In Rate:\n\n**: %.2f%%\n\n***: %.2f%%\n\n****: %.2f%%\n\nVIP: %.2f%%",data__checkIn_rate_by_date_and_type(date,2),data__checkIn_rate_by_date_and_type(date,3),data__checkIn_rate_by_date_and_type(date,4),data__checkIn_rate_by_date_and_type(date,5));
+	printf("\nCheck In Rate:\n\n   **: %.2f%%\n\n   ***: %.2f%%\n\n   ****: %.2f%%\n\n   VIP: %.2f%%",data__checkIn_rate_by_date_and_type(date,2),data__checkIn_rate_by_date_and_type(date,3),data__checkIn_rate_by_date_and_type(date,4),data__checkIn_rate_by_date_and_type(date,5));
 }
 
 
-void print__select_date_checkIn()
+
+
+
+/* exit */
+void print__exit()
 {
 	system("cls");
-	print__setup();
-	print__header();
 
-	printf("\nPlease Input the date you want to view: \n\nYour Input Date=");
+	printf("\n\n\n\n");
 
-	char *input=NULL;
+	int nSpc=30;
+	/* print a 再见 with a heart */
+	print__space(nSpc);
+    printf("        **           **        \n");
+    Sleep(70);	
+    print__space(nSpc);
+    printf("    *       *     *       *    \n");
+    Sleep(70);	
+    print__space(nSpc);
+    printf("  *            *             *  \n");
+    Sleep(70);	
+    print__space(nSpc);
+    printf(" *    _______      ____        * \n");
+    Sleep(70);
+    print__space(nSpc);
+    printf(" *     __|__      |    |       * \n");
+    Sleep(70);	
+    print__space(nSpc);
+    printf(" *    |__|__|     |  | |       * \n");
+    Sleep(70);	
+    print__space(nSpc);
+    printf(" *   _|__|__|_    |  | |      * \n");
+    Sleep(70);	
+    print__space(nSpc);
+    printf("  *   |     |       /|       *  \n");
+    Sleep(70);	
+    print__space(nSpc);
+    printf("   *  |     |      /  \\__|  *   \n");
+    Sleep(70);	
+    print__space(nSpc);
+    printf("    *                     *    \n");
+    Sleep(70);	
+    print__space(nSpc);
+    printf("      *                 *      \n");
+    Sleep(70);	
+    print__space(nSpc);
+    printf("        *             *        \n");
+    Sleep(70);	
+    print__space(nSpc);
+    printf("          *         *          \n");
+    Sleep(70);	
+    print__space(nSpc);
+    printf("             *   *             \n");
+    Sleep(70);	
+    print__space(nSpc);
+    printf("               *               \n");
 
-	input=input__getchar_plus(input);
-
-	print__checkIn_rate(atoi(input));
+    Sleep(300);
+    exit(0);
 }

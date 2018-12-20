@@ -139,6 +139,7 @@ typedef struct room
 #include "input.h"
 #include "print.h"
 #include "login.h"
+#include "menu.h"
 
 
 
@@ -189,6 +190,45 @@ void data__room_setup(int quick)
 
 }
 
+void main__income()
+{
+	system("cls");
+	print__header();
+	printf("\nPlease Input a Date in format like 20181220\n\nDate=");
+
+	char *tmp=NULL;
+
+	tmp=input__getchar_plus(tmp);
+
+	system("cls");
+	printf("Loading...\n");
+	print__income_by_date(atoi(tmp));
+
+	printf("\n\n\n\n\n\nPress any key to go back~");
+
+	system("pause>nul");
+
+}
+
+
+void main__checkIn()
+{
+	system("cls");
+	print__setup();
+	print__header();
+
+	printf("\nPlease Input the date you want to view: \n\nYour Input Date=");
+
+	char *input=NULL;
+
+	input=input__getchar_plus(input);
+
+	print__income_by_date(atoi(input));
+
+	printf("\n\n\n\n\n\nPress any key to go back~");
+
+	system("pause>nul");
+}
 
 /*****************Above are your function declearation ^_^ ***********************/
 
@@ -198,19 +238,20 @@ void data__room_setup(int quick)
 int main(int argc, char *argv[])
 {
 	
-
-	//data__update_signature(argc, &*argv);
+	/* if the program is aroused by the monitor, update signature and exit */
+	data__update_signature(argc, &*argv);
+	/* check signature to see if the data has been illegally changed */
+	data__check_file_signature();
 	/* start monitor event, for the purpose of kill bgm and delete tmp file after user exit */
-	//data__start_monitor(argv[0]);
+	data__start_monitor(argv[0]);
 
+	//demo__test_fundamental_functions(); /* Don't Remove This For Test Purpose!! */
 
-	//data__check_del_by_date(20181219);
-	demo__test_fundamental_functions(); /* Don't Remove This For Test Purpose!! */
-
-	//final_main();
+	final_main();
 
 	/*************Your Code Here****************/
 	//data__room_setup_by_nothing(20181226);
+	//data__check_del_by_date(20181219);
 	//for(int i=0;i<7;i++)
 	//data__room_setup_by_date(20181220+i,20181219);
 	//data__revise_room_price_based_on_type(20181219,1,55);
@@ -255,15 +296,93 @@ int final_main()
 {
 
 	usr usr;
+	char chUsr[]="Welcome!";
+	int step=0;
+	g_pUsr=chUsr;
 
-	int nUsr=login__choose_usr();
+	/********Body********/
+	while(1)
+	{
+		/***********login*****************/
+		while(step==0)
+		{
+			int nUsr=login__choose_usr();
 
-	if(nUsr==1) sprintf(usr.name,"staff");
-	else sprintf(usr.name,"manager");
+			if(nUsr==1) sprintf(usr.name,"staff");
+			else sprintf(usr.name,"manager");
 
-	login__check_passwd(usr);
+			sprintf(chUsr,"%s",usr.name);
 
+			g_pUsr=chUsr;
 
+			if(login__check_passwd(usr)) 
+			{
+				if(nUsr!=1)
+					step++;
+				else
+					step=5;
+			}
+		}
+
+		/**************Manager main menu**********/
+		while(step==1)
+		{
+			int nPnt=menu__main();
+
+			if(nPnt==1) step=2;
+			if(nPnt==2) step=3;
+			if(nPnt==3) step=4;
+			if(nPnt==4) step=0;
+			if(nPnt==0||nPnt==5) print__exit();
+		}
+
+		/**********Data Setting************/
+		while(step==2)
+		{
+			int nPnt=menu__data_setting();
+
+			if(nPnt==1) 
+			//if(nPnt==2) 
+			//if(nPnt==3) 
+			if(nPnt==0) step=1;
+		}
+
+		/**********View Statistics************/
+		while(step==3)
+		{
+			int nPnt=menu__data_statistics();
+
+			if(nPnt==1) main__income();
+			if(nPnt==2) main__checkIn();
+			if(nPnt==3) {system("cls");printf("Loading...\n"); data__export_room_to_excel();}
+			if(nPnt==4) {system("cls");printf("Loading...\n"); data__export_visitor_to_excel();}
+			//if(nPnt==5) 
+			//if(nPnt==6)
+			if(nPnt==0)  step=1;
+			
+			
+		}
+
+		/**********Account Setting************/
+		while(step==4)
+		{
+			int nPnt=menu__manager_password();
+
+			if(nPnt==1) login__change_my_passwd();
+			if(nPnt==2) login__create_staff_passwd();
+			if(nPnt==3) login__clean_staff_passwd();
+			if(nPnt==0) step=1;
+
+		}
+
+		/**********Staff Page************/
+		while(step==5)
+		{
+			
+			step=0;
+		}
+
+	}
 	return 0;
 }
 
