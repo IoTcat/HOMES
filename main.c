@@ -310,8 +310,8 @@ int main(int argc, char const *argv[])
     //menu__update_visitor_info();
     //menu__search_visitor_three_type_selection();
     //data__search_visitor_from_three_types();
-    int visiotrha[4]={1,123456};
-    data__insert_userinfo_to_structure(20181219,101,visiotrha);
+    //int visiotrha[4]={1,123456};
+    //data__insert_userinfo_to_structure(20181219,101,visiotrha);
     //data__get_room_availavble_by_date(20181219);
     //printf("The available room number is: %d\n",g_nRtrnRows);
     //system("pause");
@@ -319,6 +319,10 @@ int main(int argc, char const *argv[])
     //printf("The available day: %d",hahaha);
     //system("pause");
     //data__mark_check_out(20181219,101);
+    //data__change_price_by_type_final();
+       data__setting_final_version();
+
+
 
 
 
@@ -330,6 +334,43 @@ int main(int argc, char const *argv[])
 }
 
 /*********** My own function (staring line) ********/
+void data__setting_final_version(void)
+{
+    while(1)
+    {
+        int selection1=0;
+        int selection2=0;
+        print__setup();
+        selection1=menu__data_setting();
+        if(selection1==1)
+         {
+            print__room_type();
+            system("pause");
+
+            while(1)
+            {
+                if(data__change_price_by_type_final()==0)
+                    break;
+
+            }
+
+         }
+        else if(selection1==2)
+        {
+            print__room_type();
+            system("pause");
+            data__change_room_type_final();
+        }
+        else if(selection1==3)
+        {
+
+        }
+        else if(selection1==0)
+            break;
+    }
+
+}
+
 int data__revise_room_price_based_on_type(int Type,double Price)
 {
 
@@ -352,6 +393,7 @@ int data__change_price_by_type_final(void)
 {
     char* p=NULL;
     int legalornot=-100;
+    int brnum=0;
 
     while(1)
     {
@@ -369,14 +411,16 @@ int data__change_price_by_type_final(void)
            {
                int linputpricel=atoi(p);
                system("cls");
-               printf("Loading...\n\n");
+               printf("Loading...");
                m=m+1;
                double ll=linputpricel;
                data__revise_room_price_based_on_type(m,ll);
                printf("\n\nThe price has been updated successfully");
                system("pause");
+               brnum=10;
                break;
            }
+           else if(strlen(p)==1 && p[0]=='q') break;
            else
            {
                printf("Please enter a correct price\n\n\n Press \"q\" to quit\n\n");
@@ -387,6 +431,8 @@ int data__change_price_by_type_final(void)
 
 
         }
+        if(brnum==10)
+            break;
 
      }
 
@@ -398,7 +444,7 @@ int data__change_price_by_type_final(void)
 
 void data__change_room_type_final(void)
 {
-    int m=-100,n=0,x=0;
+    int m=-100,n=0,x=0,brnum=0;
     while(1)
     {
     do
@@ -431,12 +477,13 @@ void data__change_room_type_final(void)
       printf("Loading...");
       data__change_room_type(roomNo,x+1);
       printf("\n\nThe room has been successfully updated!\n\n");
+      brnum=-10;
       system("pause");
       break;
     }
 
     }while(1);
-    if(m==0) break;
+    if(m==0 || brnum==-10) break;
     }
 
 }
@@ -481,7 +528,7 @@ int data__insert_userinfo_to_structure(int Date,int RoomNo,int* Visitordetail)
     {
        printf("Visitordetail[i]=%d\n",Visitordetail[i]);
        containerwow.visitorId[i]=Visitordetail[i];
-       printf("containerwow.visitorId[i]=%f\n",containerwow.price);
+       printf("containerwow.visitorId[i]=%f\n",containerwow.checkIn);
     }
     data__insert_room_info(&containerwow);
 
@@ -759,7 +806,6 @@ void menu__print_data_setting(int nPnt)
 
 	printf("\n\nPlease use Arrows on Keyboard to Select:\n");
 	char chItem1[]="Update Room Price";
-	/* function pringt__item has three parameters: display string, if it is choosed,extra space on its left*/
 	print__item(chItem1,(nPnt==1)?1:0,0);
 
 	char chItem2[]="Change Room Type";
@@ -1597,17 +1643,19 @@ int data__change_room_type(int roomNo,int Type)
 void print__room_type(void)
 {
     system("cls");
+    print__setup();
     print__header();
+    printf("\nHere is the room and their types:\n");
     printf("\n");
     room *pts=NULL;
     int Date=data__get_current_date(0);
 
     pts=data__get_room_info(0,0,Date,NULL,2,0,0,0,pts);
     if(g_nRtrnRows==0)
-        printf("Type **: None");
+        printf("Type **(%.1f): ",pts->price);
     else
     {
-        printf("Type **: ");
+        printf("Type **(%.1f): ",pts->price);
         print__roomId(pts);
     }
 
@@ -1615,30 +1663,30 @@ void print__room_type(void)
     pts=data__get_room_info(0,0,Date,NULL,3,0,0,0,pts);
     printf("\n\n");
     if(g_nRtrnRows==0)
-        printf("Type ***: None");
+        printf("Type ***(%.1f): ",pts->price);
     else
     {
-        printf("Type ***: ");
+        printf("Type ***(%.1f): ",pts->price);
         print__roomId(pts);
     }
 
     pts=data__get_room_info(0,0,Date,NULL,4,0,0,0,pts);
     printf("\n\n");
     if(g_nRtrnRows==0)
-        printf("Type ****: None");
+        printf("Type ****(%.1f): ",pts->price);
     else
     {
-        printf("Type ****: ");
+        printf("Type ****(%.1f): ",pts->price);
         print__roomId(pts);
     }
 
     pts=data__get_room_info(0,0,Date,NULL,5,0,0,0,pts);
     printf("\n\n");
     if(g_nRtrnRows==0)
-        printf("Type VIP: None");
+        printf("Type VIP(%.1f): ",pts->price);
     else
     {
-        printf("Type VIP: ");
+        printf("Type VIP(%.1f): ",pts->price);
         print__roomId(pts);
     }
 
