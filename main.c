@@ -235,23 +235,11 @@ int main(int argc, char *argv[])
 	//print__select_date_income();
 
 	//data__room_setup(0);
-	//
-		/* declear a room pointer to receive the matched rooms info */
-	struct room *pRm=NULL;
-
-	pRm= data__get_room_info(0/*index*/,0/*roomId*/,20181226/*date*/,NULL/*visitorId*/,1/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
-
-	/* show error hint if the function not runing successfully */
-	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
-
-	/* deal with situation that nothing found */
-	if(!g_nRtrnRows) printf("No room found!!\n");
-
-	/* print all these rooms info on screen */
-	for(int i=0;i<g_nRtrnRows;i++)
-	printf("Index:%d Room:%d date:%d VisitorNum:%d Type:%d Price:%f CheckIn:%d CheckOut:%d\n", (pRm+i)->index, (pRm+i)->roomId, (pRm+i)->date,(pRm+i)->visitorId[0], (pRm+i)->type,(pRm+i)->price, (pRm+i)->checkIn, (pRm+i)->checkOut);
-
-
+	//login__change_my_passwd();
+	//login__create_staff_passwd();
+	//login__clean_staff_passwd();
+	//login__setup();
+	
 	/*************Your Code Above****************/
 
 	system("echo This is the END of your Main function!!!!&&pause>nul"); /* Remain you of the end of your main function */

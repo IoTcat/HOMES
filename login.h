@@ -38,83 +38,6 @@ int login__choose_usr()
 
 
 
-/*function for check password*/
-int login__check_passwd(usr usr)
-{
-	int words=0,times=0;
-	char tmp_word=0;
-
-	while(1)
-	{
-		/* get password input*/
-		while(1)
-		{
-			print__get_password(times,words);
-
-			tmp_word=input__detect_input_ASCII();
-			/* when press esc*/
-			if(tmp_word==27) return 0;
-			/* when press enter*/
-			if(tmp_word==13) break;
-			/* when press backpace<-*/
-			if(tmp_word==8) 
-			{
-				if(words>0)
-				{
-					words--;
-					usr.passwd[words]='\0';
-				}
-			}
-			/* filter*/
-			if(tmp_word>32&&tmp_word<127) 
-			{
-				usr.passwd[words]=tmp_word;
-				words++;
-				usr.passwd[words]='\0';
-			}
-		}
-
-
-		char *key=NULL;
-		int *ifPasswd=NULL;
-		FILE *fp=NULL;
-
-  		 char chPath[50];
-
-  		  /* get file name */
-   		 if(usr.name[0]=='s')
-   		 sprintf(chPath,"%s/%s",DATA_FOLDER,STAFF_PASSWD_FILE);
-  		 else
-   		 sprintf(chPath,"%s/%s",DATA_FOLDER,MANAGER_PASSWD_FILE);
-
-		fp=fopen(chPath,"r");
-		char tmp[50];
-		sprintf(tmp,"%s",data__encode_password(usr,key));
-		/* check is passwd exist*/
-		ifPasswd =data__seek_key_word_former(tmp, fp,ifPasswd);
-
-		fclose(fp);
-		/* if exist*/
-		if(ifPasswd[0]) return 1;
-		/* input time ++*/
-		times++;
-		/* reset*/
-		tmp_word=0;
-		words=0;
-		/* if wrong for more than 5 times*/
-		if(times>5)
-		{
-			system("cls&&color 4F");
-
-			printf("\nPassword is wrong for more than 5 times!!  Program will quit in 2 Seconds!\n");
-			Sleep(3000);
-
-			exit(-1);
-		}
-	}
-
-}
-
 
 /* function for create password*/
 int login__create_passwd(usr usr)
@@ -223,27 +146,25 @@ int login__create_passwd(usr usr)
 	return 1;
 }
 
-
-/*function for change password*/
-int login__change_passwd(usr usr)
+/*function for check password*/
+int login__check_passwd(usr usr)
 {
-
 	int words=0,times=0;
 	char tmp_word=0;
-	char tmp[50];
 
 	while(1)
 	{
+		/* get password input*/
 		while(1)
 		{
 			print__get_password(times,words);
 
 			tmp_word=input__detect_input_ASCII();
-			/* esc*/
+			/* when press esc*/
 			if(tmp_word==27) return 0;
-			/*enter*/
+			/* when press enter*/
 			if(tmp_word==13) break;
-			/*backspace*/
+			/* when press backpace<-*/
 			if(tmp_word==8) 
 			{
 				if(words>0)
@@ -252,7 +173,7 @@ int login__change_passwd(usr usr)
 					usr.passwd[words]='\0';
 				}
 			}
-			/*word*/
+			/* filter*/
 			if(tmp_word>32&&tmp_word<127) 
 			{
 				usr.passwd[words]=tmp_word;
@@ -260,122 +181,100 @@ int login__change_passwd(usr usr)
 				usr.passwd[words]='\0';
 			}
 		}
+
 
 		char *key=NULL;
 		int *ifPasswd=NULL;
 		FILE *fp=NULL;
 
-		fp=fopen("data/psswd.txt","r");
+  		 char chPath[50];
+
+  		  /* get file name */
+   		 if(usr.name[0]=='s')
+   		 sprintf(chPath,"%s/%s",DATA_FOLDER,STAFF_PASSWD_FILE);
+  		 else
+   		 sprintf(chPath,"%s/%s",DATA_FOLDER,MANAGER_PASSWD_FILE);
+
+		fp=fopen(chPath,"r");
+		char tmp[50];
 		sprintf(tmp,"%s",data__encode_password(usr,key));
+		/* check is passwd exist*/
 		ifPasswd =data__seek_key_word_former(tmp, fp,ifPasswd);
 
 		fclose(fp);
-		/*check password*/
-		if(ifPasswd[0]) break;
-
+		/* if exist*/
+		if(ifPasswd[0]) return 1;
+		/* input time ++*/
 		times++;
+		/* reset*/
 		tmp_word=0;
 		words=0;
+		/* if wrong for more than 5 times*/
+		if(times>5)
+		{
+			system("cls&&color 4F");
+
+			printf("\nPassword is wrong for more than 5 times!!  Program will quit in 2 Seconds!\n");
+			Sleep(3000);
+
+			exit(-1);
+		}
 	}
 
+}
 
-	 words=0;
-	 times=0;
-	 tmp_word=0;
 
-	char tmp_psswd[99];
 
-	while(1)
+
+void login__change_my_passwd()
+{
+	usr usr={"manager","123"};
+	
+	login__check_passwd(usr);
+	login__create_passwd(usr);
+	
+}
+
+void login__create_staff_passwd()
+{
+	usr usr={"manager","123"};
+	
+	login__check_passwd(usr);
+
+	sprintf(usr.name,"staff");
+	login__create_passwd(usr);
+}
+
+
+void login__clean_staff_passwd()
+{
+	char chPath[30];
+
+	sprintf(chPath,"del /Q %s\\%s>nul",DATA_FOLDER,STAFF_PASSWD_FILE);
+
+	int i;
+	i=MessageBox(NULL,"This Action Should Only be executed in case of an emergency. Are Your Sure to CLEAN ALL the staff password? ","AS4 Message",MB_YESNO);
+	if(i==IDYES) system(chPath);
+	
+}
+
+void login__setup()
+{
+	char chPath[30];
+
+
+	sprintf(chPath,"%s/%s",DATA_FOLDER,MANAGER_PASSWD_FILE);
+
+
+	if(fopen(chPath,"r")==NULL)
 	{
-		usr.passwd[0]='\0';
-		while(1)
-		{
-			print__get_newpassword(times,words);
+		MessageBox( 0, "Password File Broken!!", "AS4 Message", 0 );
+		
+		sprintf(chPath,"if exist %s\\%s (echo >nul)else (echo g48xQ5l05mvy6u30vzd20UK7g48xQ5l05mvy6>%s\\%s)>nul",DATA_FOLDER,MANAGER_PASSWD_FILE,DATA_FOLDER,MANAGER_PASSWD_FILE);
 
-			tmp_word=input__detect_input_ASCII();
-			/*esc*/
-			if(tmp_word==27) return 0;
-			/*enter*/
-			if(tmp_word==13) break;
-			/*backspace*/
-			if(tmp_word==8) 
-			{
-				if(words>0)
-				{
-					words--;
-					usr.passwd[words]='\0';
-				}
-			}
-			/*words*/
-			if(tmp_word>32&&tmp_word<127) 
-			{
-				usr.passwd[words]=tmp_word;
-				words++;
-				usr.passwd[words]='\0';
-			}
-		}
-		times++;
-		words=0;
-		while(!(usr.passwd[0]=='\0'||strlen(usr.passwd)<3||strlen(usr.passwd)>30))
-		{
-			print__get_newpassword(times,words);
+		system(chPath);
+		exit(0);
 
-			tmp_word=input__detect_input_ASCII();
-
-			if(tmp_word==27) return 0;
-
-			if(tmp_word==13) break;
-
-			if(tmp_word==8) 
-			{
-				if(words>0)
-				{
-					words--;
-					tmp_psswd[words]='\0';
-				}
-			}
-
-			if(tmp_word>32&&tmp_word<127) 
-			{
-				tmp_psswd[words]=tmp_word;
-				words++;
-				tmp_psswd[words]='\0';
-			}
-
-		}
-
-		if(usr.passwd[0]=='\0')
-		{
-			system("cls");
-			printf("Your password contains NOTHING!!!\n");
-			Sleep(2500);
-
-			times=-1;
-		}
-
-		else if(strlen(usr.passwd)<3||strlen(usr.passwd)>30)
-		{
-			system("cls");
-			printf("Your password length should between 3 and 30!!!\n");
-			Sleep(2500);
-
-			times=-1;
-		}
-
-		else if(usr.passwd[0]!='\0'&&!strcmp(usr.passwd,tmp_psswd)) break;
-		times++;
-		words=0;
 	}
 
-	char *key=NULL;
-	char tmpp[50];
-	char tmppp[]="staff";
-
-	sprintf(tmpp,"%s",data__encode_password(usr,key));
-
-	if(!strcmp(usr.name,tmppp))
-	data__insert_psswd_online(tmpp, 1);
-else data__insert_psswd_online(tmpp, 2);
-
-	return 1;
 }

@@ -52,7 +52,7 @@ void print__get_password(int type, int words)
 
 	if(type)	printf("Your password is WRONG! Please try again~\n\n");
 
-	printf("Please input your password: \n\nYour password = ");
+	printf("Please input your Current password: \n\nYour password = ");
 
 	for(int i=0;i<words;i++) printf("*");
 
@@ -64,13 +64,13 @@ void print__get_newpassword(int type, int words)
 {
 	system("cls");
 
-	if(type%4==0)	printf("Please set your password: \n\nYour password = ");
+	if(type%4==0)	printf("Please set New password: \n\nNew password = ");
 
-	if(type%4==1)	printf("Please input your password again: \n\nYour password = ");
+	if(type%4==1)	printf("Please input the password again: \n\nThe password = ");
 
-	if(type%4==2)	printf("The passwords you input are not the same!\n\nPlease set your password again: \n\nYour password = ");
+	if(type%4==2)	printf("The passwords you input are not the same!\n\nPlease set the New password again: \n\nNew password = ");
 
-	if(type%4==3)	printf("Please input your password again: \n\nYour password = ");
+	if(type%4==3)	printf("Please input the password again: \n\nThe password = ");
 
 	for(int i=0;i<words;i++) printf("*");
 }

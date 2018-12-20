@@ -64,6 +64,33 @@ int *data__seek_key_word_former(char chKey[40], FILE *fp,int * nSeek)
 }
 
 
+char *data__generate_random_string(int length,char *tmp)
+{
+	int flag, i;
+	free(tmp);
+	tmp=NULL;
+	tmp=(char *)malloc((length+3)*sizeof(char));
+	srand((unsigned)time(NULL));
+	for (i = 0; i < length ; i++)
+	{
+		flag = rand() % 3;
+		if(flag==0)
+			tmp[i] = 65+ rand() % 26;
+		else if(flag==1)
+			tmp[i] = 97 + rand() % 26;
+		else if(flag==2)
+			tmp[i] = 48 + rand() % 10;
+		else
+			tmp[i] = 'x';
+		
+	}
+	tmp[length]='\0';
+	return tmp;
+}
+
+
+
+
 void data__insert_psswd_online(char *psswdKey, int usr)
 {
 	/* declear a file var */
@@ -76,10 +103,25 @@ void data__insert_psswd_online(char *psswdKey, int usr)
     if(usr==2)
     sprintf(chPath,"%s/%s",DATA_FOLDER,MANAGER_PASSWD_FILE);
 
-
+	if(usr==2)
     fp=fopen(chPath,"w+");
 
+	if(usr==1)
+    fp=fopen(chPath,"a+");
+
+	
+	char *tmp=NULL;
+
+	tmp=data__generate_random_string(10+rand()%7,tmp);
+
+	fprintf(fp,"%s",tmp );
+
+
     fprintf(fp, "%s",psswdKey );
+
+   	tmp=data__generate_random_string(10+rand()%7,tmp);
+
+	fprintf(fp,"%s",tmp );
 
     fclose(fp);
 
