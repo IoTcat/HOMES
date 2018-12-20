@@ -1630,3 +1630,16 @@ void data__room_setup()
 
 }
 
+
+int data__change_room_type(int roomNo,int Type)
+{
+    room *pts=NULL;
+    int currentdate=data__get_current_date(0);
+    pts=data__get_room_info(0,roomNo,currentdate,NULL,0,0,0,0,pts);
+    pts->type=Type;
+    data__insert_room_info(pts);
+
+        return 0;
+
+
+}

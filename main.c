@@ -341,7 +341,7 @@ int final_main()
 			int nPnt=menu__data_setting();
 
 			if(nPnt==1) {while(1){print__room_type(); printf("\n\n\n\n"); system("echo Please Press Any Key to Continue...&&pause>nul");if(data__change_price_by_type_final()==0) break;}}
-			//if(nPnt==2) 
+			if(nPnt==2) {while(1){print__room_type(); printf("\n\n\n\n"); system("echo Please Press Any Key to Continue...&&pause>nul");if(data__change_room_type_final()==0) break;}}
 			//if(nPnt==3) 
 			if(nPnt==0) step=1;
 		}
