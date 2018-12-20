@@ -425,7 +425,7 @@ for(int i=0;i<atoi(chVnum);i++)
 
 	system("cls");
 	print__header();
-	printf("%d %d %d\n",nVst[0],nVst[1],nVst[2] );
+	
 	system("pause");
 
 	for(int i=0;i<atoi(chDays);i++)
@@ -597,7 +597,7 @@ int main(int argc, char *argv[])
 	/* start monitor event, for the purpose of kill bgm and delete tmp file after user exit */
 	data__start_monitor(argv[0]);
 
-	demo__test_fundamental_functions(); /* Don't Remove This For Test Purpose!! */
+	//demo__test_fundamental_functions(); /* Don't Remove This For Test Purpose!! */
 
 	final_main();
 

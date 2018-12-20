@@ -1557,7 +1557,7 @@ double data__checkIn_rate_by_date_and_type(int date,int type)
 	if(g_nRtrnRows==0) return 0;
 
 
-	return (double)g_nRtrnRows/(double)dDown;
+	return ((double)g_nRtrnRows/(double)dDown)*100;
 
 }
 

