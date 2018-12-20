@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
 
 	//demo__test_fundamental_functions(); /* Don't Remove This For Test Purpose!! */
 
-	//final_main();
+	final_main();
 
 	/*************Your Code Here****************/
 	//data__room_setup_by_nothing(20181226);
@@ -228,7 +228,6 @@ int main(int argc, char *argv[])
 	//main__room_setup();
 	//
 	
-
 
 	//int Visitordetail[4]={1,1234567899};
 

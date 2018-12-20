@@ -1601,20 +1601,21 @@ void data__room_setup()
 
 	sprintf(chPath,"%s\\%s",DATA_FOLDER,ROOM_DATA_FILE);
 
-	FILE *fp=NULL;
-
-	fp=fopen(chPath,"r");
-
-	if(fp==NULL) 
-		data__room_setup_by_nothing(data__get_current_date(0));
-
-	fclose(fp);
-	/* declear a room pointer to receive the matched rooms info */
 	struct room *pRm=NULL;
+
+	pRm= data__get_room_info(0/*index*/,0/*roomId*/,0/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
+
+	
+	if(g_nRtrnRows==0)
+	data__room_setup_by_nothing(data__get_current_date(0));
+
+
+	/* declear a room pointer to receive the matched rooms info */
+	
 	int date=data__get_current_date(8);
 	g_nRtrnRows=0;
 	do
-	{printf("kkkkkkkkkk  %d\n",date);
+	{
 		pRm= data__get_room_info(0/*index*/,0/*roomId*/,date--/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
 	}while(g_nRtrnRows==0);
 	
