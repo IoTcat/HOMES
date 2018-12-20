@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1545219732 source:d:\github_as4\ee101-as4-hotelsystem\main.c
+1545314983 source:d:\github_as4\ee101-as4-hotelsystem\main.c
 	<stdio.h>
 	<stdlib.h>
 	<conio.h>
@@ -16,7 +16,7 @@
 	"print.h"
 	"login.h"
 
-1545203653 d:\github_as4\ee101-as4-hotelsystem\data.h
+1545275048 d:\github_as4\ee101-as4-hotelsystem\data.h
 
 1545212090 d:\github_as4\ee101-as4-hotelsystem\input.h
 

@@ -244,7 +244,7 @@ int menu__data_setting();
 int menu__receptionist();
 int menu__manager_password();
 int menu__main();
-struct room *data__get_room_availavble_by_date(int);
+struct room *data__get_room_availavble_by_date(int,int);
 
 /*****************Above are your function declearation ^_^ ***********************/
 
@@ -323,7 +323,12 @@ int main(int argc, char const *argv[])
        //data__setting_final_version();
        //data__change_check_out();
        //data__mark_check_in(20181219,102);
-       data__change_check_out(102);
+       //data__change_check_out(102);
+       visitor *ptvs=NULL;
+       ptvs=data__get_visitor_info(410104199812300017,ptvs);
+       if(ptvs!=NULL)
+       printf("The NationID:%s",ptvs->nationalId);
+       else return 0;
 
 
 
@@ -342,7 +347,7 @@ int data__change_check_out(int roomNo)
 {
     int totalmoney=0;
     room *pts=NULL;
-    pts=data__get_room_info(0,roomNo,0,NULL,0,0,2,1,pts);printf("We find %d",g_nRtrnRows); system("pause");
+    pts=data__get_room_info(0,roomNo,0,NULL,0,0,2,1,pts);
     for(int i=0;i<g_nRtrnRows;i++)
     {
         totalmoney=totalmoney+(pts+i)->price;
@@ -1376,18 +1381,15 @@ void menu__print_search_visitor_three_type_selection(int nPnt)
 }
 
 
-struct visitor* data__search_visitor_from_three_types(void)
+struct visitor* data__search_visitor_from_three_types(visitor *ptvst)
 {
     char *p=NULL;
-    visitor *container0=NULL;
-    visitor *container1=NULL;
-    visitor *container2=NULL;
 
     while(1)
     {
         int selection=menu__search_visitor_three_type_selection();
         if(selection==0)
-            return container0;
+            return NULL;
         if(selection==1)
         {
             system("cls");
@@ -1417,8 +1419,8 @@ struct visitor* data__search_visitor_from_three_types(void)
 
                     system("cls");
                     printf("Loading...");
-                    container1=data__get_visitor_info(p,container1);
-                    if(container1==NULL)
+                    ptvst=data__get_visitor_info(p,ptvst);
+                    if(ptvst==NULL)
                     {
                         system("cls");
                         printf("Sorry, the visitor you search is not in the database.\n");
@@ -1437,7 +1439,7 @@ struct visitor* data__search_visitor_from_three_types(void)
                         system("cls");
                         printf("The visitor is found");
                         system("pause");
-                        return container1;
+                        return ptvst;
                     }
 
 
@@ -1497,8 +1499,8 @@ struct visitor* data__search_visitor_from_three_types(void)
                         break;
                     system("cls");
                     printf("Loading...");
-                    container2=data__get_visitor_info(p,container2);
-                    if(container2==NULL)
+                    ptvst=data__get_visitor_info(p,ptvst);
+                    if(ptvst==NULL)
                     {
                         printf("Sorry, the visitor you search is not in the database.\n");
                         system("pause");
@@ -1506,14 +1508,14 @@ struct visitor* data__search_visitor_from_three_types(void)
                     }
                     else if(g_nRtrnRows==1)
                     {
-                        int original=atoi(container2->tel);
+                        int original=atoi(ptvst->tel);
                         int input=atoi(p);
                         if(original==input)
                         {
                             system("cls");
                             printf("The visitor is found");
                             system("pause");
-                            return container2;
+                            return ptvst;
                         }
                         else
                             {
@@ -1526,9 +1528,9 @@ struct visitor* data__search_visitor_from_three_types(void)
                     }
                     else if(g_nRtrnRows>1)
                         {
-                            printf("Something wrong occurs");
-                            system("pause");
-                            break;
+                            printf("\nDo not find the visitor\n");
+                            Sleep(1500);
+                            system("cls");
                         }
 
 
@@ -1543,11 +1545,12 @@ struct visitor* data__search_visitor_from_three_types(void)
             while(1)
             {
                 printf("Please input the visitor's ID(Enter \"q\" to return): ");
+                printf("\nPlease"); system("pause");
                 p=input__getchar_plus(p);
                 while(1)
                 {
 
-                    if(strlen(p)>25 || p[0]==NULL)
+                    if(strlen(p)>25 || p[0]=='/0')
                   {
 
                     printf("Please make sure the length is within 25 numbers.\n");
@@ -1561,7 +1564,7 @@ struct visitor* data__search_visitor_from_three_types(void)
                   }
                   else if(strlen(p)==1 && p[0]=='q')
                       break;
-                  else if(strlen(p)<=25 && p[0]!=NULL)
+                  else if(strlen(p)<=25 && p[0]!='/0')
                   {
                       int i=-100;
                       for(i=0;i<strlen(p);i++)
@@ -1590,8 +1593,8 @@ struct visitor* data__search_visitor_from_three_types(void)
 
                     system("cls");
                     printf("Loading...");
-                    container2=data__get_visitor_info(p,container2);
-                    if(container2==NULL)
+                    ptvst=data__get_visitor_info(p,ptvst);
+                    if(g_nRtrnRows==0)
                     {
                         printf("Sorry, the visitor you search is not in the database.\n");
                         system("pause");
@@ -1599,14 +1602,14 @@ struct visitor* data__search_visitor_from_three_types(void)
                     }
                     else if(g_nRtrnRows==1)
                     {
-                        int original1=atoi(container2->nationalId);
+                        int original1=atoi(ptvst->nationalId);
                         int input1=atoi(p);
                         if(original1==input1)
                         {
                             printf("The visitor is found");
                             system("pause");
                             system("cls");
-                            return container2;
+                            return ptvst;
                         }
                         else
                         {
@@ -1751,11 +1754,11 @@ void print__roomId(room *pRm)
 
 }
 
-struct room *data__get_room_availavble_by_date(int Date)
+struct room *data__get_room_availavble_by_date(int Date,int Type)
 {
     room *pts=NULL;
     int visitorinfo[4]={0};
-    pts=data__get_room_info(0,0,Date,visitorinfo,0,0,1,1,pts);
+    pts=data__get_room_info(0,0,Date,visitorinfo,Type,0,1,1,pts);
     if(g_nRtrnRows==0)
     {return NULL; pts=NULL;}
     else if(g_nRtrnRows>=1)
