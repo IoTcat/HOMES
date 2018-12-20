@@ -179,17 +179,8 @@ int final_main();
 
 /*****************please put your function declearation here!!***********************/
 
-void data__room_setup(int quick)
-{
-	for(int i=0;i<7;i++)
-	{
-		data__room_setup_by_date(data__get_current_date(0)+i,20181219);
-	
-		if(!quick)
-			data__check_del_by_date(data__get_current_date(0)+i);
-	}
 
-}
+
 
 void main__income()
 {
@@ -248,7 +239,7 @@ int main(int argc, char *argv[])
 
 	//demo__test_fundamental_functions(); /* Don't Remove This For Test Purpose!! */
 
-	//final_main();
+	final_main();
 
 	/*************Your Code Here****************/
 	//data__room_setup_by_nothing(20181226);
@@ -285,6 +276,8 @@ int main(int argc, char *argv[])
 	//download__data(ROOM_DATA_FILE);
 	//download__data(VISITOR_DATA_FILE);
 	//download__upload();
+	//
+	//main__room_setup();
 	/*************Your Code Above****************/
 
 	system("echo This is the END of your Main function!!!!&&pause>nul"); /* Remain you of the end of your main function */
@@ -303,6 +296,8 @@ int final_main()
 	char chUsr[]="Welcome!";
 	int step=0;
 	g_pUsr=chUsr;
+
+	data__room_setup();
 
 	/********Body********/
 	while(1)
@@ -345,7 +340,7 @@ int final_main()
 		{
 			int nPnt=menu__data_setting();
 
-			if(nPnt==1) 
+			//if(nPnt==1) 
 			//if(nPnt==2) 
 			//if(nPnt==3) 
 			if(nPnt==0) step=1;
@@ -382,6 +377,13 @@ int final_main()
 		/**********Staff Page************/
 		while(step==5)
 		{
+			int nPnt=menu__receptionist();
+
+			//if(nPnt==1) 
+			//if(nPnt==2) 
+			//if(nPnt==3) 
+			//if(nPnt==4) 
+			if(nPnt==0) print__exit();
 			
 			step=0;
 		}

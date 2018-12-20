@@ -232,3 +232,64 @@ int menu__data_setting()/*room setting interface*/
 	/* return user choice by number*/
 	return nVal%3+1;
 }
+
+
+
+void menu__print_receptionist(int nPnt)
+{
+
+	/* clear screen */
+	system("cls");
+
+	/* print the screen header */
+	print__header();
+
+	printf("\n\nPlease use Arrows on Keyboard to Select:\n");
+	char chItem1[]="   Book Room";
+	/* function pringt__item has three parameters: display string, if it is choosed,extra space on its left*/
+	print__item(chItem1,(nPnt==1)?1:0,0);
+
+	char chItem2[]="     Update Visitor Info";
+	print__item(chItem2,(nPnt==2)?1:0,0);
+
+	char chItem3[]="   Check In";
+	print__item(chItem3,(nPnt==3)?1:0,0);
+
+	char chItem4[]="   Check Out";
+	print__item(chItem4,(nPnt==4)?1:0,0);
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	printf("Press ESC to Exit!");
+
+}
+
+
+int menu__receptionist()
+{
+	int nVal=5600;
+	int nArrw=0;
+	do
+	{
+		/* print out the menu */
+		menu__print_receptionist(nVal%4+1);
+
+		/* detect user keyboard press*/
+		nArrw= input__get_arrow();
+
+		/* when input a arrow */
+		if(nArrw==1||nArrw==-1)
+			nVal+=nArrw;
+
+		/* when press enter */
+		if(nArrw==6)
+			break;
+		/* when press esc */
+		if(nArrw==9)
+			return 0;
+
+	}while(1);
+
+	/* return user choice by number*/
+	return nVal%4+1;
+}
+
+

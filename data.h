@@ -1585,3 +1585,22 @@ double data__income_by_date_and_type(int date, int type)
 }
 
 
+void data__room_setup()
+{
+	/* declear a room pointer to receive the matched rooms info */
+	struct room *pRm=NULL;
+	int date=data__get_current_date(8);
+	g_nRtrnRows=0;
+	do
+	{
+		pRm= data__get_room_info(0/*index*/,403/*roomId*/,date--/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
+	}while(g_nRtrnRows==0);
+	
+	date++;
+	int tmp_date=date+1;
+	while(tmp_date<data__get_current_date(8))
+	{
+		data__room_setup_by_date(tmp_date++,date);
+	}
+
+}
