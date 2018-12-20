@@ -293,3 +293,118 @@ int menu__receptionist()
 }
 
 
+void menu__print_select_room_type(int nPnt)
+{
+
+	/* clear screen */
+	system("cls");
+
+	/* print the screen header */
+	print__header();
+
+	printf("\n\nPlease use Arrows on Keyboard to Select:");
+	char chItem1[]="   Type **   ";
+	/* function pringt__item has three parameters: display string, if it is choosed,extra space on its left*/
+	print__item(chItem1,(nPnt==1)?1:0,0);
+
+	char chItem2[]="  Type ***  ";
+	print__item(chItem2,(nPnt==2)?1:0,0);
+
+	char chItem3[]="   Type ****  ";
+	print__item(chItem3,(nPnt==3)?1:0,0);
+
+	char chItem4[]="  VIP    ";
+	print__item(chItem4,(nPnt==4)?1:0,0);
+
+
+	printf("\n\n\n\n\n");
+	printf("Press ESC to Exit!");
+
+}
+
+int menu__select_room_type()/*data statistics interface*/
+{
+	int nVal=5600;
+	int nArrw=0;
+	do
+	{
+		/* print out the menu */
+		menu__print_select_room_type(nVal%4+1);
+
+
+		/* detect user keyboard press*/
+		nArrw= input__get_arrow();
+
+		/* when input a arrow */
+		if(nArrw==1||nArrw==-1)
+			nVal+=nArrw;
+
+		/* when press enter */
+		if(nArrw==6)
+			break;
+		/* when press esc */
+		if(nArrw==9)
+			return 0;
+
+	}while(1);
+
+	/* return user choice by number*/
+	return nVal%4+1;
+}
+
+
+
+
+
+
+int data__change_price_by_type_final(void)
+{
+    char* p=NULL;
+    int legalornot=-100;
+    int brnum=0;
+
+    while(1)
+    {
+        int m=menu__select_room_type();
+        if(m==0) return 0;
+        system("cls");
+        printf("Please input a price\n\n");
+        p=input__getchar_plus(p);
+
+        while(1)
+        {
+
+           legalornot=data__filter_input(p);
+           if(legalornot==3 || legalornot==4 )
+           {
+               int linputpricel=atoi(p);
+               system("cls");
+               printf("Loading...");
+               m=m+1;
+               double ll=linputpricel;
+               data__revise_room_price_based_on_type(m,ll);
+               printf("\n\nThe price has been updated successfully");
+               Sleep(2000);
+               brnum=10;
+               break;
+           }
+           else if(strlen(p)==1 && p[0]=='q') break;
+           else
+           {
+               printf("Please enter a correct price\n\n\n Press \"q\" to quit\n\n");
+               p=input__getchar_plus(p);
+               if(strlen(p)==1 && p[0]=='q')
+               break;
+           }
+
+
+        }
+        if(brnum==10)
+            break;
+
+     }
+
+
+return 0;
+
+}

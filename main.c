@@ -296,7 +296,7 @@ int final_main()
 	char chUsr[]="Welcome!";
 	int step=0;
 	g_pUsr=chUsr;
-
+	login__setup();
 	data__room_setup();
 
 	/********Body********/
@@ -340,7 +340,7 @@ int final_main()
 		{
 			int nPnt=menu__data_setting();
 
-			//if(nPnt==1) 
+			if(nPnt==1) {while(1){print__room_type(); printf("\n\n\n\n"); system("echo Please Press Any Key to Continue...&&pause>nul");if(data__change_price_by_type_final()==0) break;}}
 			//if(nPnt==2) 
 			//if(nPnt==3) 
 			if(nPnt==0) step=1;
@@ -355,7 +355,7 @@ int final_main()
 			if(nPnt==2) main__checkIn();
 			if(nPnt==3) {system("cls");printf("Loading...\n"); data__export_room_to_excel();}
 			if(nPnt==4) {system("cls");printf("Loading...\n"); data__export_visitor_to_excel();}
-			if(nPnt==5) {system("cls");printf("If Windows no feedback for long time, Please close the window with control ^C\nLoading\n");Sleep(2500); download__upload();}
+			if(nPnt==5) {system("cls");printf("If Windows no feedback for long time, Please close the window with control ^C\nLoading\n");Sleep(2500); download__upload();Sleep(4000);}
 			if(nPnt==6)	{system("cls");printf("Downloading...\n"); download__data(ROOM_DATA_FILE);download__data(VISITOR_DATA_FILE);download__data(VISITOR_DEL_FILE);download__data(ROOM_DEL_FILE);download__data(SIGNATURE_FILE);}
 			if(nPnt==0)  step=1;
 			

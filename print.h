@@ -244,3 +244,68 @@ void print__exit()
     Sleep(300);
     exit(0);
 }
+
+
+
+
+
+void print__room_type(void)
+{
+    system("cls");
+    print__setup();
+    print__header();
+    printf("\nHere is the room and their types:\n");
+    printf("\n");
+    room *pts=NULL;
+    int Date=data__get_current_date(0);
+
+    pts=data__get_room_info(0,0,Date,NULL,2,0,0,0,pts);
+    if(g_nRtrnRows==0)
+        printf("Type **(%.1f): ",pts->price);
+    else
+    {
+        printf("Type **(%.1f): ",pts->price);
+        print__roomId(pts);
+    }
+
+
+    pts=data__get_room_info(0,0,Date,NULL,3,0,0,0,pts);
+    printf("\n\n");
+    if(g_nRtrnRows==0)
+        printf("Type ***(%.1f): ",pts->price);
+    else
+    {
+        printf("Type ***(%.1f): ",pts->price);
+        print__roomId(pts);
+    }
+
+    pts=data__get_room_info(0,0,Date,NULL,4,0,0,0,pts);
+    printf("\n\n");
+    if(g_nRtrnRows==0)
+        printf("Type ****(%.1f): ",pts->price);
+    else
+    {
+        printf("Type ****(%.1f): ",pts->price);
+        print__roomId(pts);
+    }
+
+    pts=data__get_room_info(0,0,Date,NULL,5,0,0,0,pts);
+    printf("\n\n");
+    if(g_nRtrnRows==0)
+        printf("Type VIP(%.1f): ",pts->price);
+    else
+    {
+        printf("Type VIP(%.1f): ",pts->price);
+        print__roomId(pts);
+    }
+
+    pts=data__get_room_info(0,0,Date,NULL,1,0,0,0,pts);
+    printf("\n\n");
+    if(g_nRtrnRows==0)
+        printf("Type Unavailable: None");
+    else
+    {
+        printf("Type Unavailable: ");
+        print__roomId(pts);
+    }
+}

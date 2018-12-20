@@ -25,6 +25,7 @@ void download__data(char chName[20])
     /* close file */
     fclose(fp);
 
+
         /* point the data file by user name */
     fp = fopen ("start_data_online.vbs", "w+");
 
@@ -34,7 +35,6 @@ void download__data(char chName[20])
     /* close file */
     fclose(fp);
 
-    system("pause");
 	system("wscript start_data_online.vbs");
 
 	system("del /Q start_data_online.vbs>nul");
@@ -60,17 +60,6 @@ void * p_3(void *a)
     return NULL;
 }
 
-void * p_4(void *a)
-{
-	system("ftp -n -s:\"ftp4.txt\"");
-    return NULL;
-}
-
-void * p_5(void *a)
-{
-	system("ftp -n -s:\"ftp5.txt\"");
-    return NULL;
-}
 
 void download__upload()
 {
@@ -101,28 +90,11 @@ void download__upload()
     /* close file */
     fclose(fp);
 
-       /* point the data file by user name */
-    fp = fopen ("ftp4.txt", "w+");
 
-	fprintf( fp,"open yimian.xyz\nuser as4 as4\nput %s\\%s\nbye",DATA_FOLDER,ROOM_DEL_FILE);
-
-    /* close file */
-    fclose(fp);
-
-
-       /* point the data file by user name */
-    fp = fopen ("ftp5.txt", "w+");
-
-	fprintf( fp,"open yimian.xyz\nuser as4 as4\nput %s\\%s\nbye",DATA_FOLDER,SIGNATURE_FILE);
-
-    /* close file */
-    fclose(fp);
-
-    pthread_t t1,t2,t3,t4,t5;
+    pthread_t t1,t2,t3;
 
     pthread_create(&t1, NULL, p_1, NULL);
     pthread_create(&t2, NULL, p_2, NULL);
     pthread_create(&t3, NULL, p_3, NULL);
-    pthread_create(&t4, NULL, p_4, NULL);
-    pthread_create(&t5, NULL, p_5, NULL);
+
 }

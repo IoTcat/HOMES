@@ -248,19 +248,26 @@ void login__create_staff_passwd()
 
 void login__clean_staff_passwd()
 {
-	char chPath[30];
+	char chPath[60];
 
 	sprintf(chPath,"del /Q %s\\%s>nul",DATA_FOLDER,STAFF_PASSWD_FILE);
 
 	int i;
 	i=MessageBox(NULL,"This Action Should Only be executed in case of an emergency. Are Your Sure to CLEAN ALL the staff password? ","AS4 Message",MB_YESNO);
-	if(i==IDYES) system(chPath);
+	if(i==IDYES) 
+		{system(chPath);		
+
+			char chPath2[90];
+
+		sprintf(chPath2,"if exist %s\\%s (echo >nul)else (echo g48xQ5l05mvy6u30vzd20UK7g48xQ5l05mvy6>%s\\%s)>nul",DATA_FOLDER,STAFF_PASSWD_FILE,DATA_FOLDER,STAFF_PASSWD_FILE);
+
+		system(chPath2);}
 	
 }
 
 void login__setup()
 {
-	char chPath[30];
+	char chPath[60];
 
 
 	sprintf(chPath,"%s/%s",DATA_FOLDER,MANAGER_PASSWD_FILE);
@@ -273,8 +280,14 @@ void login__setup()
 		sprintf(chPath,"if exist %s\\%s (echo >nul)else (echo g48xQ5l05mvy6u30vzd20UK7g48xQ5l05mvy6>%s\\%s)>nul",DATA_FOLDER,MANAGER_PASSWD_FILE,DATA_FOLDER,MANAGER_PASSWD_FILE);
 
 		system(chPath);
+		sprintf(chPath,"if exist %s\\%s (echo >nul)else (echo g48xQ5l05mvy6u30vzd20UK7g48xQ5l05mvy6>%s\\%s)>nul",DATA_FOLDER,STAFF_PASSWD_FILE,DATA_FOLDER,STAFF_PASSWD_FILE);
+
+		system(chPath);
+
 		exit(0);
 
 	}
+
+
 
 }
