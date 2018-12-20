@@ -73,7 +73,6 @@ Date,RoomId,visitorNumber,type,price,checkIn,checkOut
 20181219,802,0,notAvailable,66.660000,No,No
 20181219,803,0,notAvailable,66.660000,No,No
 20181219,804,0,notAvailable,66.660000,No,No
-20181219,805,0,notAvailable,66.660000,No,No
 20181219,806,0,notAvailable,66.660000,No,No
 20181219,807,0,notAvailable,66.660000,No,No
 20181219,808,0,notAvailable,66.660000,No,No
@@ -153,7 +152,6 @@ Date,RoomId,visitorNumber,type,price,checkIn,checkOut
 20181220,802,0,notAvailable,66.660000,No,No
 20181220,803,0,notAvailable,66.660000,No,No
 20181220,804,0,notAvailable,66.660000,No,No
-20181220,805,0,notAvailable,66.660000,No,No
 20181220,806,0,notAvailable,66.660000,No,No
 20181220,807,0,notAvailable,66.660000,No,No
 20181220,808,0,notAvailable,66.660000,No,No
@@ -639,3 +637,5 @@ Date,RoomId,visitorNumber,type,price,checkIn,checkOut
 20181226,808,0,notAvailable,66.660000,No,No
 20181226,809,0,notAvailable,66.660000,No,No
 20181226,810,0,notAvailable,66.660000,No,No
+20181220,805,0,notAvailable,66.660000,No,No
+20181219,805,0,notAvailable,66.660000,No,No

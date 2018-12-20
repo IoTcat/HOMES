@@ -1066,6 +1066,7 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
 			if(((pRm+ii)->index==(int)*(del+j+1))&&((pRm+ii)->roomId==((int)((*(del+j+1)-(double)(int)*(del+j+1))*1000)))) ifDel=1;
 		}
 
+
 		for(int jj=0;jj<ii&&ifDel==0;jj++)
 		{
 			if((pRm+jj)->date==(pRm+ii)->date&&(pRm+jj)->roomId==(pRm+ii)->roomId)
@@ -1075,6 +1076,17 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
 			}
 		}
 
+
+		if(ifDel!=0)	ii--;
+	}
+
+	g_nRtrnRows=ii;
+	ii=0;
+
+	for(;ii<g_nRtrnRows;ii++)
+	{
+
+		ifDel=0;
 		if(ifDel==0&&index!=0&&(pRm+ii)->index!=index) ifDel=1;
 		if(ifDel==0&&roomId!=0&&(pRm+ii)->roomId!=roomId) ifDel=1;
 		if(ifDel==0&&date!=0&&(pRm+ii)->date!=date) ifDel=1;
@@ -1098,12 +1110,23 @@ struct room *data__get_room_info(int index, int roomId, int date, int visitorId[
 			}
 		}
 
-		if(ifDel==0&&type!=0&&(pRm+ii)->type!=type) ifDel=1;
+		if(type!=0&&(pRm+ii)->type!=type) ifDel=1;
 		if(ifDel==0&&price!=0&&(pRm+ii)->price!=price) ifDel=1;
 		if(ifDel==0&&checkIn!=0&&(pRm+ii)->checkIn!=checkIn) ifDel=1;
 		if(ifDel==0&&checkOut!=0&&(pRm+ii)->checkOut!=checkOut) ifDel=1;
 
-		if(ifDel!=0)	ii--;
+		if(ifDel!=0)	
+		{
+			for(int iiii=ii+1;iiii<g_nRtrnRows;iiii++)
+			{
+				*(pRm+ii)=*(pRm+iiii);
+			}
+
+			ii--;
+			g_nRtrnRows--;
+		}
+
+
 	}
 
 	/* close file */
@@ -1255,7 +1278,7 @@ int data__room_setup_by_date(int date,int modelDate)
 int data__room_setup_by_nothing(int date)
 {
 	/* Create a new visitor struct variable with some user info */
-	room NewRoom={0/*this is the visitor id, please leave 0 here */,0/*roomId*/,date/*date*/,{0}/*visitorId*/,1/*room type*/,66.66/*price*/,1/*checkIn*/,1/*checkOut*/};
+	room NewRoom={0/*this is the visitor id, please leave 0 here */,0/*roomId*/,date/*date*/,{0}/*visitorId*/,5/*room type*/,66.66/*price*/,1/*checkIn*/,1/*checkOut*/};
 
 	for(int i=0;i<80;i++)
 	{
