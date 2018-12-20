@@ -27,45 +27,93 @@ Description: Program for a hotal management system.
 
 /* program title */
 #define PROGRAM_TITLE "TITLE EEE101 Assessment 4 BY Group 9"
+
 /* window color */
+
 #define WINDOW_COLOR "color 0F"
+
 /* window size */
+
 #define WINDOW_SIZE "mode con cols=88 lines=30"
+
 /* the max length of a name */
+
 #define NAME_MAX_LENGTH 35
+
 /* the max length of a tel */
+
 #define TEL_MAX_LENGTH 20
+
 /* the max length of a national ID */
+
 #define NATIONALID_MAX_LENGTH 20
+
 /* the max length of a nation, province/state or a city */
+
 #define ADDRESS_MAX_LENGTH 35
+
 /* the max visitors number in one room */
+
 #define VISITOR_MAX_NUMBER 3
+
 /* the name of data folder */
+
 #define DATA_FOLDER "data"
+
 /* the name of visitor data file */
+
 #define VISITOR_DATA_FILE "Visitor.txt"
+
 /* the name of room data file */
+
 #define ROOM_DATA_FILE "Room.txt"
+
 /* the name of visitor del file */
+
 #define VISITOR_DEL_FILE "Del.txt"
+
 /* the name of room del file */
+
 #define ROOM_DEL_FILE "Dell.txt"
+
 /* the name of signature file */
+
 #define SIGNATURE_FILE "Signature.txt"
+
 /* the name of index file */
+
 #define VISITOR_INDEX_FILE "visitorIndex.txt"
+
 /* the name of index file */
+
 #define ROOM_INDEX_FILE "roomIndex.txt"
+
+/* the name of index file */
+
+#define VISITOR_EXCEL_FILE "visitorInfo.csv"
+
+/* the name of index file */
+
+#define ROOM_EXCEL_FILE "roomInfo.csv"
+
 /* the name of passwd file */
+
 #define STAFF_PASSWD_FILE "staffPasswd.txt"
+
 /* the name of passwd file */
+
 #define MANAGER_PASSWD_FILE "managerPasswd.txt"
+
 /* the password of data file */
+
 #define PASSWORD 'l'
+
 /* the digital signature key */
+
 #define DIGITAL_SIGNATURE_KEY 'k'
+
 /* the max size of password */
+
 #define USRPASSWORD_MAX_SIZE 99
 
 
@@ -189,12 +237,14 @@ int data__mark_check_in(int,int);
 int data__mark_check_out(int,int);
 int data__insert_userinfo_to_structure(int,int,int*);
 int data__filter_input(char*);
+struct visitor* data__search_visitor_from_three_types();
 
 int menu__data_statistics();
 int menu__data_setting();
 int menu__receptionist();
 int menu__manager_password();
 int menu__main();
+struct room *data__get_room_availavble_by_date(int);
 
 /*****************Above are your function declearation ^_^ ***********************/
 
@@ -241,10 +291,34 @@ int main(int argc, char const *argv[])
     //data__calculate_day_income(20181226);
     //print__room_type();
     //data__revise_room_price_based_on_type(1,400);
-    print__room_type();
-    data__change_room_type_final();
-    print__room_type();
-
+    //print__room_type();
+    //data__change_room_type_final();
+    //print__room_type();
+    //data__change_price_by_type_final();
+    //data__revise_room_price_based_on_type(5,999);
+    //data__change_room_type_final();
+    //print__room_type();
+    //data__change_room_type_final();
+    //data__change_price_by_type_final();
+    //data__revise_room_price_based_on_type(2,789);
+    //print__room_type();
+    /*room* pts=NULL;
+    pts=data__get_room_info(0,0,20181220,NULL,1,0,0,0,pts);
+    print__roomId(pts);*/
+    //data__change_room_type_final();
+    //data__change_price_by_type_final();
+    //menu__update_visitor_info();
+    //menu__search_visitor_three_type_selection();
+    //data__search_visitor_from_three_types();
+    int visiotrha[4]={1,123456};
+    data__insert_userinfo_to_structure(20181219,101,visiotrha);
+    //data__get_room_availavble_by_date(20181219);
+    //printf("The available room number is: %d\n",g_nRtrnRows);
+    //system("pause");
+    //int hahaha=data__get_day_available_from_A_date_for_room(20181225,101);
+    //printf("The available day: %d",hahaha);
+    //system("pause");
+    //data__mark_check_out(20181219,101);
 
 
 
@@ -259,35 +333,85 @@ int main(int argc, char const *argv[])
 int data__revise_room_price_based_on_type(int Type,double Price)
 {
 
-      struct room *pts=NULL;
+      room *pts=NULL;
       int Date=0;
       Date=data__get_current_date(0);
       pts=data__get_room_info(0,0,Date,NULL,Type,0,0,0,pts);
       for(int i=0;i<g_nRtrnRows;i++)
       {
-         (pts+i)->price=Price;
-
-         data__insert_room_info(pts+i);
+          (pts+i)->price=Price;
+          data__insert_room_info(pts+i);
       }
 
-
-
-    return 0;
+       return 0;
 
 
 }
 
-void data__change_room_type_final(void)
+int data__change_price_by_type_final(void)
 {
-    do
-    {
-        int m=0,n=0,x=0;
+    char* p=NULL;
+    int legalornot=-100;
+
     while(1)
     {
+        int m=menu__select_room_type();
+        if(m==0) return 0;
+        system("cls");
+        printf("Please input a price\n\n");
+        p=input__getchar_plus(p);
+
+        while(1)
+        {
+
+           legalornot=data__filter_input(p);
+           if(legalornot==3 || legalornot==4 )
+           {
+               int linputpricel=atoi(p);
+               system("cls");
+               printf("Loading...\n\n");
+               m=m+1;
+               double ll=linputpricel;
+               data__revise_room_price_based_on_type(m,ll);
+               printf("\n\nThe price has been updated successfully");
+               system("pause");
+               break;
+           }
+           else
+           {
+               printf("Please enter a correct price\n\n\n Press \"q\" to quit\n\n");
+               p=input__getchar_plus(p);
+               if(strlen(p)==1 && p[0]=='q')
+               break;
+           }
+
+
+        }
+
+     }
+
+
+
+
+}
+
+
+void data__change_room_type_final(void)
+{
+    int m=-100,n=0,x=0;
+    while(1)
+    {
+    do
+    {
+    while(1)
+    {
+
        m=menu__select_floor();
        if(m==0) break;
        while(1)
        {
+           n=0;
+           x=0;
           n=menu__select_number(m);
           if(n==0) break;
           x=menu__select_room_type();
@@ -312,6 +436,8 @@ void data__change_room_type_final(void)
     }
 
     }while(1);
+    if(m==0) break;
+    }
 
 }
 
@@ -322,7 +448,6 @@ int data__mark_check_in(int Date,int RoomNo)
     struct room *pts=NULL;
     pts=data__get_room_info(0,RoomNo,Date,vid,0,0,0,0,pts);
     pts->checkIn=2;
-    data__del_room_info(pts->index,pts->roomId);
     data__insert_room_info(pts);
     return 0;
 
@@ -335,7 +460,6 @@ int data__mark_check_out(int Date,int RoomNo)
     struct room *pts=NULL;
     pts=data__get_room_info(0,RoomNo,Date,vid,0,0,0,0,pts);
     pts->checkOut=2;
-    data__del_room_info(pts->index,pts->roomId);
     data__insert_room_info(pts);
     return 0;
 
@@ -344,16 +468,26 @@ int data__mark_check_out(int Date,int RoomNo)
 int data__insert_userinfo_to_structure(int Date,int RoomNo,int* Visitordetail)
 {
     struct room *pts=NULL;
-    int vid[4];
-    vid[0]=0;
-    pts=data__get_room_info(0,RoomNo,Date,vid,0,0,0,0,pts);
-    for(int i=0;i<4;i++)
+    pts=data__get_room_info(0,RoomNo,Date,NULL,0,0,0,0,pts);
+    room containerwow;
+    containerwow.checkIn=pts->checkIn;
+    containerwow.checkOut=pts->checkOut;
+    containerwow.date=pts->date;
+    containerwow.index=0;
+    containerwow.price=pts->price;
+    containerwow.roomId=pts->roomId;
+    containerwow.type=pts->type;
+    for(int i=0;i<2;i++)
     {
-    pts->visitorId[i]=Visitordetail[i];
+       printf("Visitordetail[i]=%d\n",Visitordetail[i]);
+       containerwow.visitorId[i]=Visitordetail[i];
+       printf("containerwow.visitorId[i]=%f\n",containerwow.price);
     }
-    data__del_room_info(pts->index,pts->roomId);
-    data__insert_room_info(pts);
+    data__insert_room_info(&containerwow);
 
+
+	/* show error hint if the function not runing successfully */
+	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
     return 0;
 }
 
@@ -1028,14 +1162,14 @@ void menu__print_select_room_type(int nPnt)
 	print__header();
 
 	printf("\n\nPlease use Arrows on Keyboard to Select:");
-	char chItem1[]=" Type *  ";
+	char chItem1[]="   Type **   ";
 	/* function pringt__item has three parameters: display string, if it is choosed,extra space on its left*/
 	print__item(chItem1,(nPnt==1)?1:0,0);
 
-	char chItem2[]=" Type **  ";
+	char chItem2[]="  Type ***  ";
 	print__item(chItem2,(nPnt==2)?1:0,0);
 
-	char chItem3[]="   Type ***  ";
+	char chItem3[]="   Type ****  ";
 	print__item(chItem3,(nPnt==3)?1:0,0);
 
 	char chItem4[]="  VIP    ";
@@ -1044,6 +1178,390 @@ void menu__print_select_room_type(int nPnt)
 
 	printf("\n\n\n\n\n");
 	printf("Press ESC to Exit!");
+
+}
+
+int menu__update_visitor_info()/*data statistics interface*/
+{
+	int nVal=5600;
+	int nArrw=0;
+	do
+	{
+		/* print out the menu */
+		menu__print_update_visitor_info(nVal%7+1);
+
+
+		/* detect user keyboard press*/
+		nArrw= input__get_arrow();
+
+		/* when input a arrow */
+		if(nArrw==1||nArrw==-1)
+			nVal+=nArrw;
+
+		/* when press enter */
+		if(nArrw==6)
+			break;
+		/* when press esc */
+		if(nArrw==9)
+			return 0;
+
+	}while(1);
+
+	/* return user choice by number*/
+	return nVal%7+1;
+}
+
+
+
+void menu__print_update_visitor_info(int nPnt)
+{
+
+	/* clear screen */
+	system("cls");
+
+	/* print the screen header */
+	print__header();
+
+	printf("\n\nPlease use Arrows on Keyboard to Select an option:");
+	char chItem1[]="                Name";
+	/* function pringt__item has three parameters: display string, if it is choosed,extra space on its left*/
+	print__item(chItem1,(nPnt==1)?1:0,0);
+
+	char chItem2[]="                 Tel No.";
+	print__item(chItem2,(nPnt==2)?1:0,0);
+
+	char chItem3[]="VIP";
+	print__item(chItem3,(nPnt==3)?1:0,0);
+
+	char chItem4[]="                   Nation ID ";
+	print__item(chItem4,(nPnt==4)?1:0,0);
+
+	char chItem5[]="                Nation";
+	print__item(chItem5,(nPnt==5)?1:0,0);
+
+	char chItem6[]="                 Province ";
+	print__item(chItem6,(nPnt==6)?1:0,0);
+
+	char chItem7[]="                City";
+	print__item(chItem7,(nPnt==7)?1:0,0);
+
+	printf("\n\n\n\n\n");
+	printf("Press ESC to Exit!");
+
+}
+
+int menu__search_visitor_three_type_selection()/*data statistics interface*/
+{
+	int nVal=5700;
+	int nArrw=0;
+	do
+	{
+		/* print out the menu */
+		menu__print_search_visitor_three_type_selection(nVal%3+1);
+
+
+		/* detect user keyboard press*/
+		nArrw= input__get_arrow();
+
+		/* when input a arrow */
+		if(nArrw==1||nArrw==-1)
+			nVal+=nArrw;
+
+		/* when press enter */
+		if(nArrw==6)
+			break;
+		/* when press esc */
+		if(nArrw==9)
+			return 0;
+
+	}while(1);
+
+	/* return user choice by number*/
+	return nVal%3+1;
+}
+
+
+
+void menu__print_search_visitor_three_type_selection(int nPnt)
+{
+
+	/* clear screen */
+	system("cls");
+
+	/* print the screen header */
+	print__header();
+
+	printf("\n\nPlease use Arrows on Keyboard to Select an option:");
+	char chItem1[]="                Name";
+	/* function pringt__item has three parameters: display string, if it is choosed,extra space on its left*/
+	print__item(chItem1,(nPnt==1)?1:0,0);
+
+	char chItem2[]="                 Tel No.";
+	print__item(chItem2,(nPnt==2)?1:0,0);
+
+	char chItem3[]="                   Nation ID ";
+	print__item(chItem3,(nPnt==3)?1:0,0);
+	printf("\n\n\n\n\n");
+	printf("Press ESC to Exit!");
+
+}
+
+
+struct visitor* data__search_visitor_from_three_types(void)
+{
+    char *p=NULL;
+    visitor *container0=NULL;
+    visitor *container1=NULL;
+    visitor *container2=NULL;
+
+    while(1)
+    {
+        int selection=menu__search_visitor_three_type_selection();
+        if(selection==0)
+            return container0;
+        if(selection==1)
+        {
+            system("cls");
+            while(1)
+            {
+                printf("The visitor you want to find(Enter \"q\" to return): ");
+                p=input__getchar_plus(p);
+                while(1)
+                {
+                    if(strlen(p)>25 || p[0]==NULL)
+                  {
+
+                    printf("Please make sure the length is within 25 letters.\n");
+                    printf("Enter \"q\" to return\n\n");
+                    system("pause");
+                    system("cls");
+                    printf("The visitor you want to find(Enter \"q\" to return): ");
+                    p=input__getchar_plus(p);
+                    if(strlen(p)==1 && p[0]=='q')
+                        break;
+                  }
+                  else if(strlen(p)<=25 && p[0]!=NULL)
+                    break;
+                }
+                  if(strlen(p)==1 && p[0]=='q')
+                        break;
+
+                    system("cls");
+                    printf("Loading...");
+                    container1=data__get_visitor_info(p,container1);
+                    if(container1==NULL)
+                    {
+                        system("cls");
+                        printf("Sorry, the visitor you search is not in the database.\n");
+                        system("pause");
+                        system("cls");
+                    }
+                    else if(g_nRtrnRows!=1)
+                    {
+                        printf("There are more than two users with the same name\n");
+                        printf("Please user other keywords to find visitor");
+                        system("pause");
+                        break;
+                    }
+                    else if(g_nRtrnRows==1)
+                    {
+                        system("cls");
+                        printf("The visitor is found");
+                        system("pause");
+                        return container1;
+                    }
+
+
+
+            }
+
+        }
+   if(selection==2)
+        {
+            system("cls");
+            while(1)
+            {
+                printf("Please input the visitor's Tel No.(Enter \"q\" to return): ");
+                p=input__getchar_plus(p);
+                while(1)
+                {
+
+                    if(strlen(p)>25 || p[0]==NULL)
+                  {
+
+                    printf("Please make sure the length is within 25 numbers.\n");
+                    printf("Enter \"q\" to return\n\n");
+                    system("pause");
+                    system("cls");
+                    printf("Please input the visitor's Tel No.(Enter \"q\" to return): ");
+                    p=input__getchar_plus(p);
+                    if(strlen(p)==1 && p[0]=='q')
+                        break;
+                  }
+                  else if(strlen(p)==1 && p[0]=='q')
+                      break;
+                  else if(strlen(p)<=25 && p[0]!=NULL)
+                  {
+                      int i=-100;
+                      for(i=0;i<strlen(p);i++)
+                      {
+                          if(isdigit(p[i]) || p[i]==35 || p[i]==42 || p[i]==43) continue;
+                          else break;
+                      }
+                      if(i==strlen(p))
+                        break;
+                      else
+                      {
+                          printf("Please make sure the length is within 25 numbers.\n");
+                          printf("Enter \"q\" to return\n\n");
+                          system("pause");
+                          system("cls");
+                          printf("Please input the visitor's Tel No.(Enter \"q\" to return): ");
+                          p=input__getchar_plus(p);
+                          if(strlen(p)==1 && p[0]=='q')
+                              break;
+                      }
+
+                  }
+                }
+                  if(strlen(p)==1 && p[0]=='q')
+                        break;
+                    system("cls");
+                    printf("Loading...");
+                    container2=data__get_visitor_info(p,container2);
+                    if(container2==NULL)
+                    {
+                        printf("Sorry, the visitor you search is not in the database.\n");
+                        system("pause");
+                        system("cls");
+                    }
+                    else if(g_nRtrnRows==1)
+                    {
+                        int original=atoi(container2->tel);
+                        int input=atoi(p);
+                        if(original==input)
+                        {
+                            system("cls");
+                            printf("The visitor is found");
+                            system("pause");
+                            return container2;
+                        }
+                        else
+                            {
+                            printf("Do not find the visitor");
+                            system("pause");
+                            system("cls");
+                            continue;
+                            }
+
+                    }
+                    else if(g_nRtrnRows>1)
+                        {
+                            printf("Something wrong occurs");
+                            system("pause");
+                            break;
+                        }
+
+
+
+            }
+
+        }
+
+        if(selection==3)
+        {
+            system("cls");
+            while(1)
+            {
+                printf("Please input the visitor's ID(Enter \"q\" to return): ");
+                p=input__getchar_plus(p);
+                while(1)
+                {
+
+                    if(strlen(p)>25 || p[0]==NULL)
+                  {
+
+                    printf("Please make sure the length is within 25 numbers.\n");
+                    printf("Enter \"q\" to return\n\n");
+                    system("pause");
+                    system("cls");
+                    printf("The visitor you want to find(Enter \"q\" to return): ");
+                    p=input__getchar_plus(p);
+                    if(strlen(p)==1 && p[0]=='q')
+                        break;
+                  }
+                  else if(strlen(p)==1 && p[0]=='q')
+                      break;
+                  else if(strlen(p)<=25 && p[0]!=NULL)
+                  {
+                      int i=-100;
+                      for(i=0;i<strlen(p);i++)
+                      {
+                          if(isdigit(p[i])) continue;
+                          else break;
+                      }
+                      if(i==strlen(p))
+                        break;
+                      else
+                      {
+                          printf("Please make sure the length is within 25 numbers.\n");
+                          printf("Enter \"q\" to return\n\n");
+                          system("pause");
+                          system("cls");
+                          printf("Please input the visitor's ID(Enter \"q\" to return): ");
+                          p=input__getchar_plus(p);
+                          if(strlen(p)==1 && p[0]=='q')
+                              break;
+                      }
+
+                  }
+                }
+                  if(strlen(p)==1 && p[0]=='q')
+                        break;
+
+                    system("cls");
+                    printf("Loading...");
+                    container2=data__get_visitor_info(p,container2);
+                    if(container2==NULL)
+                    {
+                        printf("Sorry, the visitor you search is not in the database.\n");
+                        system("pause");
+                        system("cls");
+                    }
+                    else if(g_nRtrnRows==1)
+                    {
+                        int original1=atoi(container2->nationalId);
+                        int input1=atoi(p);
+                        if(original1==input1)
+                        {
+                            printf("The visitor is found");
+                            system("pause");
+                            system("cls");
+                            return container2;
+                        }
+                        else
+                        {
+                            system("cls");
+                            printf("Do not find the visitor");
+                            system("pause");
+                            continue;
+                        }
+
+                    }
+                    else if(g_nRtrnRows>1)
+                        {
+                            printf("Something wrong occurs");
+                            system("pause");
+                            break;
+                        }
+
+
+
+            }
+
+        }
+
+    }
 
 }
 
@@ -1066,17 +1584,11 @@ int data__calculate_day_income(int Date)
 int data__change_room_type(int roomNo,int Type)
 {
     room *pts=NULL;
-    int i;
-    for(i=0;i<8;i++)
-    {
-        int currentdate=data__get_current_date(i);
-        pts=data__get_room_info(0,roomNo,currentdate,NULL,0,0,0,0,pts);
-        pts->type=Type;
-        data__insert_room_info(pts);
-    }
-    if(i==8)
-        return 1;
-    else
+    int currentdate=data__get_current_date(0);
+    pts=data__get_room_info(0,roomNo,currentdate,NULL,0,0,0,0,pts);
+    pts->type=Type;
+    data__insert_room_info(pts);
+
         return 0;
 
 
@@ -1092,17 +1604,6 @@ void print__room_type(void)
 
     pts=data__get_room_info(0,0,Date,NULL,2,0,0,0,pts);
     if(g_nRtrnRows==0)
-        printf("Type *: None");
-    else
-    {
-        printf("Type *: ");
-        print__roomId(pts);
-    }
-
-
-    pts=data__get_room_info(0,0,Date,NULL,3,0,0,0,pts);
-    printf("\n\n");
-    if(g_nRtrnRows==0)
         printf("Type **: None");
     else
     {
@@ -1110,13 +1611,24 @@ void print__room_type(void)
         print__roomId(pts);
     }
 
-    pts=data__get_room_info(0,0,Date,NULL,4,0,0,0,pts);
+
+    pts=data__get_room_info(0,0,Date,NULL,3,0,0,0,pts);
     printf("\n\n");
     if(g_nRtrnRows==0)
         printf("Type ***: None");
     else
     {
         printf("Type ***: ");
+        print__roomId(pts);
+    }
+
+    pts=data__get_room_info(0,0,Date,NULL,4,0,0,0,pts);
+    printf("\n\n");
+    if(g_nRtrnRows==0)
+        printf("Type ****: None");
+    else
+    {
+        printf("Type ****: ");
         print__roomId(pts);
     }
 
@@ -1168,6 +1680,45 @@ void print__roomId(room *pRm)
 
 }
 
+struct room *data__get_room_availavble_by_date(int Date)
+{
+    room *pts=NULL;
+    int visitorinfo[4]={0};
+    pts=data__get_room_info(0,0,Date,visitorinfo,0,0,1,1,pts);
+    if(g_nRtrnRows==0)
+    {return NULL; pts=NULL;}
+    else if(g_nRtrnRows>=1)
+        return pts;
+}
+
+int data__get_day_available_from_A_date_for_room(int Date,int roomNo)
+{
+    room* pts=NULL;
+    int i=0;
+    int count=0;
+    if(Date==data__get_current_date(0)) i=8;
+    else if(Date==data__get_current_date(1)) i=7;
+    else if(Date==data__get_current_date(2)) i=6;
+    else if(Date==data__get_current_date(3)) i=5;
+    else if(Date==data__get_current_date(4)) i=4;
+    else if(Date==data__get_current_date(5)) i=3;
+    else if(Date==data__get_current_date(6)) i=2;
+    else if(Date==data__get_current_date(7)) i=1;
+    for(int m=0;m<i;m++)
+    {
+        int x=data__get_current_date(8+m-i);
+        pts=data__get_room_info(0,roomNo,x,NULL,0,0,0,0,pts);
+        if(g_nRtrnRows==0 || pts->visitorId[0]!=0)
+            break;
+        else if(pts->visitorId[0]==0)
+            count++;
+    }
+    return count;
+
+}
+
+
+
 int* get__selection_roomId_type(void)
 {
 
@@ -1176,7 +1727,7 @@ int* get__selection_roomId_type(void)
 //--------------------------------------------------------------------------------------------------------------//
 int data__change_room_info(int room,int date,int roomNo,int roomdate,struct room *container)
 {
-    if(!data__get_room_info(0,room,date,"NULL",0,0,0,0,&container))
+    if(!data__get_room_info(0,room,date,NULL,0,0,0,0,&container))
     {
        container->roomId=roomNo;
        container->date=date;
@@ -1565,6 +2116,8 @@ void demo__print__menu(int nPnt)
 	printf("Press ESC to Exit!");
 
 }
+
+
 
 
 /* demo for data_insert visitor_info() */
