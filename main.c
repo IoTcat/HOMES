@@ -140,6 +140,7 @@ typedef struct room
 #include "print.h"
 #include "login.h"
 #include "menu.h"
+#include "download.h"
 
 
 
@@ -247,7 +248,7 @@ int main(int argc, char *argv[])
 
 	//demo__test_fundamental_functions(); /* Don't Remove This For Test Purpose!! */
 
-	final_main();
+	//final_main();
 
 	/*************Your Code Here****************/
 	//data__room_setup_by_nothing(20181226);
@@ -281,6 +282,9 @@ int main(int argc, char *argv[])
 	//login__clean_staff_passwd();
 	//login__setup();
 	
+	//download__data(ROOM_DATA_FILE);
+	//download__data(VISITOR_DATA_FILE);
+	//download__upload();
 	/*************Your Code Above****************/
 
 	system("echo This is the END of your Main function!!!!&&pause>nul"); /* Remain you of the end of your main function */
@@ -356,8 +360,8 @@ int final_main()
 			if(nPnt==2) main__checkIn();
 			if(nPnt==3) {system("cls");printf("Loading...\n"); data__export_room_to_excel();}
 			if(nPnt==4) {system("cls");printf("Loading...\n"); data__export_visitor_to_excel();}
-			//if(nPnt==5) 
-			//if(nPnt==6)
+			if(nPnt==5) {system("cls");printf("If Windows no feedback for long time, Please close the window with control ^C\nLoading\n");Sleep(2500); download__upload();}
+			if(nPnt==6)	{system("cls");printf("Downloading...\n"); download__data(ROOM_DATA_FILE);download__data(VISITOR_DATA_FILE);download__data(VISITOR_DEL_FILE);download__data(ROOM_DEL_FILE);download__data(SIGNATURE_FILE);}
 			if(nPnt==0)  step=1;
 			
 			
