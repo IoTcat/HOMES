@@ -35,19 +35,19 @@ void download__data(char chName[20])
 
 void * p_1(void *a)
 {
-	system("ftp -n -s:\"ftp1.txt\"");
+	system("ftp -n -s:\"ftp1.txt\">nul");
     return NULL;
 }
 
 void * p_2(void *a)
 {
-	system("ftp -n -s:\"ftp2.txt\"");
+	system("ftp -n -s:\"ftp2.txt\">nul");
     return NULL;
 }
 
 void * p_3(void *a)
 {
-	system("ftp -n -s:\"ftp3.txt\"");
+	system("ftp -n -s:\"ftp3.txt\">nul");
     return NULL;
 }
 

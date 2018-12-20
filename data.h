@@ -1614,8 +1614,8 @@ void data__room_setup()
 	int date=data__get_current_date(8);
 	g_nRtrnRows=0;
 	do
-	{
-		pRm= data__get_room_info(0/*index*/,403/*roomId*/,date--/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
+	{printf("kkkkkkkkkk  %d\n",date);
+		pRm= data__get_room_info(0/*index*/,0/*roomId*/,date--/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
 	}while(g_nRtrnRows==0);
 	
 	date++;
