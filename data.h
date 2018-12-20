@@ -1,3 +1,4 @@
+
 /* function for get current date */
 int data__get_current_date(int plus)
 {
@@ -1584,6 +1585,20 @@ double data__income_by_date_and_type(int date, int type)
 }
 
 
+
+void * p_room_updating(void *a)
+{
+	int tmp_date=1;
+
+
+	while(data__get_current_date( tmp_date)<data__get_current_date(8))
+	{
+		data__room_setup_by_date(data__get_current_date(tmp_date++),data__get_current_date(0));
+	}
+    return NULL;
+}
+
+
 void data__room_setup()
 {
 	
@@ -1612,23 +1627,26 @@ void data__room_setup()
 
 	/* declear a room pointer to receive the matched rooms info */
 	
-	int date=data__get_current_date(8);
+	int date=8;
+	data__get_current_date(date);
 	g_nRtrnRows=0;
 	do
 	{
-		pRm= data__get_room_info(0/*index*/,0/*roomId*/,date--/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
+		pRm= data__get_room_info(0/*index*/,0/*roomId*/,data__get_current_date(date--)/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
 	}while(g_nRtrnRows==0);
 	
 	date++;
-	int tmp_date=date+1;
-	while(tmp_date<data__get_current_date(8))
-	{
-		data__room_setup_by_date(tmp_date++,date);
-	}
+	
+	data__room_setup_by_date(data__get_current_date(0),data__get_current_date(date));
 
+	pthread_t t1;
 
+    pthread_create(&t1, NULL, p_room_updating, NULL);
 
 }
+
+
+
 
 
 int data__change_room_type(int roomNo,int Type)
@@ -1678,5 +1696,4 @@ int data__get_day_available_from_A_date_for_room(int Date,int roomNo)
     return count;
 
 }
-
 
