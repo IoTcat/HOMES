@@ -1601,9 +1601,14 @@ void data__room_setup()
 
 	sprintf(chPath,"%s\\%s",DATA_FOLDER,ROOM_DATA_FILE);
 
-	if(fopen(chPath,"r")==NULL) 
+	FILE *fp=NULL;
+
+	fp=fopen(chPath,"r");
+
+	if(fp==NULL) 
 		data__room_setup_by_nothing(data__get_current_date(0));
 
+	fclose(fp);
 	/* declear a room pointer to receive the matched rooms info */
 	struct room *pRm=NULL;
 	int date=data__get_current_date(8);
