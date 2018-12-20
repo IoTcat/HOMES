@@ -83,8 +83,10 @@ Description: Program for a hotal management system.
 char *g_pUsr=NULL;
 /* this variable indicate the rows of return struct */ 
 int g_nRtrnRows=0;
-
-
+/* thread for data operation*/
+pthread_t t8;
+/* variable for checking if thread is busy */
+int is_busy=0;
 
 
 
@@ -296,8 +298,8 @@ int final_main()
 		{
 			int nPnt=menu__data_setting();
 
-			if(nPnt==1) {while(1){print__room_type(); printf("\n\n\n\n"); system("echo Please Press esc to quit of press Any Key to Continue...");if(input__detect_input_ASCII()==27) break;if(data__change_price_by_type_final()==0) break;}}
-			if(nPnt==2) {while(1){print__room_type(); printf("\n\n\n\n"); system("echo Please Press esc to quit of press Any Key to Continue...");if(input__detect_input_ASCII()==27) break;if(data__change_room_type_final()==0) break;}}
+			if(nPnt==1) {while(1){print__room_type(); printf("\n\n\n\n"); system("echo Please Press esc to quit of press Any Key to Continue...");if(input__detect_input_ASCII()==27) break;if(is_busy) {printf("\nThere are data operation conducting, please wait a while..\n");Sleep(1500);break;} if(data__change_price_by_type_final()==0) break;}}
+			if(nPnt==2) {while(1){print__room_type(); printf("\n\n\n\n"); system("echo Please Press esc to quit of press Any Key to Continue...");if(input__detect_input_ASCII()==27) break;if(is_busy) {printf("\nThere are data operation conducting, please wait a while..\n");Sleep(1500);break;}if(data__change_room_type_final()==0) break;}}
 			if(nPnt==3) main__change_visitor_info();
 			if(nPnt==0) step=1;
 		}

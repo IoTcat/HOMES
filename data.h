@@ -1589,12 +1589,41 @@ double data__income_by_date_and_type(int date, int type)
 void * p_room_updating(void *a)
 {
 	int tmp_date=1;
+	is_busy=1;
 
 
 	while(data__get_current_date( tmp_date)<data__get_current_date(8))
 	{
 		data__room_setup_by_date(data__get_current_date(tmp_date++),data__get_current_date(0));
 	}
+	is_busy=0;
+    return NULL;
+}
+
+
+
+void * p_room_setup(void *a)
+{
+	struct room *pRm=NULL;
+	is_busy=1;
+	int date=8;
+	data__get_current_date(date);
+	g_nRtrnRows=0;
+	do
+	{
+		pRm= data__get_room_info(0/*index*/,0/*roomId*/,data__get_current_date(date--)/*date*/,NULL/*visitorId*/,0/*type*/,0/*price*/,0/*checkIn*/,0/*checkOut*/,pRm);
+	}while(g_nRtrnRows==0);
+	
+	date++;
+
+	int tmp_date=date+1;
+
+
+	while(data__get_current_date( tmp_date)<data__get_current_date(8))
+	{
+		data__room_setup_by_date(data__get_current_date(tmp_date++),data__get_current_date(0));
+	}
+	is_busy=0;
     return NULL;
 }
 
@@ -1608,7 +1637,7 @@ void data__room_setup()
 
 	data__check_file_path('k');
 
-	printf("This is your first time visiting, we are doing some preparation...\n");
+	printf("Data Classifying..\nIf this is your first time visiting, it may take a little long time...\n");
 
 	sprintf(chPath,"IF NOT EXIST \"%s\" md %s >nul",DATA_FOLDER,DATA_FOLDER);
 
@@ -1636,12 +1665,12 @@ void data__room_setup()
 	}while(g_nRtrnRows==0);
 	
 	date++;
-	
+
+	if(date<0)	
 	data__room_setup_by_date(data__get_current_date(0),data__get_current_date(date));
 
-	pthread_t t1;
 
-    pthread_create(&t1, NULL, p_room_updating, NULL);
+    pthread_create(&t8, NULL, p_room_setup, NULL);
 
 }
 

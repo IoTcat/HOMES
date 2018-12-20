@@ -682,8 +682,7 @@ int data__change_price_by_type_final(void)
                double ll=linputpricel;
                data__revise_room_price_based_on_type(m,ll);
                printf("\n\nThe price has been updated successfully");
-               pthread_t t1;
-    			pthread_create(&t1, NULL, p_room_updating, NULL);
+    			pthread_create(&t8, NULL, p_room_updating, NULL);
                Sleep(2000);
                brnum=10;
                break;
@@ -746,8 +745,7 @@ int data__change_room_type_final(void)
       printf("Loading...");
       data__change_room_type(roomNo,x+1);
       printf("\n\nThe room has been successfully updated!\n\n");
-    pthread_t t1;
-    pthread_create(&t1, NULL, p_room_updating, NULL);
+    pthread_create(&t8, NULL, p_room_updating, NULL);
       brnum=-10;
       Sleep(2000);
       break;

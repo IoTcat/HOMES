@@ -92,7 +92,7 @@ while(1)
 	/****the type choosing screen*****/
 	/*****how long choosing screen****/
 
-
+	if(is_busy) { system("cls");printf("\nThere are data operation conducting, please wait a while..\n");Sleep(1500);return 0;}
 	system("cls");
 	print__header();
 
@@ -260,6 +260,7 @@ for(int i=0;i<atoi(chVnum);i++)
 int main__checkIn_re()
 {
 
+	if(is_busy) { system("cls");printf("\nThere are data operation conducting, please wait a while..\n");Sleep(1500);return 0;}
 	int nVst=0;
 
 	while(1)
