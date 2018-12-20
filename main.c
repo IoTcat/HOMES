@@ -435,7 +435,68 @@ for(int i=0;i<atoi(chVnum);i++)
 }
 
 
+int main__checkIn_re()
+{
 
+	int nVst=0;
+
+	while(1)
+	{
+
+	system("cls");
+	print__header();
+
+
+	printf("Please Input a Key words to search a Visitor: \nKey Words= ");
+
+	char *chWd=NULL;
+
+	chWd=input__getchar_plus(chWd);
+
+	if(strlen(chWd)==0) return 0;
+
+	struct visitor *pVstr=NULL;
+	pVstr= data__get_visitor_info(chWd,pVstr);
+
+
+	/* print all these visitors info on screen */
+	for(int i=0;i<g_nRtrnRows;i++)
+	printf("ID:%d Name:%s Tel:%s VIP:%d NationalID:%s Nation:%s province:%s City:%s\n", (pVstr+i)->id, (pVstr+i)->name, (pVstr+i)->tel,(pVstr+i)->vip, (pVstr+i)->nationalId,(pVstr+i)->nation, (pVstr+i)->province, (pVstr+i)->city);
+
+
+	if(g_nRtrnRows==1)
+	{
+		Sleep(1500);
+
+		nVst=pVstr->id;
+		break;
+	}
+
+	printf("Find nothing or Find more than one result!!\n");
+
+	Sleep(1500);
+
+	}
+
+	/* declear a room pointer to receive the matched rooms info */
+	struct room *pRm=NULL;
+
+	int hh[]={1/* number of visitors*/,nVst/* visitorId*/};
+	pRm= data__get_room_info(0/*index*/,0/*roomId*/,0/*date*/,hh/*visitorId*/,0/*type*/,0/*price*/,1/*checkIn*/,0/*checkOut*/,pRm);
+
+	/* show error hint if the function not runing successfully */
+	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
+
+
+	data__mark_check_in(data__get_current_date(0),pRm->roomId);
+
+	printf("\n\nCheck in Successfully!!\n");
+
+	Sleep(1500);
+
+
+	return 0;
+}
 
 
 
@@ -500,7 +561,7 @@ int main(int argc, char *argv[])
 	//int Visitordetail[4]={1,1234567899};
 
 	//data__insert_userinfo_to_structure(808,20181227,Visitordetail);
-	main__booking();
+	//main__booking();
 	
 	/*************Your Code Above****************/
 
@@ -605,7 +666,7 @@ int final_main()
 
 			if(nPnt==1)  main__booking();
 			//if(nPnt==2) 
-			//if(nPnt==3) 
+			if(nPnt==3) main__checkIn_re();
 			if(nPnt==4) menu__change_check_out();
 			if(nPnt==0) print__exit();
 			
