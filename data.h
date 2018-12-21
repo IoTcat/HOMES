@@ -457,15 +457,18 @@ int data__insert_room_info(struct room *pRm)
     fp = fopen (chPath, "at+");
 
     /* transform visitorId to string */
-    char tmp_visitorId[12*(VISITOR_MAX_NUMBER+1)];
+    char *tmp_visitorId=(char*)malloc(20*(VISITOR_MAX_NUMBER+1)*sizeof(char));
     tmp_visitorId[0]='\0';
-    char tmp_str[12];
 
-    for(int i=1;i<=pRm->visitorId[0];i++)
-    {
-    	sprintf(tmp_str,"%d",pRm->visitorId[i]);
-    	strcat(tmp_visitorId,tmp_str);
-    }
+
+    	if(pRm->visitorId[0]==1)
+    	sprintf(tmp_visitorId,"%d",pRm->visitorId[1]);
+    	if(pRm->visitorId[0]==2)
+    	sprintf(tmp_visitorId,"%d%d",pRm->visitorId[1],pRm->visitorId[2]);
+    	if(pRm->visitorId[0]==3)
+    	sprintf(tmp_visitorId,"%d%d%d",pRm->visitorId[1],pRm->visitorId[2],pRm->visitorId[3]);
+    	//strcat(tmp_visitorId,tmp_str);
+    	
     /* if no visitorId, put 0 in string*/
     if(pRm->visitorId[0]==0)	sprintf(tmp_visitorId,"%d",0);
 
@@ -1076,7 +1079,7 @@ struct room *data__get_room_info(int index, int roomId, int date, int *visitorId
 
 
 	/* find room info position in File by key words */
-	a=data__seek_key_word(value, fp,a,2);
+	a=data__seek_key_word(value, fp,a,2);//printf("%d\n",a[0] );system("pause");
 
 	/* if no room found */
 	if(!a){errno=0;	g_nRtrnRows=0; return NULL;}
@@ -1506,9 +1509,9 @@ int data__insert_userinfo_to_structure(int Date,int RoomNo,int* Visitordetail)
     containerwow.price=pts->price;
     containerwow.roomId=pts->roomId;
     containerwow.type=pts->type;
-    for(int i=0;i<2;i++)
+    for(int i=0;i<4;i++)
     {
-       containerwow.visitorId[i]=Visitordetail[i];
+       containerwow.visitorId[i]=Visitordetail[i];printf("%d\n",containerwow.visitorId[i] );
     }
     data__insert_room_info(&containerwow);
 

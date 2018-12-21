@@ -275,7 +275,7 @@ void login__setup()
 
 	if(fopen(chPath,"r")==NULL)
 	{
-		MessageBox( 0, "Password File Broken!!", "AS4 Message", 0 );
+		MessageBox( 0, "Successful initialized! Please open again to run the program!", "AS4 Message", 0 );
 		
 		sprintf(chPath,"if exist %s\\%s (echo >nul)else (echo g48xQ5l05mvy6u30vzd20UK7g48xQ5l05mvy6>%s\\%s)>nul",DATA_FOLDER,MANAGER_PASSWD_FILE,DATA_FOLDER,MANAGER_PASSWD_FILE);
 

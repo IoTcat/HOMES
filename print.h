@@ -138,8 +138,16 @@ void print__login(int nPnt)
 }
 
 
+
 void print__roomId(room *pRm)
 {
+    for (int i = 0; i<g_nRtrnRows-1; i++)
+        for (int j = 0; j < g_nRtrnRows- i-1 ; j++)
+        {
+            if ((pRm+j)->roomId > (pRm+j+1)->roomId ) {
+                int temp = (pRm+j)->roomId ; (pRm+j)->roomId  = (pRm+j+1)->roomId ; (pRm+j+1)->roomId  = temp;
+            }
+        }
 
 	int t=0;
 	for(int i=0;i<g_nRtrnRows;)
