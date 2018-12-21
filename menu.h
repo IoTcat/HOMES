@@ -825,4 +825,56 @@ int menu__change_check_out()
 }
 
 
+void menu__print_two_option_today_else(int nPnt)
+{
+
+	/* clear screen */
+	system("cls");
+
+	/* print the screen header */
+	print__header();
+
+	printf("\n\nPlease use Arrows on Keyboard to Select:\n");
+	char chItem1[]="   Today";
+	/* function pringt__item has three parameters: display string, if it is choosed,extra space on its left*/
+	print__item(chItem1,(nPnt==1)?1:0,0);
+
+	char chItem2[]="         Other";
+	print__item(chItem2,(nPnt==2)?1:0,0);
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	printf("Press ESC to Exit!");
+
+}
+
+
+int menu__two_option_today_else()
+{
+	int nVal=5600;
+	int nArrw=0;
+	do
+	{
+		/* print out the menu */
+		menu__print_two_option_today_else(nVal%2+1);
+
+		/* detect user keyboard press*/
+		nArrw= input__get_arrow();
+
+		/* when input a arrow */
+		if(nArrw==1||nArrw==-1)
+			nVal+=nArrw;
+
+		/* when press enter */
+		if(nArrw==6)
+			break;
+		/* when press esc */
+		if(nArrw==9)
+			return 0;
+
+	}while(1);
+
+	/* return user choice by number*/
+	return nVal%2+1;
+}
+
+
 

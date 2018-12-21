@@ -311,9 +311,9 @@ int final_main()
 			if(nPnt==1) main__income();
 			if(nPnt==2) main__checkIn();
 			if(nPnt==3) {while(1){system("cls");printf("Loading...\n");if(is_busy) {system("cls");printf("\nThere are data operation conducting, please wait a while..\n");Sleep(1500);break;} data__export_room_to_excel();Sleep(1500);break;}}
-			if(nPnt==4) {while(1){system("cls");if(is_busy) {system("cls");printf("\nThere are data operation conducting, please wait a while..\n");Sleep(1500);break;}printf("Loading...\n"); data__export_visitor_to_excel();}}
-			if(nPnt==5) {while(1){system("cls");if(is_busy) {system("cls");printf("\nThere are data operation conducting, please wait a while..\n");Sleep(1500);break;}printf("If Windows no feedback for long time, Please close the window with control ^C\n\nUploading...\n");Sleep(2500); download__upload();Sleep(4000);}}
-			if(nPnt==6)	{while(1){system("cls");if(is_busy) {system("cls");printf("\nThere are data operation conducting, please wait a while..\n");Sleep(1500);break;}printf("Downloading...\n"); download__data(VISITOR_DATA_FILE);download__data(VISITOR_DEL_FILE);download__data(ROOM_DATA_FILE);}}
+			if(nPnt==4) {while(1){system("cls");if(is_busy) {system("cls");printf("\nThere are data operation conducting, please wait a while..\n");Sleep(1500);break;}printf("Loading...\n"); data__export_visitor_to_excel();break;}}
+			if(nPnt==5) {while(1){system("cls");if(is_busy) {system("cls");printf("\nThere are data operation conducting, please wait a while..\n");Sleep(1500);break;}printf("If Windows no feedback for long time, Please close the window with control ^C\n\nUploading...\n");Sleep(2500); download__upload();Sleep(4000);break;}}
+			if(nPnt==6)	{while(1){system("cls");if(is_busy) {system("cls");printf("\nThere are data operation conducting, please wait a while..\n");Sleep(1500);break;}printf("Downloading...\n"); download__data(VISITOR_DATA_FILE);download__data(VISITOR_DEL_FILE);download__data(ROOM_DATA_FILE);break;}}
 			if(nPnt==0)  step=1;
 			
 			

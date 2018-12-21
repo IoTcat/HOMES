@@ -1,14 +1,22 @@
 
 
-void main__income()
+int main__income()
 {
+	
+	int opt=menu__two_option_today_else();
+	char *tmp=(char*)malloc(15*sizeof(char));
+
+	if(opt==1) sprintf(tmp,"%d",data__get_current_date(0));
+	if(opt==0) return 0;
+	if(opt==2)
+	{
+
 	system("cls");
 	print__header();
 	printf("\nPlease Input a Date in format like 20181220\n\nDate=");
 
-	char *tmp=NULL;
-
 	tmp=input__getchar_plus(tmp);
+	}
 
 	system("cls");
 	printf("Loading...\n");
@@ -18,26 +26,38 @@ void main__income()
 
 	system("pause>nul");
 
+	return 0;
 }
 
 
-void main__checkIn()
+int main__checkIn()
 {
+	
+	int opt=menu__two_option_today_else();
+	char *input=(char*)malloc(15*sizeof(char));
+
+	if(opt==1) sprintf(input,"%d",data__get_current_date(0));
+	if(opt==0) return 0;
+	if(opt==2)
+	{
+
 	system("cls");
 	print__setup();
 	print__header();
 
 	printf("\nPlease Input the date you want to view: \n\nYour Input Date=");
 
-	char *input=NULL;
-
 	input=input__getchar_plus(input);
+
+	}
 
 	print__checkIn_rate(atoi(input));
 
 	printf("\n\n\n\n\n\nPress any key to go back~");
 
 	system("pause>nul");
+
+	return 0;
 }
 
 
@@ -93,40 +113,148 @@ while(1)
 	/*****how long choosing screen****/
 
 	if(is_busy) { system("cls");printf("\nThere are data operation conducting, please wait a while..\n");Sleep(1500);return 0;}
+
+	int opt=menu__two_option_today_else();
+	char *chDate=(char*)malloc(15*sizeof(char));
+
+	if(opt==1) sprintf(chDate,"%d",data__get_current_date(0));
+	if(opt==0) return 0;
+	if(opt==2)
+	{
 	system("cls");
 	print__header();
 
 	printf("Please Input the Date:\nDate= ");
 
-	char *chDate=NULL;
+	
+	 int i0=0,i1=0,i2=0,i3=0,i4=0,i5=0,i6=0,i7=0;
+    while(1)
+    {
+        chDate=input__getchar_plus(chDate);
 
-	chDate=input__getchar_plus(chDate);
+        i0=data__get_current_date(0);
+        i1=data__get_current_date(1);
+        i2=data__get_current_date(2);
+        i3=data__get_current_date(3);
+        i4=data__get_current_date(4);
+        i5=data__get_current_date(5);
+        i6=data__get_current_date(6);
+        i7=data__get_current_date(7);
+	    if(strlen(chDate)==8)
+       {
+           if(atoi(chDate)==i0 || atoi(chDate)==i1 || atoi(chDate)==i2 || atoi(chDate)==i3 || atoi(chDate)==i4)
+           {
+               break;
+           }
+           else if( (atoi(chDate)==i5) || (atoi(chDate)==i6) || (atoi(chDate)==i7) )
+            break;
+            else
+            {
+                printf("Please make sure the Date is valid\n");
+                printf("Press \"q\" to quit");
+                Sleep(1500);
+                system("cls");
+                print__header();
+                printf("Please Input the Date:\nDate= ");
+                continue;
+            }
+       }
+       else if(strlen(chDate)==1 && chDate[0]=='q')
+        return -1;
+       else
+       {
+           printf("Please make sure the Date is valid\n");
+           printf("Press \"q\" to quit");
+           Sleep(1500);
+           system("cls");
+           print__header();
+           printf("Please Input the Date:\nDate= ");
+       }
+    }
+	}
+      int inType=menu__select_room_type();
+      if (inType==0) return -2;
+      inType=inType+1;
 
-	printf("\nPlease Input Type:\n Type= ");
+	//printf("\nPlease Input Type:\n Type= ");
 
-	char *chType=NULL;
+	//char *chType=NULL;
 
-	chType=input__getchar_plus(chType);
+	//chType=input__getchar_plus(chType);
 
 	system("cls");
 
 	printf("Availible Rooms and days: \n");
 
-	print__search_room_by_date_and_type(atoi(chDate),atoi(chType));
+	print__search_room_by_date_and_type(atoi(chDate),inType);
 
 	char *chRoom=NULL;
 
 	/*未容错*/
 	printf("\n\nPlease Input the Room to book:\nroom= ");
 
-	chRoom=input__getchar_plus(chRoom);
+	 while(1)
+      {
+          chRoom=input__getchar_plus(chRoom);
+          if(strlen(chRoom)==3)
+          {
+              int m=0;
+              m=data__filter_input(chRoom);
+              if(m==3)
+              {
+                  int n=0,baiwei=0,gewei=0;
+                  n=atoi(chRoom);
+                  baiwei=n/100;
+                  gewei=n%100;
+                  if(baiwei>=1 && baiwei<=8 && gewei>=1 && gewei<=10)
+                    break;
+                  else
+                  {
+                      printf("Please Enter a Correct Room No\n");
+                      printf("Press \"q\" to quit\n");
+                      Sleep(1500);
+                      printf("\n\nPlease Input the Room to book:\nroom= ");
+
+                  }
+              }
+              else
+              {
+                  printf("Please Enter a Correct Room No\n");
+                  printf("Press \"q\" to quit\n");
+                  Sleep(1500);
+                  printf("\n\nPlease Input the Room to book:\nroom= ");
+              }
+          }
+          else if(strlen(chRoom)==1 && chRoom[0]=='q') return -3;
+          else
+          {
+              printf("Please Enter a Correct Room No\n");
+              printf("Press \"q\" to quit\n");
+              Sleep(1500);
+              printf("\n\nPlease Input the Room to book:\nroom= ");
+          }
+      }
 	
 	/*未容错*/
 	char *chDays=NULL;
 
 	printf("\nPlease input the days to book: \ndays= ");
 
-	chDays=input__getchar_plus(chDays);
+	while(1)
+    {
+        chDays=input__getchar_plus(chDays);
+        if(strlen(chDays)==1 && chDays[0]>=49 && chDays[0]<=56)
+            break;
+        else if(strlen(chDays)==1 && chDays[0]=='q')
+            return -3;
+        else
+        {
+            printf("Please Enter a Correct Day Interval\n");
+            printf("Press \"q\" to quit... \n");
+            Sleep(1500);
+            printf("\nPlease input the days to book: \ndays= ");
+        }
+    }
 
 
 	system("cls");
@@ -136,7 +264,22 @@ while(1)
 
 	char *chVnum=NULL;
 
-	chVnum=input__getchar_plus(chVnum);
+	while(1)
+    {
+        chVnum=input__getchar_plus(chVnum);
+        if(strlen(chVnum)==1 && chVnum[0]<=51 && chVnum[0]>=49)
+            break;
+        else if(strlen(chVnum)==1 && chVnum[0]=='q')
+            return -4;
+        else
+        {
+            printf("Please Enter a Correct Visitor Number\n");
+            printf("Press \"q\" to quit... \n");
+            Sleep(1500);
+            printf("Please input the visitor number\nVisitor Number= ");
+        }
+
+    }
 
 	int nVst[atoi(chVnum)+1];
 
@@ -197,11 +340,65 @@ for(int i=0;i<atoi(chVnum);i++)
 	gets(demo_NewVisitor.name);
 
 	printf("Please input a tel:\n");
-	gets(demo_NewVisitor.tel);
+	char *pttel=NULL;
+	while(1)
+       {
+          gets(demo_NewVisitor.tel);
+          pttel=demo_NewVisitor.tel;
+            if(strlen(pttel)<=20 && strlen(pttel)>=3)
+            {
+                int i=0,m=0;
+
+                m=strlen(pttel);
+                for(i=0;i<m;i++)
+                {
+                    if(isdigit(pttel[i]))
+                        continue;
+                    else break;
+                }
+                if(i==m) break;
+                else
+                {
+                    printf("The Form of Tel Number is not correct\n");
+                    printf("Press \"q\" to quit\n");
+                    Sleep(1500);
+                    printf("Please input a tel:\n");
+
+                }
+            }
+            else if(strlen(pttel)==1 && pttel[0]=='q')
+            {
+                return -12;
+            }
+            else
+            {
+                    printf("The Form of Tel Number is not correct\n");
+                    printf("Press \"q\" to quit\n");
+                    Sleep(1500);
+                    printf("Please input a tel:\n");
+
+            }
+       }
+
 
 	printf("Please input if it is vip (not vip->1,vip->2) :\n");
 	char tmp_ch[15];
-	gets(tmp_ch);
+	while(1)
+    {
+       gets(tmp_ch);
+       if(strlen(tmp_ch)==1 && (tmp_ch[0]==49 || tmp_ch[0]==50))
+        break;
+       else if(strlen(tmp_ch)==1 && tmp_ch[0]=='q') return -13;
+        else
+       {
+                    printf("The Form of Input is not Correct\n");
+                    printf("Press \"q\" to quit\n");
+                    Sleep(1500);
+                    printf("Please Input a number :\n");
+
+        }
+
+    }
 	demo_NewVisitor.vip=atoi(tmp_ch);
 
 	printf("Please input a nationalId:\n");
