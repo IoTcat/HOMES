@@ -12,6 +12,17 @@ int input__detect_input_ASCII()
     return nKey;
 }
 
+
+char *input__process_space(char *chTmp)
+{
+	for(int i=0;i<strlen(chTmp);i++)
+	{
+		if(chTmp[i]==32) chTmp[i]='_';
+	}
+
+	return chTmp;
+}
+
 /* function to get a char type string as needed */
 char *input__getchar_plus(char *p)
 {
@@ -40,6 +51,8 @@ char *input__getchar_plus(char *p)
 
     /* free the Tmp memory */
     free(pTmp);
+
+    p=input__process_space(p);
 
     return p;
 }

@@ -172,7 +172,7 @@ for(int i=0;i<atoi(chVnum);i++)
 
 	/* print all these visitors info on screen */
 	for(int i=0;i<g_nRtrnRows;i++)
-	printf("\n\n Name:%s Tel:%s VIP:%d NationalID:%s Nation:%s province:%s City:%s\n",  (pVstr+i)->name, (pVstr+i)->tel,(pVstr+i)->vip, (pVstr+i)->nationalId,(pVstr+i)->nation, (pVstr+i)->province, (pVstr+i)->city);
+	printf("\n\n Name:%s Tel:%s VIP:%d Nation:%s province:%s City:%s\n",  (pVstr+i)->name, (pVstr+i)->tel,(pVstr+i)->vip, (pVstr+i)->nation, (pVstr+i)->province, (pVstr+i)->city);
 
 
 	if(g_nRtrnRows==1)
@@ -227,7 +227,7 @@ for(int i=0;i<atoi(chVnum);i++)
 
 	/* print all these visitors info on screen */
 	for(int i=0;i<g_nRtrnRows;i++)
-	printf(" \n\nName:%s Tel:%s VIP:%d NationalID:%s Nation:%s province:%s City:%s\n",  (pVstr+i)->name, (pVstr+i)->tel,(pVstr+i)->vip, (pVstr+i)->nationalId,(pVstr+i)->nation, (pVstr+i)->province, (pVstr+i)->city);
+	printf(" \n\nName:%s Tel:%s VIP:%d Nation:%s province:%s City:%s\n",  (pVstr+i)->name, (pVstr+i)->tel,(pVstr+i)->vip, (pVstr+i)->nation, (pVstr+i)->province, (pVstr+i)->city);
 
 
 	Sleep(1500);
@@ -283,7 +283,7 @@ int main__checkIn_re()
 
 	/* print all these visitors info on screen */
 	for(int i=0;i<g_nRtrnRows;i++)
-	printf("\n\nName:%s Tel:%s VIP:%d NationalID:%s Nation:%s province:%s City:%s\n", (pVstr+i)->name, (pVstr+i)->tel,(pVstr+i)->vip, (pVstr+i)->nationalId,(pVstr+i)->nation, (pVstr+i)->province, (pVstr+i)->city);
+	printf("\n\nName:%s Tel:%s VIP:%d Nation:%s province:%s City:%s\n", (pVstr+i)->name, (pVstr+i)->tel,(pVstr+i)->vip, (pVstr+i)->nation, (pVstr+i)->province, (pVstr+i)->city);
 
 
 	if(g_nRtrnRows==1)
@@ -310,9 +310,9 @@ int main__checkIn_re()
 	/* show error hint if the function not runing successfully */
 	if(!pRm)	printf("Error in Function data__get_room_info: %s\n",strerror(errno));
 
-	data__mark_check_in(data__get_current_date(0),pRm->roomId);
+	
 	if(g_nRtrnRows==1)
-	{printf("\n\nCheck in Successfully!!\n");}
+	{data__mark_check_in(data__get_current_date(0),pRm->roomId);printf("\n\nCheck in Successfully!!\n");}
 	else
 	printf("\n\nThis Visitor has not Book the Room.\n");
 
@@ -349,7 +349,7 @@ int main__change_visitor_info()
 
 	/* print all these visitors info on screen */
 	for(int i=0;i<g_nRtrnRows;i++)
-	printf("\n\nName:%s Tel:%s VIP:%d NationalID:%s Nation:%s province:%s City:%s\n",  (pVstr+i)->name, (pVstr+i)->tel,(pVstr+i)->vip, (pVstr+i)->nationalId,(pVstr+i)->nation, (pVstr+i)->province, (pVstr+i)->city);
+	printf("\n\nName:%s Tel:%s VIP:%d Nation:%s province:%s City:%s\n",  (pVstr+i)->name, (pVstr+i)->tel,(pVstr+i)->vip,(pVstr+i)->nation, (pVstr+i)->province, (pVstr+i)->city);
 
 
 	if(g_nRtrnRows==1)

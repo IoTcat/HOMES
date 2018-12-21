@@ -1170,6 +1170,12 @@ struct room *data__get_room_info(int index, int roomId, int date, int *visitorId
 	/* inform return rows of the pVstr*/
 	g_nRtrnRows=ii;
 
+	if(date!=0)
+	{
+		for(int i=0;i<ii;i++)
+		if((pRm+i)->date!=date) g_nRtrnRows--;
+	}
+	//printf("%d\n",g_nRtrnRows );
 	if(errno==22)	errno=0;
 
    	return pRm;
@@ -1511,7 +1517,7 @@ int data__insert_userinfo_to_structure(int Date,int RoomNo,int* Visitordetail)
     containerwow.type=pts->type;
     for(int i=0;i<4;i++)
     {
-       containerwow.visitorId[i]=Visitordetail[i];printf("%d\n",containerwow.visitorId[i] );
+       containerwow.visitorId[i]=Visitordetail[i];//printf("%d\n",containerwow.visitorId[i] );
     }
     data__insert_room_info(&containerwow);
 
