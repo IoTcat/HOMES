@@ -337,10 +337,11 @@ int final_main()
 			int nPnt=menu__receptionist();
 
 			if(nPnt==1)  main__booking();
-			if(nPnt==2) main__change_visitor_info();
-			if(nPnt==3) main__checkIn_re();
-			if(nPnt==4) menu__change_check_out();
-			if(nPnt==0) print__exit();
+			if(nPnt==2) main__checkIn_re();
+			if(nPnt==3) menu__change_check_out();
+			if(nPnt==4) step=0;
+			if(nPnt==5) main__change_visitor_info();
+			if(nPnt==0||nPnt==6) print__exit();
 			
 		}
 

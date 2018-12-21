@@ -609,15 +609,21 @@ void menu__print_receptionist(int nPnt)
 	/* function pringt__item has three parameters: display string, if it is choosed,extra space on its left*/
 	print__item(chItem1,(nPnt==1)?1:0,0);
 
-	char chItem2[]="     Update Visitor Info";
+	char chItem2[]="   Check In";
 	print__item(chItem2,(nPnt==2)?1:0,0);
 
-	char chItem3[]="   Check In";
+	char chItem3[]="   Check Out";
 	print__item(chItem3,(nPnt==3)?1:0,0);
 
-	char chItem4[]="   Check Out";
+	char chItem4[]="   Switch User";
 	print__item(chItem4,(nPnt==4)?1:0,0);
-	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
+
+	char chItem5[]="     Update Visitor Info";
+	print__item(chItem5,(nPnt==5)?1:0,0);
+
+	char chItem6[]="               Exit          ";
+	print__item(chItem6,(nPnt==6)?1:0,0);
+	printf("\n\n\n\n\n\n\n\n\n");
 	printf("Press ESC to Exit!");
 
 }
@@ -625,12 +631,12 @@ void menu__print_receptionist(int nPnt)
 
 int menu__receptionist()
 {
-	int nVal=5600;
+	int nVal=5400;
 	int nArrw=0;
 	do
 	{
 		/* print out the menu */
-		menu__print_receptionist(nVal%4+1);
+		menu__print_receptionist(nVal%6+1);
 
 		/* detect user keyboard press*/
 		nArrw= input__get_arrow();
@@ -649,7 +655,7 @@ int menu__receptionist()
 	}while(1);
 
 	/* return user choice by number*/
-	return nVal%4+1;
+	return nVal%6+1;
 }
 
 
@@ -673,7 +679,7 @@ int data__change_price_by_type_final(void)
         {
 
            legalornot=data__filter_input(p);
-           if(legalornot==3 || legalornot==4 )
+           if(legalornot==3 || legalornot==4||legalornot==2 )
            {
                int linputpricel=atoi(p);
                system("cls");

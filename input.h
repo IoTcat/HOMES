@@ -98,6 +98,21 @@ int data__filter_input(char*parameter1)
     {
         return -40;
     }
+    else if(strlen(parameter1)==2)
+    {
+    	int i=0;
+    	for(i=0;i<2;i++)
+    	{
+    		if(isdigit(parameter1[i]))
+    			continue;
+    		else
+    			break;
+    	}
+    	if(i==2)
+    		return 2;
+    	else
+    		return -2;
+    }
     else if(strlen(parameter1)==1)/*Visitor number*/
     {
         if(parameter1[0]==48 || parameter1[0]==49 || parameter1[0]==50)
@@ -107,7 +122,7 @@ int data__filter_input(char*parameter1)
     }
     else if(strlen(parameter1)==3)/*Price or room number*/
     {
-        int i;
+        int i=0;
         for(i=0;i<3;i++)/*Whether all characters are digits*/
         {
          if(isdigit(parameter1[i]))

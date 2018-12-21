@@ -466,7 +466,7 @@ int main__checkIn_re()
 	print__header();
 
 
-	printf("Please Input a Key words to search a Visitor: \nKey Words= ");
+	printf("Please Input a Key words to search a Visitor (Press Enter to Exit): \nKey Words= ");
 
 	char *chWd=NULL;
 
@@ -532,7 +532,7 @@ int main__change_visitor_info()
 	print__header();
 
 
-	printf("Please Input a Key words to search a Visitor: \nKey Words= ");
+	printf("Please Input a Key words to search a Visitor (Press Enter to Exit): \nKey Words= ");
 
 	char *chWd=NULL;
 
