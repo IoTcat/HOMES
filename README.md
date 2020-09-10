@@ -1,5 +1,7 @@
 # ee101-as4-hotelsystem
 
+![size](https://badge-size.herokuapp.com/iotcat/HOMES/master/HOMES.exe)
+
 > Warning!! The cloud backup feature was no longer supported due to security issue..
 
 ## Quick Start
